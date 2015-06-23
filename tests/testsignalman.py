@@ -30,7 +30,11 @@ False
 
 """
 
-from ..signalman import Signalman
+import os
+import sys, os.path
+sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), "..")))
+
+from terminatorlib.signalman import Signalman
 
 class TestWidget():
     signals = None

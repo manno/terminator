@@ -29,7 +29,11 @@
 
 """
 
-from ..borg import Borg
+import os
+import sys, os.path
+sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), "..")))
+
+from terminatorlib.borg import Borg
 
 class TestBorg(Borg):
     attribute = None
