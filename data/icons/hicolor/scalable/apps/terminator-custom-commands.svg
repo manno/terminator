@@ -14,7 +14,7 @@
    height="48px"
    id="svg1306"
    sodipodi:version="0.32"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.48.4 r9939"
    sodipodi:docname="terminator-custom-commands.svg"
    inkscape:export-filename="/home/sboddy/Development/terminator/terminator_work/data/icons/48x48/apps/terminator-custom-commands.png"
    inkscape:export-xdpi="90"
@@ -365,6 +365,19 @@
          style="stop-color:#a2a2a2"
          offset="1" />
     </linearGradient>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath3856">
+      <rect
+         style="fill:none;stroke:#000000;stroke-width:0.1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         id="rect3858"
+         width="27.506281"
+         height="16.375"
+         x="-8.6983881"
+         y="-2.667829"
+         rx="0.11773217"
+         ry="0.11773217" />
+    </clipPath>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -373,21 +386,25 @@
      borderopacity="0.19607843"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="8"
-     inkscape:cx="23.676504"
-     inkscape:cy="25.599997"
+     inkscape:zoom="16"
+     inkscape:cx="22.105186"
+     inkscape:cy="25.947543"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:grid-bbox="true"
      inkscape:document-units="px"
-     inkscape:window-width="513"
-     inkscape:window-height="552"
-     inkscape:window-x="445"
-     inkscape:window-y="278"
+     inkscape:window-width="1920"
+     inkscape:window-height="1006"
+     inkscape:window-x="0"
+     inkscape:window-y="24"
      showguides="true"
      inkscape:guide-bbox="true"
      inkscape:showpageshadow="false"
-     inkscape:window-maximized="0" />
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3860" />
+  </sodipodi:namedview>
   <metadata
      id="metadata1311">
     <rdf:RDF>
@@ -603,7 +620,8 @@
        sodipodi:nodetypes="ccccccccccccc" />
     <g
        id="layer1-3"
-       transform="translate(11.948388,10.042829)">
+       transform="matrix(1.5037888,0,0,1.5037888,11.6752,13.441057)"
+       clip-path="url(#clipPath3856)">
       <g
          id="g2486">
         <path
