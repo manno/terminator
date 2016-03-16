@@ -134,6 +134,7 @@ if __name__ == '__main__':
         (DEBUGTHREAD, DEBUGSVR) = debugserver.spawn(locals())
         TERMINATOR.debug_address = DEBUGSVR.server_address
 
+    Gdk.threads_init()
     try:
         Gtk.main()
     except KeyboardInterrupt:

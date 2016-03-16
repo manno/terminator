@@ -108,6 +108,9 @@ class Terminal(Gtk.VBox):
     cnxids = None
     targets_for_new_group = None
 
+    control = None
+    pane_id = None
+
     def __init__(self):
         """Class initialiser"""
         GObject.GObject.__init__(self)
@@ -175,6 +178,8 @@ class Terminal(Gtk.VBox):
                 os.putenv('http_proxy', self.config['http_proxy'])
         self.reconfigure()
         self.vte.set_size(80, 24)
+
+        self.control = self.terminator.tmux_control
 
     def get_vte(self):
         """This simply returns the vte widget we are using"""
@@ -898,6 +903,8 @@ class Terminal(Gtk.VBox):
             if groupsend == groupsend_type['all']:
                 self.terminator.all_emit(self, 'key-press-event', event)
 
+        self.control.send_keypress(event, pane_id=self.pane_id)
+
         return(False)
 
     def on_buttonpress(self, widget, event):
@@ -1425,15 +1432,22 @@ class Terminal(Gtk.VBox):
             envv.append('TERMINATOR_DBUS_PATH=%s' % self.terminator.dbus_path)
 
         dbg('Forking shell: "%s" with args: %s' % (shell, args))
-        args.insert(0, shell)
-        result,  self.pid = self.vte.spawn_sync(Vte.PtyFlags.DEFAULT,
-                                       self.cwd,
-                                       args,
-                                       envv,
-                                       GLib.SpawnFlags.FILE_AND_ARGV_ZERO | GLib.SpawnFlags.DO_NOT_REAP_CHILD,
-                                       None,
-                                       None,
-                                       None)
+        if 1:
+            # command = '{} {}'.format(shell, ' '.join(args))
+            command = ' '.join(args)
+            self.pane_id = str(util.make_uuid())
+            self.control.run_command(command=command, cwd=self.cwd,
+                                     marker=self.pane_id)
+        else:
+            args.insert(0, shell)
+            result,  self.pid = self.vte.spawn_sync(Vte.PtyFlags.DEFAULT,
+                                           self.cwd,
+                                           args,
+                                           envv,
+                                           GLib.SpawnFlags.FILE_AND_ARGV_ZERO | GLib.SpawnFlags.DO_NOT_REAP_CHILD,
+                                           None,
+                                           None,
+                                           None)
         self.command = shell
 
         self.titlebar.update()
@@ -1503,12 +1517,21 @@ class Terminal(Gtk.VBox):
 
     def paste_clipboard(self, primary=False):
         """Paste one of the two clipboards"""
-        for term in self.terminator.get_target_terms(self):
-            if primary:
-                term.vte.paste_primary()
-            else:
-                term.vte.paste_clipboard()
-        self.vte.grab_focus()
+        if 1:
+            def callback(_, content, __):
+                content = content.replace('\n',  '\r')
+                quote = '"' if "'" in content else "'"
+                self.control.input.write(
+                    "send-keys -t {} -l {}{}{}\n"
+                    .format(self.pane_id, quote, content, quote))
+            self.clipboard.request_text(callback)
+        else:
+            for term in self.terminator.get_target_terms(self):
+                if primary:
+                    term.vte.paste_primary()
+                else:
+                    term.vte.paste_clipboard()
+            self.vte.grab_focus()
 
     def feed(self, text):
         """Feed the supplied text to VTE"""
