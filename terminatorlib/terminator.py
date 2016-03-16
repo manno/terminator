@@ -95,6 +95,7 @@ class Terminator(Borg):
             self.pane_id_to_terminal = {}
         if self.tmux_control is None:
             def callback(notification):
+                # dbg('@@@ {}'.format(notification))
                 if isinstance(notification, control.Output):
                     pane_id = notification.pane_id
                     output = notification.output
@@ -103,15 +104,14 @@ class Terminator(Borg):
                         return
                     terminal.vte.feed(output.decode('string_escape'))
                 elif isinstance(notification, control.Result):
-                    result = notification.result
-                    if len(result) == 1 and result[0].startswith('|||'):
-                        _, pane_id, marker = result[0].split(' ')
+                    if notification.is_pane_id_result():
+                        pane_id, marker = notification.pane_id_and_marker
                         terminal = self.find_terminal_by_pane_id(marker)
                         terminal.pane_id = pane_id
                         self.pane_id_to_terminal[pane_id] = terminal
             self.tmux_control = control.TmuxControl(
-                    session_name='terminator',
-                    notifications_handler=callback)
+                session_name='terminator',
+                notifications_handler=callback)
 
     def set_origcwd(self, cwd):
         """Store the original cwd our process inherits"""

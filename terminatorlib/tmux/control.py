@@ -3,6 +3,8 @@ import subprocess
 
 from gi.repository import Gtk, Gdk
 
+PANE_ID_RESULT_PREFIX = '|||'
+
 mappings = {}
 
 
@@ -45,6 +47,15 @@ class Result(Notification):
         end, timestamp, code, _ = line.split(' ')
         self.end_timestamp = timestamp
         self.error = end == '%error'
+
+    def is_pane_id_result(self):
+        return len(self.result) == 1 and self.result[0].startswith(
+            PANE_ID_RESULT_PREFIX)
+
+    @property
+    def pane_id_and_marker(self):
+        _, pane_id, marker = self.result[0].split(' ')
+        return pane_id, marker
 
 
 @notification
@@ -202,19 +213,21 @@ class TmuxControl(object):
             self.new_session(cwd=cwd, command=command, marker=marker)
 
     def new_window(self, cwd=None, command=None, marker=''):
-        tmux_command = 'new-window -P -F "||| #D {}"'.format(marker)
-        if cwd:
-            tmux_command += ' -c {}'.format(cwd)
+        tmux_command = 'new-window -P -F "{} #D {}"'.format(
+            PANE_ID_RESULT_PREFIX, marker)
+        # TODO: fix (getting None for pid, e.g. /proc/None/cwd)
+        # if cwd:
+        #     tmux_command += ' -c "{}"'.format(cwd)
         if command:
-            tmux_command += ' {}'.format(command)
-        self.input.write('{}\n'.format(command))
+            tmux_command += ' "{}"'.format(command)
+        self.input.write('{}\n'.format(tmux_command))
 
     def new_session(self, cwd=None, command=None, marker=''):
         self.kill_server()
 
         popen_command = [
             'tmux', '-2', '-C', 'new-session', '-s', self.session_name,
-            '-P', '-F', '||| #D {}'.format(marker)]
+            '-P', '-F', '{} #D {}'.format(PANE_ID_RESULT_PREFIX, marker)]
         if cwd:
             popen_command += ['-c', cwd]
         if command:
@@ -249,10 +262,12 @@ class TmuxControl(object):
         if key == ';':
             key = '\\;'
 
-        quote = '"' if key == "'" else "'"
+        self.send_content(key, pane_id)
 
+    def send_content(self, content, pane_id):
+        quote = '"' if "'" in content else "'"
         self.input.write("send-keys -t {} -l {}{}{}\n".format(
-                pane_id, quote, key, quote))
+                pane_id, quote, content, quote))
 
     @staticmethod
     def kill_server():
