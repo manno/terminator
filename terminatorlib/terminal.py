@@ -1518,12 +1518,9 @@ class Terminal(Gtk.VBox):
     def paste_clipboard(self, primary=False):
         """Paste one of the two clipboards"""
         if 1:
-            def callback(_, content, __):
+            def callback(_, content):
                 content = content.replace('\n',  '\r')
-                quote = '"' if "'" in content else "'"
-                self.control.input.write(
-                    "send-keys -t {} -l {}{}{}\n"
-                    .format(self.pane_id, quote, content, quote))
+                self.control.send_content(content, self.pane_id)
             self.clipboard.request_text(callback)
         else:
             for term in self.terminator.get_target_terms(self):
