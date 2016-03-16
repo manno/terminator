@@ -14,10 +14,12 @@ import borg
 from borg import Borg
 from config import Config
 from keybindings import Keybindings
-from util import dbg, err, enumerate_descendants
+from util import dbg, err, enumerate_descendants, TMUX_ATTACH
 from factory import Factory
 from cwd import get_pid_cwd
 from version import APP_NAME, APP_VERSION
+import tmux.control
+import tmux.notifications
 
 def eventkey2gdkevent(eventkey):  # FIXME FOR GTK3: is there a simpler way of casting from specific EventKey to generic (union) GdkEvent?
     gdkevent = Gdk.Event.new(eventkey.type)
@@ -64,6 +66,9 @@ class Terminator(Borg):
 
     cur_gtk_theme_name = None
     gtk_settings = None
+    tmux_control = None
+    pane_id_to_terminal = None
+    initial_layout = None
 
     def __init__(self):
         """Class initialiser"""
@@ -97,6 +102,9 @@ class Terminator(Borg):
             self.pid_cwd = get_pid_cwd()
         if self.gnome_client is None:
             self.attempt_gnome_client()
+        if self.pane_id_to_terminal is None:
+            self.pane_id_to_terminal = {}
+
         self.connect_signals()
 
     def connect_signals(self):
@@ -227,6 +235,15 @@ class Terminator(Borg):
                 return window
         return None
 
+    def find_terminal_by_pane_id(self, pane_id):
+        """Search our terminals for one matching the supplied pane_id"""
+        dbg('searching self.terminals for: %s' % pane_id)
+        for terminal in self.terminals:
+            dbg('checking: %s (%s)' % (terminal.pane_id, terminal))
+            if terminal.pane_id == pane_id:
+                return terminal
+        return None
+
     def new_window(self, cwd=None, profile=None):
         """Create a window with a Terminal in it"""
         maker = Factory()
@@ -244,19 +261,20 @@ class Terminator(Borg):
 
     def create_layout(self, layoutname):
         """Create all the parts necessary to satisfy the specified layout"""
-        layout = None
+        layout = copy.deepcopy(self.initial_layout)
         objects = {}
 
         self.doing_layout = True
         self.last_active_window = None
         self.prelayout_windows = self.windows[:]
 
-        layout = copy.deepcopy(self.config.layout_get_config(layoutname))
         if not layout:
-            # User specified a non-existent layout. default to one Terminal
-            err('layout %s not defined' % layout)
-            self.new_window()
-            return
+            layout = copy.deepcopy(self.config.layout_get_config(layoutname))
+            if not layout:
+                # User specified a non-existent layout. default to one Terminal
+                err('layout %s not defined' % layout)
+                self.new_window()
+                return
 
         # Wind the flat objects into a hierarchy
         hierarchy = {}
@@ -682,5 +700,4 @@ class Terminator(Borg):
             count = window.describe_layout(count, parent, layout, 0)
 
         return(layout)
-
 # vim: set expandtab ts=4 sw=4:
