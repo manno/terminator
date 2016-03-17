@@ -41,6 +41,8 @@ DEBUGCLASSES = []
 # list of methods to show debugging for. empty list means show all methods
 DEBUGMETHODS = []
 
+TMUX = True
+
 def dbg(log = ""):
     """Print a message if debugging is enabled"""
     if DEBUG:

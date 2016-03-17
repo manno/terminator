@@ -48,7 +48,7 @@ import terminatorlib.optionparse
 from terminatorlib.terminator import Terminator
 from terminatorlib.factory import Factory
 from terminatorlib.version import APP_NAME, APP_VERSION
-from terminatorlib.util import dbg, err
+from terminatorlib.util import dbg, err, TMUX
 from terminatorlib.layoutlauncher import LayoutLauncher
 
 if __name__ == '__main__':
@@ -133,8 +133,9 @@ if __name__ == '__main__':
         Gdk.threads_init()
         (DEBUGTHREAD, DEBUGSVR) = debugserver.spawn(locals())
         TERMINATOR.debug_address = DEBUGSVR.server_address
+    elif TMUX:
+        Gdk.threads_init()
 
-    Gdk.threads_init()
     try:
         Gtk.main()
     except KeyboardInterrupt:

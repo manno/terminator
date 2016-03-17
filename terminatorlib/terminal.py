@@ -903,7 +903,8 @@ class Terminal(Gtk.VBox):
             if groupsend == groupsend_type['all']:
                 self.terminator.all_emit(self, 'key-press-event', event)
 
-        self.control.send_keypress(event, pane_id=self.pane_id)
+        if util.TMUX:
+            self.control.send_keypress(event, pane_id=self.pane_id)
 
         return(False)
 
@@ -1271,7 +1272,8 @@ class Terminal(Gtk.VBox):
         column_count = self.vte.get_column_count()
         row_count = self.vte.get_row_count()
         self.titlebar.update_terminal_size(column_count, row_count)
-        self.control.refresh_client(column_count, row_count)
+        if util.TMUX:
+            self.control.refresh_client(column_count, row_count)
         if self.config['geometry_hinting']:
             window = self.get_toplevel()
             window.deferred_set_rough_geometry_hints()
@@ -1434,7 +1436,7 @@ class Terminal(Gtk.VBox):
             envv.append('TERMINATOR_DBUS_PATH=%s' % self.terminator.dbus_path)
 
         dbg('Forking shell: "%s" with args: %s' % (shell, args))
-        if 1:
+        if util.TMUX:
             # command = '{} {}'.format(shell, ' '.join(args))
             command = ' '.join(args)
             self.pane_id = str(util.make_uuid())
@@ -1519,7 +1521,7 @@ class Terminal(Gtk.VBox):
 
     def paste_clipboard(self, primary=False):
         """Paste one of the two clipboards"""
-        if 1:
+        if util.TMUX:
             def callback(_, content):
                 content = content.replace('\n',  '\r')
                 self.control.send_content(content, self.pane_id)
