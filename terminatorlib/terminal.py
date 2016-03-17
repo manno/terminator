@@ -1234,8 +1234,10 @@ class Terminal(Gtk.VBox):
         self.on_vte_size_allocate(widget, allocation)
 
     def on_vte_size_allocate(self, widget, allocation):
-        self.titlebar.update_terminal_size(self.vte.get_column_count(),
-                self.vte.get_row_count())
+        column_count = self.vte.get_column_count()
+        row_count = self.vte.get_row_count()
+        self.titlebar.update_terminal_size(column_count, row_count)
+        self.control.refresh_client(column_count, row_count)
         if self.config['geometry_hinting']:
             window = self.get_toplevel()
             window.deferred_set_rough_geometry_hints()
