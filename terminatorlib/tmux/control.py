@@ -220,7 +220,7 @@ class TmuxControl(object):
         #     tmux_command += ' -c "{}"'.format(cwd)
         if command:
             tmux_command += ' "{}"'.format(command)
-        self.input.write('{}\n'.format(tmux_command))
+        self._run_command(tmux_command)
 
     def new_session(self, cwd=None, command=None, marker=''):
         self.kill_server()
@@ -238,6 +238,9 @@ class TmuxControl(object):
         self.input = self.tmux.stdin
         self.output = self.tmux.stdout
         self.start_notifications_consumer()
+
+    def refresh_client(self, width, height):
+        self._run_command('refresh-client -C {},{}'.format(width, height))
 
     def send_keypress(self, event, pane_id):
         keyval = event.keyval
@@ -266,7 +269,7 @@ class TmuxControl(object):
 
     def send_content(self, content, pane_id):
         quote = '"' if "'" in content else "'"
-        self.input.write("send-keys -t {} -l {}{}{}\n".format(
+        self._run_command("send-keys -t {} -l {}{}{}".format(
                 pane_id, quote, content, quote))
 
     @staticmethod
@@ -294,3 +297,6 @@ class TmuxControl(object):
             notification = mappings[marker]()
             notification.consume(line, self.output)
             yield notification
+
+    def _run_command(self, command):
+        self.input.write('{}\n'.format(command))
