@@ -3,6 +3,8 @@ import subprocess
 
 from gi.repository import Gtk, Gdk
 
+from terminatorlib.util import dbg
+
 PANE_ID_RESULT_PREFIX = '|||'
 
 mappings = {}
@@ -186,7 +188,6 @@ class TmuxControl(object):
         self.output = None
         self.input = None
         self.consumer = None
-
         raw_mappings = {
             'BackSpace': '\b',
             'Tab': '\t',
@@ -272,16 +273,22 @@ class TmuxControl(object):
         self._run_command("send-keys -t {} -l {}{}{}".format(
                 pane_id, quote, content, quote))
 
+    def _run_command(self, command):
+        if not self.input:
+            dbg('No tmux connection. [command={}]'.format(command))
+        else:
+            self.input.write('{}\n'.format(command))
+
     @staticmethod
     def kill_server():
         subprocess.call(['tmux', 'kill-server'])
 
     def start_notifications_consumer(self):
-        callback = self.notifications_handler
+        handler = self.notifications_handler
 
         def target():
             for notification in self.consume_notifications():
-                callback(notification)
+                handler.handle(notification)
         self.consumer = threading.Thread(target=target)
         self.consumer.daemon = True
         self.consumer.start()
@@ -298,5 +305,33 @@ class TmuxControl(object):
             notification.consume(line, self.output)
             yield notification
 
-    def _run_command(self, command):
-        self.input.write('{}\n'.format(command))
+
+class NotificationsHandler(object):
+
+    def __init__(self, terminator):
+        self.terminator = terminator
+
+    def handle(self, notification):
+        try:
+            handler_method = getattr(self, 'handle_{}'.format(
+                notification.marker))
+            handler_method(notification)
+        except AttributeError:
+            pass
+
+    def handle_begin(self, notification):
+        assert isinstance(notification, Result)
+        if notification.is_pane_id_result():
+            pane_id, marker = notification.pane_id_and_marker
+            terminal = self.terminator.find_terminal_by_pane_id(marker)
+            terminal.pane_id = pane_id
+            self.terminator.pane_id_to_terminal[pane_id] = terminal
+
+    def handle_output(self, notification):
+        assert isinstance(notification, Output)
+        pane_id = notification.pane_id
+        output = notification.output
+        terminal = self.terminator.pane_id_to_terminal.get(pane_id)
+        if not terminal:
+            return
+        terminal.vte.feed(output.decode('string_escape'))
