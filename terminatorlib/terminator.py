@@ -103,24 +103,9 @@ class Terminator(Borg):
         if self.pane_id_to_terminal is None:
             self.pane_id_to_terminal = {}
         if self.tmux_control is None:
-            def callback(notification):
-                # dbg('@@@ {}'.format(notification))
-                if isinstance(notification, control.Output):
-                    pane_id = notification.pane_id
-                    output = notification.output
-                    terminal = self.pane_id_to_terminal.get(pane_id)
-                    if not terminal:
-                        return
-                    terminal.vte.feed(output.decode('string_escape'))
-                elif isinstance(notification, control.Result):
-                    if notification.is_pane_id_result():
-                        pane_id, marker = notification.pane_id_and_marker
-                        terminal = self.find_terminal_by_pane_id(marker)
-                        terminal.pane_id = pane_id
-                        self.pane_id_to_terminal[pane_id] = terminal
             self.tmux_control = control.TmuxControl(
                 session_name='terminator',
-                notifications_handler=callback)
+                notifications_handler=control.NotificationsHandler(self))
         self.connect_signals()
 
     def connect_signals(self):
@@ -715,5 +700,4 @@ class Terminator(Borg):
             count = window.describe_layout(count, parent, layout, 0)
 
         return(layout)
-
 # vim: set expandtab ts=4 sw=4:
