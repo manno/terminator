@@ -1,6 +1,6 @@
 import unittest
 
-from terminatorlib.tmux import control
+from terminatorlib.tmux import notifications
 
 
 class NotificationsTests(unittest.TestCase):
@@ -13,7 +13,7 @@ class NotificationsTests(unittest.TestCase):
             'sum,80x24,0,0[80x12,0,0,0,80x5,0,13,1,80x5,0,19{40x5,0,19,2,19x5,41,19,3,9x5,61,19,4,4x5,71,19,5,4x5,76,19,6}]'
         ]
         for layout in layouts:
-            notification = control.LayoutChange()
+            notification = notifications.LayoutChange()
             notification.consume(['', layout])
             print notification.window_layout
 

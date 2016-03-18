@@ -3,14 +3,15 @@ import subprocess
 
 from gi.repository import Gtk, Gdk
 
+from terminatorlib import tmux
+from terminatorlib.tmux import notifications
 from terminatorlib.util import dbg
-from terminatorlib.tmux import layout
 
 
 def esc(seq):
     return '\033{}'.format(seq)
 
-PANE_ID_RESULT_PREFIX = '|||'
+
 KEY_MAPPINGS = {
     Gdk.KEY_BackSpace: '\b',
     Gdk.KEY_Tab: '\t',
@@ -33,174 +34,6 @@ ARROW_KEYS = {
 }
 
 
-notifications_mappings = {}
-
-
-def notification(cls):
-    notifications_mappings[cls.marker] = cls
-    return cls
-
-
-class Notification(object):
-
-    marker = 'undefined'
-    attributes = []
-
-    def consume(self, line, out):
-        pass
-
-    def __str__(self):
-        attributes = ['{}="{}"'.format(attribute, getattr(self, attribute, ''))
-                      for attribute in self.attributes]
-        return '{}[{}]'.format(self.marker, ', '.join(attributes))
-
-
-@notification
-class Result(Notification):
-
-    marker = 'begin'
-    attributes = ['begin_timestamp', 'code', 'result', 'end_timestamp',
-                  'error']
-
-    def consume(self, line, out):
-        timestamp, code, _ = line
-        self.begin_timestamp = timestamp
-        self.code = code
-        result = []
-        line = out.readline()[:-1]
-        while not (line.startswith('%end') or line.startswith('%error')):
-            result.append(line)
-            line = out.readline()[:-1]
-        self.result = result
-        end, timestamp, code, _ = line.split(' ')
-        self.end_timestamp = timestamp
-        self.error = end == '%error'
-
-    def is_pane_id_result(self):
-        return len(self.result) == 1 and self.result[0].startswith(
-            PANE_ID_RESULT_PREFIX)
-
-    @property
-    def pane_id_and_marker(self):
-        _, pane_id, marker = self.result[0].split(' ')
-        return pane_id, marker
-
-
-@notification
-class Exit(Notification):
-
-    marker = 'exit'
-    attributes = ['reason']
-
-    def consume(self, line, *args):
-        self.reason = line[0] if line else None
-
-
-@notification
-class LayoutChange(Notification):
-
-    marker = 'layout-change'
-    attributes = ['window_id', 'window_layout', 'window_visible_layout',
-                  'window_flags']
-
-    def consume(self, line, *args):
-        # window_id, window_layout, window_visible_layout, window_flags = line
-        window_id, window_layout = line
-        self.window_id = window_id
-        self.window_layout = layout.parse_layout(window_layout)
-        # self.window_visible_layout = window_visible_layout
-        # self.window_flags = window_flags
-
-
-@notification
-class Output(Notification):
-
-    marker = 'output'
-    attributes = ['pane_id', 'output']
-
-    def consume(self, line, *args):
-        pane_id = line[0]
-        output = ' '.join(line[1:])
-        self.pane_id = pane_id
-        self.output = output
-
-
-@notification
-class SessionChanged(Notification):
-
-    marker = 'session-changed'
-    attributes = ['session_id', 'session_name']
-
-    def consume(self, line, *args):
-        session_id, session_name = line
-        self.session_id = session_id
-        self.session_name = session_name
-
-
-@notification
-class SessionRenamed(Notification):
-
-    marker = 'session-renamed'
-    attributes = ['session_id', 'session_name']
-
-    def consume(self, line, *args):
-        session_id, session_name = line
-        self.session_id = session_id
-        self.session_name = session_name
-
-
-@notification
-class SessionsChanged(Notification):
-
-    marker = 'sessions-changed'
-    attributes = []
-
-
-@notification
-class UnlinkedWindowAdd(Notification):
-
-    marker = 'unlinked-window-add'
-    attributes = ['window_id']
-
-    def consume(self, line, *args):
-        window_id, = line
-        self.window_id = window_id
-
-
-@notification
-class WindowAdd(Notification):
-
-    marker = 'window-add'
-    attributes = ['window_id']
-
-    def consume(self, line, *args):
-        window_id, = line
-        self.window_id = window_id
-
-
-@notification
-class WindowClose(Notification):
-
-    marker = 'window-close'
-    attributes = ['window_id']
-
-    def consume(self, line, *args):
-        window_id, = line
-        self.window_id = window_id
-
-
-@notification
-class WindowRenamed(Notification):
-
-    marker = 'window-renamed'
-    attributes = ['window_id', 'window_name']
-
-    def consume(self, line, *args):
-        window_id, window_name = line
-        self.window_id = window_id
-        self.window_name = window_name
-
-
 class TmuxControl(object):
 
     def __init__(self, session_name, notifications_handler):
@@ -219,7 +52,7 @@ class TmuxControl(object):
 
     def new_window(self, cwd=None, command=None, marker=''):
         tmux_command = 'new-window -P -F "{} #D {}"'.format(
-            PANE_ID_RESULT_PREFIX, marker)
+            tmux.PANE_ID_RESULT_PREFIX, marker)
         # TODO: fix (getting None for pid, e.g. /proc/None/cwd)
         # if cwd:
         #     tmux_command += ' -c "{}"'.format(cwd)
@@ -232,7 +65,7 @@ class TmuxControl(object):
 
         popen_command = [
             'tmux', '-2', '-C', 'new-session', '-s', self.session_name,
-            '-P', '-F', '{} #D {}'.format(PANE_ID_RESULT_PREFIX, marker)]
+            '-P', '-F', '{} #D {}'.format(tmux.PANE_ID_RESULT_PREFIX, marker)]
         if cwd:
             popen_command += ['-c', cwd]
         if command:
@@ -288,16 +121,12 @@ class TmuxControl(object):
         subprocess.call(['tmux', 'kill-server'])
 
     def start_notifications_consumer(self):
-        handler = self.notifications_handler
-
-        def target():
-            for notification in self.consume_notifications():
-                handler.handle(notification)
-        self.consumer = threading.Thread(target=target)
+        self.consumer = threading.Thread(target=self.consume_notifications)
         self.consumer.daemon = True
         self.consumer.start()
 
     def consume_notifications(self):
+        handler = self.notifications_handler
         while self.tmux.poll() is None:
             line = self.output.readline()[:-1]
             if not line:
@@ -305,37 +134,7 @@ class TmuxControl(object):
             line = line[1:].split(' ')
             marker = line[0]
             line = line[1:]
-            notification = notifications_mappings[marker]()
+            notification = notifications.notifications_mappings[marker]()
             notification.consume(line, self.output)
-            yield notification
-
-
-class NotificationsHandler(object):
-
-    def __init__(self, terminator):
-        self.terminator = terminator
-
-    def handle(self, notification):
-        try:
-            handler_method = getattr(self, 'handle_{}'.format(
-                notification.marker))
-            handler_method(notification)
-        except AttributeError:
-            pass
-
-    def handle_begin(self, notification):
-        assert isinstance(notification, Result)
-        if notification.is_pane_id_result():
-            pane_id, marker = notification.pane_id_and_marker
-            terminal = self.terminator.find_terminal_by_pane_id(marker)
-            terminal.pane_id = pane_id
-            self.terminator.pane_id_to_terminal[pane_id] = terminal
-
-    def handle_output(self, notification):
-        assert isinstance(notification, Output)
-        pane_id = notification.pane_id
-        output = notification.output
-        terminal = self.terminator.pane_id_to_terminal.get(pane_id)
-        if not terminal:
-            return
-        terminal.vte.feed(output.decode('string_escape'))
+            handler.handle(notification)
+w

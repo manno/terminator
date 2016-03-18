@@ -18,7 +18,8 @@ from util import dbg, err, enumerate_descendants
 from factory import Factory
 from cwd import get_pid_cwd
 from version import APP_NAME, APP_VERSION
-from tmux import control
+import tmux.control
+import tmux.notifications
 
 def eventkey2gdkevent(eventkey):  # FIXME FOR GTK3: is there a simpler way of casting from specific EventKey to generic (union) GdkEvent?
     gdkevent = Gdk.Event.new(eventkey.type)
@@ -103,9 +104,10 @@ class Terminator(Borg):
         if self.pane_id_to_terminal is None:
             self.pane_id_to_terminal = {}
         if self.tmux_control is None:
-            self.tmux_control = control.TmuxControl(
+            handler = tmux.notifications.NotificationsHandler(self)
+            self.tmux_control = tmux.control.TmuxControl(
                 session_name='terminator',
-                notifications_handler=control.NotificationsHandler(self))
+                notifications_handler=handler)
         self.connect_signals()
 
     def connect_signals(self):
