@@ -4,14 +4,40 @@ import subprocess
 from gi.repository import Gtk, Gdk
 
 from terminatorlib.util import dbg
+from terminatorlib.tmux import layout
+
+
+def esc(seq):
+    return '\033{}'.format(seq)
 
 PANE_ID_RESULT_PREFIX = '|||'
+KEY_MAPPINGS = {
+    Gdk.KEY_BackSpace: '\b',
+    Gdk.KEY_Tab: '\t',
+    Gdk.KEY_Insert: esc('[2~'),
+    Gdk.KEY_Delete: esc('[3~'),
+    Gdk.KEY_Page_Up: esc('[5~'),
+    Gdk.KEY_Page_Down: esc('[6~'),
+    Gdk.KEY_Home: esc('OH'),
+    Gdk.KEY_End: esc('OF'),
+    Gdk.KEY_Up: esc('[A'),
+    Gdk.KEY_Down: esc('[B'),
+    Gdk.KEY_Right: esc('[C'),
+    Gdk.KEY_Left: esc('[D'),
+}
+ARROW_KEYS = {
+    Gdk.KEY_Up,
+    Gdk.KEY_Down,
+    Gdk.KEY_Left,
+    Gdk.KEY_Right
+}
 
-mappings = {}
+
+notifications_mappings = {}
 
 
 def notification(cls):
-    mappings[cls.marker] = cls
+    notifications_mappings[cls.marker] = cls
     return cls
 
 
@@ -81,7 +107,7 @@ class LayoutChange(Notification):
         # window_id, window_layout, window_visible_layout, window_flags = line
         window_id, window_layout = line
         self.window_id = window_id
-        self.window_layout = window_layout
+        self.window_layout = layout.parse_layout(window_layout)
         # self.window_visible_layout = window_visible_layout
         # self.window_flags = window_flags
 
@@ -175,10 +201,6 @@ class WindowRenamed(Notification):
         self.window_name = window_name
 
 
-def esc(seq):
-    return '\033{}'.format(seq)
-
-
 class TmuxControl(object):
 
     def __init__(self, session_name, notifications_handler):
@@ -188,24 +210,6 @@ class TmuxControl(object):
         self.output = None
         self.input = None
         self.consumer = None
-        raw_mappings = {
-            'BackSpace': '\b',
-            'Tab': '\t',
-            'Insert': esc('[2~'),
-            'Delete': esc('[3~'),
-            'Page_Up': esc('[5~'),
-            'Page_Down': esc('[6~'),
-            'Home': esc('OH'),
-            'End': esc('OF'),
-            'Up': esc('[A'),
-            'Down': esc('[B'),
-            'Right': esc('[C'),
-            'Left': esc('[D'),
-        }
-        self.mappings = {Gdk.keyval_from_name(name): value
-                         for name, value in raw_mappings.items()}
-        self.arrows = {Gdk.keyval_from_name(name)
-                       for name in ['Up', 'Down', 'Right', 'Left']}
 
     def run_command(self, command, marker, cwd=None):
         if self.input:
@@ -247,9 +251,9 @@ class TmuxControl(object):
         keyval = event.keyval
         state = event.state
 
-        if keyval in self.mappings:
-            key = self.mappings[keyval]
-            if keyval in self.arrows and state & Gdk.ModifierType.CONTROL_MASK:
+        if keyval in KEY_MAPPINGS:
+            key = KEY_MAPPINGS[keyval]
+            if keyval in ARROW_KEYS and state & Gdk.ModifierType.CONTROL_MASK:
                 key = '{}1;5{}'.format(key[:2], key[2:])
         else:
             key = event.string
@@ -301,7 +305,7 @@ class TmuxControl(object):
             line = line[1:].split(' ')
             marker = line[0]
             line = line[1:]
-            notification = mappings[marker]()
+            notification = notifications_mappings[marker]()
             notification.consume(line, self.output)
             yield notification
 
