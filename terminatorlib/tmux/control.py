@@ -137,4 +137,3 @@ class TmuxControl(object):
             notification = notifications.notifications_mappings[marker]()
             notification.consume(line, self.output)
             handler.handle(notification)
-w
