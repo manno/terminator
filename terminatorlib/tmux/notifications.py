@@ -1,3 +1,5 @@
+from gi.repository import GObject
+
 from terminatorlib import tmux
 from terminatorlib.tmux import layout
 
@@ -48,10 +50,22 @@ class Result(Notification):
         return len(self.result) == 1 and self.result[0].startswith(
             tmux.PANE_ID_RESULT_PREFIX)
 
+    def is_garbage_collect_panes_result(self):
+        return len(self.result) > 0 and self.result[0].startswith(
+            tmux.GARBAGE_COLLECT_PANES_PREFIX)
+
     @property
     def pane_id_and_marker(self):
         _, pane_id, marker = self.result[0].split(' ')
         return pane_id, marker
+
+    @property
+    def pane_ids(self):
+        result = []
+        for line in self.result:
+            _, pane_id = line.split(' ')
+            result.append(pane_id)
+        return result
 
 
 @notification
@@ -177,7 +191,7 @@ class NotificationsHandler(object):
     def handle(self, notification):
         try:
             handler_method = getattr(self, 'handle_{}'.format(
-                    notification.marker))
+                    notification.marker.replace('-', '_')))
             handler_method(notification)
         except AttributeError:
             pass
@@ -189,6 +203,19 @@ class NotificationsHandler(object):
             terminal = self.terminator.find_terminal_by_pane_id(marker)
             terminal.pane_id = pane_id
             self.terminator.pane_id_to_terminal[pane_id] = terminal
+        elif notification.is_garbage_collect_panes_result():
+            pane_ids = set(notification.pane_ids)
+            pane_id_to_terminal = self.terminator.pane_id_to_terminal
+            removed_pane_ids = [p for p in pane_id_to_terminal.keys()
+                                if p not in pane_ids]
+            if removed_pane_ids:
+                def callback():
+                    for pane_id in removed_pane_ids:
+                        terminal = pane_id_to_terminal.pop(pane_id, None)
+                        if terminal:
+                            terminal.close()
+                    return False
+                GObject.idle_add(callback)
 
     def handle_output(self, notification):
         assert isinstance(notification, Output)
@@ -198,3 +225,15 @@ class NotificationsHandler(object):
         if not terminal:
             return
         terminal.vte.feed(output.decode('string_escape'))
+
+    def handle_layout_change(self, notification):
+        assert isinstance(notification, LayoutChange)
+        self.terminator.tmux_control.garbage_collect_panes()
+
+    def handle_window_close(self, notification):
+        assert isinstance(notification, WindowClose)
+        self.terminator.tmux_control.garbage_collect_panes()
+
+    def terminate(self):
+        for window in self.terminator.windows:
+            window.emit('destroy')

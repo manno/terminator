@@ -231,14 +231,15 @@ class Terminal(Gtk.VBox):
         dbg('close: called')
         self.cnxids.remove_signal(self.vte, 'child-exited')
         self.emit('close-term')
-        try:
-            dbg('close: killing %d' % self.pid)
-            os.kill(self.pid, signal.SIGHUP)
-        except Exception, ex:
-            # We really don't want to care if this failed. Deep OS voodoo is
-            # not what we should be doing.
-            dbg('os.kill failed: %s' % ex)
-            pass
+        if not util.TMUX:
+            try:
+                dbg('close: killing %d' % self.pid)
+                os.kill(self.pid, signal.SIGHUP)
+            except Exception, ex:
+                # We really don't want to care if this failed. Deep OS voodoo
+                # is not what we should be doing.
+                dbg('os.kill failed: %s' % ex)
+                pass
 
     def create_terminalbox(self):
         """Create a GtkHBox containing the terminal and a scrollbar"""

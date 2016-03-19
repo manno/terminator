@@ -98,6 +98,10 @@ class TmuxControl(object):
     def refresh_client(self, width, height):
         self._run_command('refresh-client -C {},{}'.format(width, height))
 
+    def garbage_collect_panes(self):
+        self._run_command('list-panes -a -F "{} #D"'.format(
+            tmux.GARBAGE_COLLECT_PANES_PREFIX))
+
     def send_keypress(self, event, pane_id):
         keyval = event.keyval
         state = event.state
@@ -155,3 +159,4 @@ class TmuxControl(object):
             notification = notifications.notifications_mappings[marker]()
             notification.consume(line, self.output)
             handler.handle(notification)
+        handler.terminate()
