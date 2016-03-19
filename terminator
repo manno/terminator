@@ -108,6 +108,9 @@ if __name__ == '__main__':
             dbg('dbus not imported')
             pass
 
+        if TMUX:
+            Gdk.threads_init()
+
         MAKER = Factory()
         TERMINATOR = Terminator()
         TERMINATOR.set_origcwd(ORIGCWD)
@@ -131,8 +134,6 @@ if __name__ == '__main__':
         Gdk.threads_init()
         (DEBUGTHREAD, DEBUGSVR) = debugserver.spawn(locals())
         TERMINATOR.debug_address = DEBUGSVR.server_address
-    elif TMUX:
-        Gdk.threads_init()
 
     try:
         Gtk.main()

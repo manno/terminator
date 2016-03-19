@@ -99,6 +99,7 @@ class Terminator(Borg):
             self.tmux_control = tmux.control.TmuxControl(
                 session_name='terminator',
                 notifications_handler=handler)
+            # self.tmux_control.attach_session()
 
     def set_origcwd(self, cwd):
         """Store the original cwd our process inherits"""
