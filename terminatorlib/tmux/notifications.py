@@ -235,5 +235,7 @@ class NotificationsHandler(object):
         self.terminator.tmux_control.garbage_collect_panes()
 
     def terminate(self):
-        for window in self.terminator.windows:
-            window.emit('destroy')
+        def callback():
+            for window in self.terminator.windows:
+                window.emit('destroy')
+        GObject.idle_add(callback)
