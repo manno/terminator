@@ -78,9 +78,20 @@ class TmuxControl(object):
             tmux_command += ' "{}"'.format(command)
         self._run_command(tmux_command)
 
+    def attach_session(self):
+        self.kill_server()
+        popen_command = ['tmux', '-2', '-C', 'attach-session',
+                         '-t', self.session_name]
+        self.tmux = subprocess.Popen(popen_command,
+                                     stdout=subprocess.PIPE,
+                                     stdin=subprocess.PIPE)
+        self.input = self.tmux.stdin
+        self.output = self.tmux.stdout
+        self.start_notifications_consumer()
+        self.initial_layout()
+
     def new_session(self, cwd=None, command=None, marker=''):
         self.kill_server()
-
         popen_command = [
             'tmux', '-2', '-C', 'new-session', '-s', self.session_name,
             '-P', '-F', '{} #D {}'.format(tmux.PANE_ID_RESULT_PREFIX, marker)]
@@ -99,8 +110,13 @@ class TmuxControl(object):
         self._run_command('refresh-client -C {},{}'.format(width, height))
 
     def garbage_collect_panes(self):
-        self._run_command('list-panes -a -F "{} #D"'.format(
-            tmux.GARBAGE_COLLECT_PANES_PREFIX))
+        self._run_command('list-panes -s -t {} -F "{} #D"'.format(
+            self.session_name, tmux.GARBAGE_COLLECT_PANES_PREFIX))
+
+    def initial_layout(self):
+        self._run_command('list-windows -t {} -F "{} #{{window_layout}}"'
+                          .format(self.session_name,
+                                  tmux.INITIAL_LAYOUT_PREFIX))
 
     def send_keypress(self, event, pane_id):
         keyval = event.keyval

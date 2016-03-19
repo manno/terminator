@@ -55,6 +55,10 @@ class Result(Notification):
         return len(self.result) > 0 and self.result[0].startswith(
             tmux.GARBAGE_COLLECT_PANES_PREFIX)
 
+    def is_initial_layout_result(self):
+        return len(self.result) > 0 and self.result[0].startswith(
+            tmux.INITIAL_LAYOUT_PREFIX)
+
     @property
     def pane_id_and_marker(self):
         _, pane_id, marker = self.result[0].split(' ')
@@ -66,6 +70,14 @@ class Result(Notification):
         for line in self.result:
             _, pane_id = line.split(' ')
             result.append(pane_id)
+        return result
+
+    @property
+    def window_layouts(self):
+        result = []
+        for line in self.result:
+            _, window_layout = line.split(' ')
+            result.append(layout.parse_layout(window_layout))
         return result
 
 
@@ -219,6 +231,9 @@ class NotificationsHandler(object):
                             terminal.close()
                     return False
                 GObject.idle_add(callback)
+        elif notification.is_initial_layout_result():
+            window_layouts = notification.window_layouts
+            dbg(window_layouts)
 
     def handle_output(self, notification):
         assert isinstance(notification, Output)
