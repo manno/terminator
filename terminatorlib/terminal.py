@@ -1364,7 +1364,8 @@ class Terminal(Gtk.VBox):
         if cwd is not None:
             self.cwd = cwd
 
-    def spawn_child(self, widget=None, respawn=False, debugserver=False):
+    def spawn_child(self, widget=None, respawn=False, debugserver=False,
+                    orientation=None, active_pane_id=None):
         args = []
         shell = None
         command = None
@@ -1440,8 +1441,11 @@ class Terminal(Gtk.VBox):
             # command = '{} {}'.format(shell, ' '.join(args))
             command = ' '.join(args)
             self.pane_id = str(util.make_uuid())
-            self.control.run_command(command=command, cwd=self.cwd,
-                                     marker=self.pane_id)
+            self.control.run_command(command=command,
+                                     cwd=self.cwd,
+                                     marker=self.pane_id,
+                                     orientation=orientation,
+                                     pane_id=active_pane_id)
         else:
             args.insert(0, shell)
             result,  self.pid = self.vte.spawn_sync(Vte.PtyFlags.DEFAULT,

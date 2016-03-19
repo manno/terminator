@@ -44,11 +44,29 @@ class TmuxControl(object):
         self.input = None
         self.consumer = None
 
-    def run_command(self, command, marker, cwd=None):
+    def run_command(self, command, marker, cwd=None, orientation=None,
+                    pane_id=None):
         if self.input:
-            self.new_window(cwd=cwd, command=command, marker=marker)
+            if orientation:
+                self.split_window(cwd=cwd, orientation=orientation,
+                                  pane_id=pane_id, command=command,
+                                  marker=marker)
+            else:
+                self.new_window(cwd=cwd, command=command, marker=marker)
         else:
             self.new_session(cwd=cwd, command=command, marker=marker)
+
+    def split_window(self, cwd, orientation, pane_id,
+                     command=None, marker=''):
+        orientation = '-h' if orientation == 'horizontal' else '-v'
+        tmux_command = 'split-window {} -t {} -P -F "{} #D {}"'.format(
+            orientation, pane_id, tmux.PANE_ID_RESULT_PREFIX, marker)
+        # TODO: fix (getting None for pid, e.g. /proc/None/cwd)
+        # if cwd:
+        #     tmux_command += ' -c "{}"'.format(cwd)
+        if command:
+            tmux_command += ' "{}"'.format(command)
+        self._run_command(tmux_command)
 
     def new_window(self, cwd=None, command=None, marker=''):
         tmux_command = 'new-window -P -F "{} #D {}"'.format(
