@@ -1,5 +1,6 @@
 from gi.repository import GObject
 
+from terminatorlib.util import dbg
 from terminatorlib import tmux
 from terminatorlib.tmux import layout
 
@@ -198,7 +199,9 @@ class NotificationsHandler(object):
 
     def handle_begin(self, notification):
         assert isinstance(notification, Result)
-        if notification.is_pane_id_result():
+        if notification.error:
+            dbg('Request error: {}'.format(notification))
+        elif notification.is_pane_id_result():
             pane_id, marker = notification.pane_id_and_marker
             terminal = self.terminator.find_terminal_by_pane_id(marker)
             terminal.pane_id = pane_id
