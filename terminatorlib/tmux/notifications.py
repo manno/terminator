@@ -233,7 +233,10 @@ class NotificationsHandler(object):
                 GObject.idle_add(callback)
         elif notification.is_initial_layout_result():
             window_layouts = notification.window_layouts
-            dbg(window_layouts)
+            terminator_layout = layout.convert_to_terminator_layout(
+                window_layouts)
+            import pprint
+            dbg(pprint.pformat(terminator_layout))
 
     def handle_output(self, notification):
         assert isinstance(notification, Output)

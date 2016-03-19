@@ -39,6 +39,11 @@ def parse_layout(layout):
     return parse(consumed=0)[0][0]
 
 
+def convert_to_terminator_layout(windows_layouts):
+    result = {}
+    return result
+
+
 class Container(object):
 
     def __init__(self, width, height, x, y):
