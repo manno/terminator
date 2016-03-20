@@ -1239,8 +1239,8 @@ class Terminal(Gtk.VBox):
         column_count = self.vte.get_column_count()
         row_count = self.vte.get_row_count()
         self.titlebar.update_terminal_size(column_count, row_count)
-        if util.TMUX:
-            self.control.refresh_client(column_count, row_count)
+        # if util.TMUX:
+        #     self.control.refresh_client(column_count, row_count)
         if self.config['geometry_hinting']:
             window = self.get_toplevel()
             window.deferred_set_rough_geometry_hints()
