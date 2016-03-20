@@ -224,8 +224,7 @@ class NotificationsHandler(object):
                 return False
             GObject.idle_add(callback)
 
-    @staticmethod
-    def initial_layout_result(result):
+    def initial_layout_result(self, result):
         window_layouts = []
         for line in result:
             window_layout = line.strip()
@@ -234,6 +233,7 @@ class NotificationsHandler(object):
                 window_layouts)
         import pprint
         dbg(pprint.pformat(terminator_layout))
+        self.terminator.initial_layout = terminator_layout
 
     def terminate(self):
         def callback():

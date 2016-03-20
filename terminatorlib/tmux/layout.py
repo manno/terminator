@@ -142,7 +142,7 @@ def _convert_container_to_terminator_pane(result, parent_name,
                                           container_or_children,
                                           pane_index, pane_type,
                                           order):
-    terminator_type = 'VPane' if issubclass(pane_type, Vertical) else 'HPane'
+    terminator_type = 'VPaned' if issubclass(pane_type, Vertical) else 'HPaned'
     if isinstance(container_or_children, pane_type):
         container = container_or_children
         pane = _convert(parent_name, terminator_type, container_or_children,

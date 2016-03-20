@@ -22,6 +22,7 @@ import sys
 import os
 import psutil
 import pwd
+import time
 try:
     ORIGCWD = os.getcwd()
 except OSError:
@@ -48,7 +49,7 @@ import terminatorlib.optionparse
 from terminatorlib.terminator import Terminator
 from terminatorlib.factory import Factory
 from terminatorlib.version import APP_NAME, APP_VERSION
-from terminatorlib.util import dbg, err, TMUX
+from terminatorlib.util import dbg, err, TMUX, TMUX_ATTACH
 from terminatorlib.layoutlauncher import LayoutLauncher
 
 if __name__ == '__main__':
@@ -121,12 +122,16 @@ if __name__ == '__main__':
         TERMINATOR.ibus_running = ibus_running
 
         try:
+            if TMUX_ATTACH:
+                while TERMINATOR.initial_layout is None:
+                    time.sleep(0.1)
             dbg('Creating a terminal with layout: %s' % OPTIONS.layout)
             TERMINATOR.create_layout(OPTIONS.layout)
         except (KeyError,ValueError), ex:
             err('layout creation failed, creating a window ("%s")' % ex)
             TERMINATOR.new_window()
         TERMINATOR.layout_done()
+        TERMINATOR.initial_layout = None
 
     if OPTIONS.debug >= 2:
         import terminatorlib.debugserver as debugserver
