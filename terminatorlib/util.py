@@ -35,6 +35,7 @@ DEBUGCLASSES = []
 DEBUGMETHODS = []
 
 TMUX = True
+TMUX_ATTACH = TMUX and True
 
 def dbg(log = ""):
     """Print a message if debugging is enabled"""

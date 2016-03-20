@@ -1405,14 +1405,17 @@ class Terminal(Gtk.VBox):
 
         dbg('Forking shell: "%s" with args: %s' % (shell, args))
         if util.TMUX:
-            # command = '{} {}'.format(shell, ' '.join(args))
-            command = ' '.join(args)
-            self.pane_id = str(util.make_uuid())
-            self.control.run_command(command=command,
-                                     cwd=self.cwd,
-                                     marker=self.pane_id,
-                                     orientation=orientation,
-                                     pane_id=active_pane_id)
+            if util.TMUX_ATTACH:
+                pass
+            else:
+                # command = '{} {}'.format(shell, ' '.join(args))
+                command = ' '.join(args)
+                self.pane_id = str(util.make_uuid())
+                self.control.run_command(command=command,
+                                         cwd=self.cwd,
+                                         marker=self.pane_id,
+                                         orientation=orientation,
+                                         pane_id=active_pane_id)
         else:
             args.insert(0, shell)
             result,  self.pid = self.vte.spawn_sync(Vte.PtyFlags.DEFAULT,
@@ -1639,6 +1642,9 @@ class Terminal(Gtk.VBox):
             self.directory = layout['directory']
         if layout.has_key('uuid') and layout['uuid'] != '':
             self.uuid = make_uuid(layout['uuid'])
+        if layout.has_key('tmux'):
+            tmux = layout['tmux']
+            self.pane_id = tmux['pane_id']
 
     def scroll_by_page(self, pages):
         """Scroll up or down in pages"""
