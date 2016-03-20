@@ -124,6 +124,12 @@ class TmuxControl(object):
             .format(self.session_name),
             callback=self.notifications_handler.initial_layout_result)
 
+    def initial_output(self, pane_id):
+        self._run_command(
+            'capture-pane -p -t {} -eC -S - -E -'.format(pane_id),
+            callback=self.notifications_handler.initial_output_result_callback(
+                pane_id))
+
     def send_keypress(self, event, pane_id):
         keyval = event.keyval
         state = event.state

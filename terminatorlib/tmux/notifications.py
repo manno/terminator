@@ -235,6 +235,16 @@ class NotificationsHandler(object):
         dbg(pprint.pformat(terminator_layout))
         self.terminator.initial_layout = terminator_layout
 
+    def initial_output_result_callback(self, pane_id):
+        def result_callback(result):
+            terminal = self.terminator.pane_id_to_terminal.get(pane_id)
+            if not terminal:
+                return
+            for line in result:
+                # line = '{}\n'.format(line)
+                terminal.vte.feed(line.decode('string_escape'))
+        return result_callback
+
     def terminate(self):
         def callback():
             for window in self.terminator.windows:
