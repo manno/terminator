@@ -1,9 +1,9 @@
 import threading
 import subprocess
+import Queue
 
 from gi.repository import Gtk, Gdk
 
-from terminatorlib import tmux
 from terminatorlib.tmux import notifications
 from terminatorlib.util import dbg
 
@@ -43,6 +43,7 @@ class TmuxControl(object):
         self.output = None
         self.input = None
         self.consumer = None
+        self.requests = Queue.Queue()
 
     def run_command(self, command, marker, cwd=None, orientation=None,
                     pane_id=None):
@@ -59,24 +60,25 @@ class TmuxControl(object):
     def split_window(self, cwd, orientation, pane_id,
                      command=None, marker=''):
         orientation = '-h' if orientation == 'horizontal' else '-v'
-        tmux_command = 'split-window {} -t {} -P -F "{} #D {}"'.format(
-            orientation, pane_id, tmux.PANE_ID_RESULT_PREFIX, marker)
+        tmux_command = 'split-window {} -t {} -P -F "#D {}"'.format(
+            orientation, pane_id, marker)
         # TODO (dank): fix (getting None for pid, e.g. /proc/None/cwd)
         # if cwd:
         #     tmux_command += ' -c "{}"'.format(cwd)
         if command:
             tmux_command += ' "{}"'.format(command)
-        self._run_command(tmux_command)
+        self._run_command(tmux_command,
+                          callback=self.notifications_handler.pane_id_result)
 
     def new_window(self, cwd=None, command=None, marker=''):
-        tmux_command = 'new-window -P -F "{} #D {}"'.format(
-            tmux.PANE_ID_RESULT_PREFIX, marker)
+        tmux_command = 'new-window -P -F "#D {}"'.format(marker)
         # TODO (dank): fix (getting None for pid, e.g. /proc/None/cwd)
         # if cwd:
         #     tmux_command += ' -c "{}"'.format(cwd)
         if command:
             tmux_command += ' "{}"'.format(command)
-        self._run_command(tmux_command)
+        self._run_command(tmux_command,
+                          callback=self.notifications_handler.pane_id_result)
 
     def attach_session(self):
         self.kill_server()
@@ -85,6 +87,7 @@ class TmuxControl(object):
         self.tmux = subprocess.Popen(popen_command,
                                      stdout=subprocess.PIPE,
                                      stdin=subprocess.PIPE)
+        self.requests.put(notifications.noop)
         self.input = self.tmux.stdin
         self.output = self.tmux.stdout
         self.start_notifications_consumer()
@@ -94,7 +97,7 @@ class TmuxControl(object):
         self.kill_server()
         popen_command = [
             'tmux', '-2', '-C', 'new-session', '-s', self.session_name,
-            '-P', '-F', '{} #D {}'.format(tmux.PANE_ID_RESULT_PREFIX, marker)]
+            '-P', '-F', '#D {}'.format(marker)]
         if cwd:
             popen_command += ['-c', cwd]
         if command:
@@ -102,6 +105,7 @@ class TmuxControl(object):
         self.tmux = subprocess.Popen(popen_command,
                                      stdout=subprocess.PIPE,
                                      stdin=subprocess.PIPE)
+        self.requests.put(self.notifications_handler.pane_id_result)
         self.input = self.tmux.stdin
         self.output = self.tmux.stdout
         self.start_notifications_consumer()
@@ -110,13 +114,15 @@ class TmuxControl(object):
         self._run_command('refresh-client -C {},{}'.format(width, height))
 
     def garbage_collect_panes(self):
-        self._run_command('list-panes -s -t {} -F "{} #D"'.format(
-            self.session_name, tmux.GARBAGE_COLLECT_PANES_PREFIX))
+        self._run_command('list-panes -s -t {} -F "#D"'.format(
+            self.session_name),
+            callback=self.notifications_handler.garbage_collect_panes_result)
 
     def initial_layout(self):
-        self._run_command('list-windows -t {} -F "{} #{{window_layout}}"'
-                          .format(self.session_name,
-                                  tmux.INITIAL_LAYOUT_PREFIX))
+        self._run_command(
+            'list-windows -t {} -F "#{{window_layout}}"'
+            .format(self.session_name),
+            callback=self.notifications_handler.initial_layout_result)
 
     def send_keypress(self, event, pane_id):
         keyval = event.keyval
@@ -148,11 +154,13 @@ class TmuxControl(object):
         self._run_command("send-keys -t {} -l {}{}{}".format(
                 pane_id, quote, content, quote))
 
-    def _run_command(self, command):
+    def _run_command(self, command, callback=None):
         if not self.input:
             dbg('No tmux connection. [command={}]'.format(command))
         else:
             self.input.write('{}\n'.format(command))
+            callback = callback or notifications.noop
+            self.requests.put(callback)
 
     @staticmethod
     def kill_server():

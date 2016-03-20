@@ -1,7 +1,6 @@
 from gi.repository import GObject
 
 from terminatorlib.util import dbg
-from terminatorlib import tmux
 from terminatorlib.tmux import layout
 
 notifications_mappings = {}
@@ -46,39 +45,6 @@ class Result(Notification):
         end, timestamp, code, _ = line.split(' ')
         self.end_timestamp = timestamp
         self.error = end == '%error'
-
-    def is_pane_id_result(self):
-        return len(self.result) == 1 and self.result[0].startswith(
-            tmux.PANE_ID_RESULT_PREFIX)
-
-    def is_garbage_collect_panes_result(self):
-        return len(self.result) > 0 and self.result[0].startswith(
-            tmux.GARBAGE_COLLECT_PANES_PREFIX)
-
-    def is_initial_layout_result(self):
-        return len(self.result) > 0 and self.result[0].startswith(
-            tmux.INITIAL_LAYOUT_PREFIX)
-
-    @property
-    def pane_id_and_marker(self):
-        _, pane_id, marker = self.result[0].split(' ')
-        return pane_id, marker
-
-    @property
-    def pane_ids(self):
-        result = []
-        for line in self.result:
-            _, pane_id = line.split(' ')
-            result.append(pane_id)
-        return result
-
-    @property
-    def window_layouts(self):
-        result = []
-        for line in self.result:
-            _, window_layout = line.split(' ')
-            result.append(layout.parse_layout(window_layout))
-        return result
 
 
 @notification
@@ -210,33 +176,13 @@ class NotificationsHandler(object):
             pass
 
     def handle_begin(self, notification):
+        dbg('### {}'.format(notification))
         assert isinstance(notification, Result)
+        callback = self.terminator.tmux_control.requests.get()
         if notification.error:
             dbg('Request error: {}'.format(notification))
-        elif notification.is_pane_id_result():
-            pane_id, marker = notification.pane_id_and_marker
-            terminal = self.terminator.find_terminal_by_pane_id(marker)
-            terminal.pane_id = pane_id
-            self.terminator.pane_id_to_terminal[pane_id] = terminal
-        elif notification.is_garbage_collect_panes_result():
-            pane_ids = set(notification.pane_ids)
-            pane_id_to_terminal = self.terminator.pane_id_to_terminal
-            removed_pane_ids = [p for p in pane_id_to_terminal.keys()
-                                if p not in pane_ids]
-            if removed_pane_ids:
-                def callback():
-                    for pane_id in removed_pane_ids:
-                        terminal = pane_id_to_terminal.pop(pane_id, None)
-                        if terminal:
-                            terminal.close()
-                    return False
-                GObject.idle_add(callback)
-        elif notification.is_initial_layout_result():
-            window_layouts = notification.window_layouts
-            terminator_layout = layout.convert_to_terminator_layout(
-                window_layouts)
-            import pprint
-            dbg(pprint.pformat(terminator_layout))
+            return
+        callback(notification.result)
 
     def handle_output(self, notification):
         assert isinstance(notification, Output)
@@ -249,14 +195,51 @@ class NotificationsHandler(object):
 
     def handle_layout_change(self, notification):
         assert isinstance(notification, LayoutChange)
-        self.terminator.tmux_control.garbage_collect_panes()
+        GObject.idle_add(self.terminator.tmux_control.garbage_collect_panes)
 
     def handle_window_close(self, notification):
         assert isinstance(notification, WindowClose)
-        self.terminator.tmux_control.garbage_collect_panes()
+        GObject.idle_add(self.terminator.tmux_control.garbage_collect_panes)
+
+    def pane_id_result(self, result):
+        pane_id, marker = result[0].split(' ')
+        terminal = self.terminator.find_terminal_by_pane_id(marker)
+        terminal.pane_id = pane_id
+        self.terminator.pane_id_to_terminal[pane_id] = terminal
+
+    def garbage_collect_panes_result(self, result):
+        pane_ids = set()
+        for line in result:
+            pane_id = line.strip()
+            pane_ids.add(pane_id)
+        pane_id_to_terminal = self.terminator.pane_id_to_terminal
+        removed_pane_ids = [p for p in pane_id_to_terminal.keys()
+                            if p not in pane_ids]
+        if removed_pane_ids:
+            def callback():
+                for pane_id in removed_pane_ids:
+                    terminal = pane_id_to_terminal.pop(pane_id, None)
+                    if terminal:
+                        terminal.close()
+                return False
+            GObject.idle_add(callback)
+
+    def initial_layout_result(self, result):
+        window_layouts = []
+        for line in result:
+            window_layout = line.strip()
+            window_layouts.append(layout.parse_layout(window_layout))
+        terminator_layout = layout.convert_to_terminator_layout(
+                window_layouts)
+        import pprint
+        dbg(pprint.pformat(terminator_layout))
 
     def terminate(self):
         def callback():
             for window in self.terminator.windows:
                 window.emit('destroy')
         GObject.idle_add(callback)
+
+
+def noop(result):
+    pass
