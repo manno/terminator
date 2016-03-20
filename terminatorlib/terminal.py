@@ -1679,6 +1679,8 @@ class Terminal(Gtk.VBox):
         if layout.has_key('tmux'):
             tmux = layout['tmux']
             self.pane_id = tmux['pane_id']
+            self.terminator.pane_id_to_terminal[self.pane_id] = self
+            self.control.initial_output(self.pane_id)
 
     def scroll_by_page(self, pages):
         """Scroll up or down in pages"""
