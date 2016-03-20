@@ -126,7 +126,7 @@ class TmuxControl(object):
 
     def initial_output(self, pane_id):
         self._run_command(
-            'capture-pane -p -t {} -eC -S - -E -'.format(pane_id),
+            'capture-pane -J -p -t {} -eC -S - -E -'.format(pane_id),
             callback=self.notifications_handler.initial_output_result_callback(
                 pane_id))
 

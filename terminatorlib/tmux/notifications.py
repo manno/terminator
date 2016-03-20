@@ -240,9 +240,7 @@ class NotificationsHandler(object):
             terminal = self.terminator.pane_id_to_terminal.get(pane_id)
             if not terminal:
                 return
-            # TODO (dank): properly handle large whitespace at the end
-            # of capture-pane
-            output = '\r\n'.join(result).strip()
+            output = '\r\n'.join(l for l in result if l)
             terminal.vte.feed(output.decode('string_escape'))
         return result_callback
 
