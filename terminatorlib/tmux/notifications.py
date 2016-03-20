@@ -224,7 +224,8 @@ class NotificationsHandler(object):
                 return False
             GObject.idle_add(callback)
 
-    def initial_layout_result(self, result):
+    @staticmethod
+    def initial_layout_result(result):
         window_layouts = []
         for line in result:
             window_layout = line.strip()
