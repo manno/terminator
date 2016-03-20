@@ -1439,7 +1439,7 @@ class Terminal(Gtk.VBox):
 
         dbg('Forking shell: "%s" with args: %s' % (shell, args))
         if util.TMUX:
-            if util.TMUX_ATTACH:
+            if self.terminator.initial_layout:
                 pass
             else:
                 # command = '{} {}'.format(shell, ' '.join(args))
