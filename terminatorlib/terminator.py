@@ -242,7 +242,7 @@ class Terminator(Borg):
 
     def create_layout(self, layoutname):
         """Create all the parts necessary to satisfy the specified layout"""
-        layout = self.initial_layout
+        layout = copy.deepcopy(self.initial_layout)
         objects = {}
 
         self.doing_layout = True
