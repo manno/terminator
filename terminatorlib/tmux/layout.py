@@ -168,10 +168,12 @@ def _convert_container_to_terminator_pane(result, parent_name,
     child1_converter = _get_converter(child1)
     pane_index, order = child1_converter(result, parent_name, child1,
                                          pane_index, order)
-    pane_index, order = _convert_vertical_to_vpane(result, parent_name,
-                                                   children[1:],
-                                                   pane_index,
-                                                   order)
+    pane_index, order = _convert_container_to_terminator_pane(result,
+                                                              parent_name,
+                                                              children[1:],
+                                                              pane_index,
+                                                              pane_type,
+                                                              order)
     return pane_index, order
 
 
