@@ -1274,8 +1274,15 @@ class Terminal(Gtk.VBox):
         row_count = self.vte.get_row_count()
         self.titlebar.update_terminal_size(column_count, row_count)
         if util.TMUX:
-            # FIXME: call it where it makes sense, not sure this is the place
-            self.control.list_panes_size()
+            # FIXME: probably not the best place for this, update tmux client size to match the window geometry
+            # it is also likely to be very expensive
+            window = self.terminator.get_windows()[0]
+            column_count, row_count = map(int, get_column_row_count(window))
+            # dbg("{}::{}: {}x{}".format("NotificationsHandler", "list_panes_size_result", column_count, row_count))
+            size_up_to_date = bool(column_count == self.terminator.tmux_control.width and row_count == self.terminator.tmux_control.height)
+            if not size_up_to_date:
+                self.terminator.tmux_control.refresh_client(column_count, row_count)
+
         if self.config['geometry_hinting']:
             window = self.get_toplevel()
             window.deferred_set_rough_geometry_hints()
