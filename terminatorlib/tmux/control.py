@@ -141,6 +141,9 @@ class TmuxControl(object):
             callback=self.notifications_handler.initial_output_result_callback(
                 pane_id))
 
+    def toggle_zoom(self, pane_id):
+        self._run_command('resize-pane -Z -t {}'.format(pane_id))
+
     def send_keypress(self, event, pane_id):
         keyval = event.keyval
         state = event.state
