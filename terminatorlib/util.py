@@ -35,7 +35,7 @@ DEBUGCLASSES = []
 DEBUGMETHODS = []
 
 TMUX = True
-TMUX_ATTACH = TMUX and True
+TMUX_ATTACH = TMUX and False
 
 def dbg(log = ""):
     """Print a message if debugging is enabled"""
@@ -304,6 +304,22 @@ def enumerate_descendants(parent):
     dbg('%d containers and %d terminals fall beneath %s' % (len(containers), 
         len(terminals), parent))
     return(containers, terminals)
+
+def get_column_row_count(terminals):
+    column_sum = 0
+    row_sum = 0
+
+    for terminal in terminals:
+        rect = terminal.get_allocation()
+        if rect.x == 0:
+            cols, rows = terminal.get_size()
+            row_sum = row_sum + rows
+        if rect.y == 0:
+            cols, rows = terminal.get_size()
+            column_sum = column_sum + cols
+
+    return (column_sum, row_sum)
+
 
 def make_uuid(str_uuid=None):
     """Generate a UUID for an object"""

@@ -7,7 +7,6 @@ from gi.repository import Gtk, Gdk
 from terminatorlib.tmux import notifications
 from terminatorlib.util import dbg
 
-
 def esc(seq):
     return '\033{}'.format(seq)
 
@@ -43,6 +42,8 @@ class TmuxControl(object):
         self.output = None
         self.input = None
         self.consumer = None
+        self.width = None
+        self.height = None
         self.requests = Queue.Queue()
 
     def run_command(self, command, marker, cwd=None, orientation=None,
@@ -67,6 +68,7 @@ class TmuxControl(object):
         #     tmux_command += ' -c "{}"'.format(cwd)
         if command:
             tmux_command += ' "{}"'.format(command)
+
         self._run_command(tmux_command,
                           callback=self.notifications_handler.pane_id_result)
 
@@ -109,8 +111,17 @@ class TmuxControl(object):
         self.input = self.tmux.stdin
         self.output = self.tmux.stdout
         self.start_notifications_consumer()
+        # self.initial_layout()
+
+    def list_panes_size(self):
+        tmux_command = 'list-panes -a -F "#D #{pane_width} #{pane_height}"'
+        self._run_command(tmux_command,
+                          callback=self.notifications_handler.list_panes_size_result)
 
     def refresh_client(self, width, height):
+        dbg('{}::{}: {}x{}'.format("TmuxControl", "refresh_client", width, height))
+        self.width = width
+        self.height = height
         self._run_command('refresh-client -C {},{}'.format(width, height))
 
     def garbage_collect_panes(self):
