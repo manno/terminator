@@ -65,12 +65,12 @@ class LayoutChange(Notification):
                   'window_flags']
 
     def consume(self, line, *args):
-        # window_id, window_layout, window_visible_layout, window_flags = line
-        window_id, window_layout = line
+        # window_id, window_layout = line
+        window_id, window_layout, window_visible_layout, window_flags = line
         self.window_id = window_id
         self.window_layout = layout.parse_layout(window_layout)
-        # self.window_visible_layout = window_visible_layout
-        # self.window_flags = window_flags
+        self.window_visible_layout = window_visible_layout
+        self.window_flags = window_flags
 
 
 @notification
