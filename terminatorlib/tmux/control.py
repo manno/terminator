@@ -2,6 +2,7 @@ import threading
 import subprocess
 import Queue
 
+from pipes import quote
 from gi.repository import Gtk, Gdk
 
 from terminatorlib.tmux import notifications
@@ -64,6 +65,7 @@ class TmuxControl(object):
         self.run_remote_command(command)
 
     def run_remote_command(self, popen_command):
+        popen_command = map(quote, popen_command)
         command = " ".join(popen_command)
         if not self.input:
             dbg('No tmux connection. [command={}]'.format(command))
@@ -128,9 +130,8 @@ class TmuxControl(object):
         self.initial_layout()
 
     def new_session(self, cwd=None, command=None, marker=''):
-        quote = "'" if self.remote else ""
         popen_command = ['tmux', '-2', '-C', 'new-session', '-s', self.session_name,
-                '-P', '-F', '{}#D {}{}'.format(quote, marker, quote)]
+                '-P', '-F', '#D {}'.format(marker)]
         if cwd:
             popen_command += ['-c', cwd]
         if command:
@@ -204,9 +205,9 @@ class TmuxControl(object):
         self.send_content(key, pane_id)
 
     def send_content(self, content, pane_id):
-        quote = '"' if "'" in content else "'"
-        self._run_command("send-keys -t {} -l {}{}{}".format(
-                pane_id, quote, content, quote))
+        content = quote(content)
+        self._run_command("send-keys -t {} -l {}".format(
+                pane_id, content))
 
     def _run_command(self, command, callback=None):
         if not self.input:
