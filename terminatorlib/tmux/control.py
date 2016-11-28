@@ -81,7 +81,7 @@ class TmuxControl(object):
                           callback=self.notifications_handler.pane_id_result)
 
     def attach_session(self):
-        self.kill_server()
+        # self.kill_server()
         popen_command = ['tmux', '-2', '-C', 'attach-session',
                          '-t', self.session_name]
         self.tmux = subprocess.Popen(popen_command,
