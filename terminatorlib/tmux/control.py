@@ -116,6 +116,9 @@ class TmuxControl(object):
         self.tmux = subprocess.Popen(popen_command,
                                      stdout=subprocess.PIPE,
                                      stdin=subprocess.PIPE)
+        # starting a new session, delete any old requests we may have
+        # in the queue (e.g. those added while trying to attach to
+        # a nonexistant session)
         with self.requests.mutex:
             self.requests.queue.clear()
 
@@ -184,7 +187,11 @@ class TmuxControl(object):
         if not self.input:
             dbg('No tmux connection. [command={}]'.format(command))
         else:
-            self.input.write('{}\n'.format(command))
+            try:
+                self.input.write('{}\n'.format(command))
+            except IOError:
+                dbg("Tmux server has gone away.")
+                return
             callback = callback or notifications.noop
             self.requests.put(callback)
 
@@ -203,7 +210,13 @@ class TmuxControl(object):
 
     def consume_notifications(self):
         handler = self.notifications_handler
-        while self.tmux.poll() is None:
+        while True:
+            try:
+                if self.tmux.poll() is not None:
+                    break
+            except AttributeError as e:
+                dbg("Tmux control instance was reset.")
+                return
             line = self.output.readline()[:-1]
             if not line:
                 continue
