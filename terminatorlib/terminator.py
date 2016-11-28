@@ -126,6 +126,10 @@ class Terminator(Borg):
             os.chdir(cwd)
         self.origcwd = cwd
 
+    def set_tmux_remote(self, remote):
+        """Store the command line argument intended for tmux"""
+        self.tmux_control.remote = remote
+
     def set_dbus_data(self, dbus_service):
         """Store the DBus bus details, if they are available"""
         if dbus_service:
