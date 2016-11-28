@@ -638,7 +638,7 @@ class Window(Container, Gtk.Window):
         # the last terminal we inspected. Looking up the default profile font
         # size and calculating its character sizes would be rather expensive
         # though.
-        terminal = terminals.items()[0][0]
+        terminal = terminals[0][0]
         font_width, font_height = terminal.get_font_size()
         total_font_width = font_width * column_sum
         total_font_height = font_height * row_sum
