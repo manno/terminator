@@ -14,7 +14,7 @@ import borg
 from borg import Borg
 from config import Config
 from keybindings import Keybindings
-from util import dbg, err, enumerate_descendants, TMUX
+from util import dbg, err, enumerate_descendants
 from factory import Factory
 from cwd import get_pid_cwd
 from version import APP_NAME, APP_VERSION
@@ -128,6 +128,11 @@ class Terminator(Borg):
 
     def start_tmux(self, remote=None):
         """Store the command line argument intended for tmux and start the process"""
+        if self.tmux_control is None:
+            handler = tmux.notifications.NotificationsHandler(self)
+            self.tmux_control = tmux.control.TmuxControl(
+                session_name='terminator',
+                notifications_handler=handler)
         self.tmux_control.remote = remote
         self.tmux_control.attach_session()
 

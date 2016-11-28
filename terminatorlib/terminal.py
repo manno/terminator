@@ -234,7 +234,7 @@ class Terminal(Gtk.VBox):
         dbg('close: called')
         self.cnxids.remove_widget(self.vte)
         self.emit('close-term')
-        if not util.TMUX:
+        if not self.terminator.tmux_control:
             try:
                 dbg('close: killing %d' % self.pid)
                 os.kill(self.pid, signal.SIGHUP)
@@ -904,7 +904,7 @@ class Terminal(Gtk.VBox):
             if groupsend == groupsend_type['all']:
                 self.terminator.all_emit(self, 'key-press-event', event)
 
-        if util.TMUX:
+        if self.terminator.tmux_control:
             self.control.send_keypress(event, pane_id=self.pane_id)
 
         return(False)
@@ -1273,7 +1273,7 @@ class Terminal(Gtk.VBox):
         column_count = self.vte.get_column_count()
         row_count = self.vte.get_row_count()
         self.titlebar.update_terminal_size(column_count, row_count)
-        if util.TMUX:
+        if self.terminator.tmux_control:
             # FIXME: probably not the best place for this, update tmux client size to match the window geometry
             # it is also likely to be very expensive
             window = self.terminator.get_windows()[0]
@@ -1446,7 +1446,7 @@ class Terminal(Gtk.VBox):
             envv.append('TERMINATOR_DBUS_PATH=%s' % self.terminator.dbus_path)
 
         dbg('Forking shell: "%s" with args: %s' % (shell, args))
-        if util.TMUX:
+        if self.terminator.tmux_control:
             if self.terminator.initial_layout:
                 pass
             else:
@@ -1536,7 +1536,7 @@ class Terminal(Gtk.VBox):
 
     def paste_clipboard(self, primary=False):
         """Paste one of the two clipboards"""
-        if util.TMUX:
+        if self.terminator.tmux_control:
             def callback(_, content):
                 content = content.replace('\n',  '\r')
                 self.control.send_content(content, self.pane_id)
@@ -1808,7 +1808,7 @@ class Terminal(Gtk.VBox):
             self.unzoom()
         else:
             self.maximise()
-        if util.TMUX:
+        if self.terminator.tmux_control:
             self.control.toggle_zoom(self.pane_id)
 
     def key_scaled_zoom(self):
@@ -1816,7 +1816,7 @@ class Terminal(Gtk.VBox):
             self.unzoom()
         else:
             self.zoom()
-        if util.TMUX:
+        if self.terminator.tmux_control:
             self.control.toggle_zoom(self.pane_id)
 
     def key_next_tab(self):
