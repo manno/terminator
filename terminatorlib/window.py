@@ -462,11 +462,13 @@ class Window(Container, Gtk.Window):
             container = maker.make('HPaned')
         
         self.set_pos_by_ratio = True
-
         if not sibling:
             sibling = maker.make('Terminal')
             sibling.set_cwd(cwd)
-            sibling.spawn_child()
+            # TODO (dank): is widget ever not a Terminal?
+            sibling.spawn_child(
+                orientation='vertical' if vertical else 'horizontal',
+                active_pane_id=getattr(widget, 'pane_id', None))
             if widget.group and self.config['split_to_group']:
                 sibling.set_group(None, widget.group)
         if self.config['always_split_with_profile']:

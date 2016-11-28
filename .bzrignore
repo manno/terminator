@@ -5,3 +5,5 @@ terminatorlib/*.pyc
 terminatorlib/meliae
 _trial_temp
 terminatorc
+*.iml
+.idea

@@ -26,13 +26,16 @@ import uuid
 import subprocess
 
 # set this to true to enable debugging output
-DEBUG = False
+DEBUG = True
 # set this to true to additionally list filenames in debugging
 DEBUGFILES = False
 # list of classes to show debugging for. empty list means show all classes
 DEBUGCLASSES = []
 # list of methods to show debugging for. empty list means show all methods
 DEBUGMETHODS = []
+
+TMUX = True
+TMUX_ATTACH = TMUX and True
 
 def dbg(log = ""):
     """Print a message if debugging is enabled"""
