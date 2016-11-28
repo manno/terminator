@@ -32,7 +32,7 @@ ARROW_KEYS = {
     Gdk.KEY_Right
 }
 
-
+# TODO: implement ssh connection using paramiko
 class TmuxControl(object):
 
     def __init__(self, session_name, notifications_handler):
@@ -88,7 +88,7 @@ class TmuxControl(object):
         popen_command = ['tmux', '-2', '-C', 'attach-session',
                          '-t', self.session_name]
         if self.remote:
-            popen_command = ['ssh', self.remote, '--'].append(popen_command)
+            popen_command[:0] =  ['ssh', self.remote, '--']
         self.tmux = subprocess.Popen(popen_command,
                                      stdout=subprocess.PIPE,
                                      stdin=subprocess.PIPE)
@@ -118,11 +118,6 @@ class TmuxControl(object):
         self.output = self.tmux.stdout
         self.start_notifications_consumer()
         # self.initial_layout()
-
-    def list_panes_size(self):
-        tmux_command = 'list-panes -a -F "#D #{pane_width} #{pane_height}"'
-        self._run_command(tmux_command,
-                          callback=self.notifications_handler.list_panes_size_result)
 
     def refresh_client(self, width, height):
         dbg('{}::{}: {}x{}'.format("TmuxControl", "refresh_client", width, height))
