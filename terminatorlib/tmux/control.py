@@ -44,6 +44,7 @@ class TmuxControl(object):
         self.consumer = None
         self.width = None
         self.height = None
+        self.remote = None
         self.requests = Queue.Queue()
 
     def run_command(self, command, marker, cwd=None, orientation=None,
@@ -86,6 +87,8 @@ class TmuxControl(object):
         # self.kill_server()
         popen_command = ['tmux', '-2', '-C', 'attach-session',
                          '-t', self.session_name]
+        if self.remote:
+            popen_command = ['ssh', self.remote, '--'].append(popen_command)
         self.tmux = subprocess.Popen(popen_command,
                                      stdout=subprocess.PIPE,
                                      stdin=subprocess.PIPE)
@@ -96,14 +99,17 @@ class TmuxControl(object):
         self.initial_layout()
 
     def new_session(self, cwd=None, command=None, marker=''):
-        self.kill_server()
-        popen_command = [
-            'tmux', '-2', '-C', 'new-session', '-s', self.session_name,
-            '-P', '-F', '#D {}'.format(marker)]
-        if cwd:
+        self.kill_server(self.remote)
+        quote = "'" if self.remote else ""
+        popen_command = ['tmux', '-2', '-C', 'new-session', '-s', self.session_name,
+                '-P', '-F', '{}#D {}{}'.format(quote, marker, quote)]
+        if self.remote:
+            popen_command[:0] = ['ssh', self.remote, '--']
+        elif cwd:
             popen_command += ['-c', cwd]
         if command:
             popen_command.append(command)
+        dbg(popen_command)
         self.tmux = subprocess.Popen(popen_command,
                                      stdout=subprocess.PIPE,
                                      stdin=subprocess.PIPE)
@@ -183,8 +189,11 @@ class TmuxControl(object):
             self.requests.put(callback)
 
     @staticmethod
-    def kill_server():
-        subprocess.call(['tmux', 'kill-server'])
+    def kill_server(remote):
+        command = ['tmux', 'kill-server']
+        if remote:
+            command[:0] = ['ssh', remote, '--']
+        subprocess.call(command)
 
     def start_notifications_consumer(self):
         self.consumer = threading.Thread(target=self.consume_notifications)
