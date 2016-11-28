@@ -4,6 +4,7 @@ from terminatorlib.util import dbg
 from terminatorlib.tmux import layout
 
 import string
+ATTACH_ERROR_STRINGS = ["can't find session terminator", "no current session"]
 
 notifications_mappings = {}
 
@@ -140,6 +141,17 @@ class WindowAdd(Notification):
 
 
 @notification
+class UnlinkedWindowClose(Notification):
+
+    marker = 'unlinked-window-close'
+    attributes = ['window_id']
+
+    def consume(self, line, *args):
+        window_id, = line
+        self.window_id = window_id
+
+
+@notification
 class WindowClose(Notification):
 
     marker = 'window-close'
@@ -148,6 +160,18 @@ class WindowClose(Notification):
     def consume(self, line, *args):
         window_id, = line
         self.window_id = window_id
+
+
+@notification
+class UnlinkedWindowRenamed(Notification):
+
+    marker = 'unlinked-window-renamed'
+    attributes = ['window_id', 'window_name']
+
+    def consume(self, line, *args):
+        window_id, window_name = line
+        self.window_id = window_id
+        self.window_name = window_name
 
 
 @notification
@@ -181,7 +205,7 @@ class NotificationsHandler(object):
         callback = self.terminator.tmux_control.requests.get()
         if notification.error:
             dbg('Request error: {}'.format(notification))
-            if notification.result[0] == 'no current session':
+            if notification.result[0] in ATTACH_ERROR_STRINGS:
                 # if we got here it means that attaching to an existing session
                 # failed, invalidate the layout so the Terminator initialization
                 # can pick up from where we left off
