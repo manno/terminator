@@ -1,6 +1,6 @@
 from gi.repository import GObject
 
-from terminatorlib.util import dbg, get_column_row_count
+from terminatorlib.util import dbg
 from terminatorlib.tmux import layout
 
 import string

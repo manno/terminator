@@ -13,7 +13,7 @@ from gi.repository import Vte
 import subprocess
 import urllib
 
-from util import dbg, err, spawn_new_terminator, make_uuid, manual_lookup, display_manager
+from util import dbg, err, spawn_new_terminator, make_uuid, manual_lookup, display_manager, get_column_row_count
 import util
 from config import Config
 from cwd import get_default_cwd

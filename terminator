@@ -116,14 +116,14 @@ if __name__ == '__main__':
 
         MAKER = Factory()
         TERMINATOR = Terminator()
-        TERMINATOR.set_tmux_remote(OPTIONS.remote)
         TERMINATOR.set_origcwd(ORIGCWD)
         TERMINATOR.set_dbus_data(dbus_service)
         TERMINATOR.reconfigure()
         TERMINATOR.ibus_running = ibus_running
 
         try:
-            if TMUX_ATTACH:
+            if TMUX:
+                TERMINATOR.start_tmux(remote=OPTIONS.remote)
                 while TERMINATOR.initial_layout is None:
                     time.sleep(0.1)
             dbg('Creating a terminal with layout: %s' % OPTIONS.layout)

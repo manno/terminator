@@ -14,7 +14,7 @@ import borg
 from borg import Borg
 from config import Config
 from keybindings import Keybindings
-from util import dbg, err, enumerate_descendants, TMUX_ATTACH
+from util import dbg, err, enumerate_descendants, TMUX
 from factory import Factory
 from cwd import get_pid_cwd
 from version import APP_NAME, APP_VERSION
@@ -104,7 +104,7 @@ class Terminator(Borg):
             self.attempt_gnome_client()
         if self.pane_id_to_terminal is None:
             self.pane_id_to_terminal = {}
-        if self.tmux_control is None:
+        if self.tmux_control is None and TMUX:
             handler = tmux.notifications.NotificationsHandler(self)
             self.tmux_control = tmux.control.TmuxControl(
                 session_name='terminator',
@@ -126,9 +126,10 @@ class Terminator(Borg):
             os.chdir(cwd)
         self.origcwd = cwd
 
-    def set_tmux_remote(self, remote):
-        """Store the command line argument intended for tmux"""
+    def start_tmux(self, remote=None):
+        """Store the command line argument intended for tmux and start the process"""
         self.tmux_control.remote = remote
+        self.tmux_control.attach_session()
 
     def set_dbus_data(self, dbus_service):
         """Store the DBus bus details, if they are available"""
