@@ -181,6 +181,12 @@ class NotificationsHandler(object):
         callback = self.terminator.tmux_control.requests.get()
         if notification.error:
             dbg('Request error: {}'.format(notification))
+            if notification.result[0] == 'no current session':
+                # if we got here it means that attaching to an existing session
+                # failed, invalidate the layout so the Terminator initialization
+                # can pick up from where we left off
+                self.terminator.initial_layout = {}
+                self.terminator.tmux_control.reset()
             return
         callback(notification.result)
 

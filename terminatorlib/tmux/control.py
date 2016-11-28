@@ -47,6 +47,9 @@ class TmuxControl(object):
         self.remote = None
         self.requests = Queue.Queue()
 
+    def reset(self):
+        self.tmux = self.input = self.output = self.width = self.height = self.consumer = None
+
     def run_command(self, command, marker, cwd=None, orientation=None,
                     pane_id=None):
         if self.input:
@@ -57,7 +60,7 @@ class TmuxControl(object):
             else:
                 self.new_window(cwd=cwd, command=command, marker=marker)
         else:
-            self.attach_session(cwd=cwd, command=command, marker=marker)
+            self.new_session(cwd=cwd, command=command, marker=marker)
 
     def split_window(self, cwd, orientation, pane_id,
                      command=None, marker=''):
@@ -83,7 +86,7 @@ class TmuxControl(object):
         self._run_command(tmux_command,
                           callback=self.notifications_handler.pane_id_result)
 
-    def attach_session(self, cwd=None, command=None, marker=''):
+    def attach_session(self):
         # self.kill_server()
         popen_command = ['tmux', '-2', '-C', 'attach-session',
                          '-t', self.session_name]
@@ -93,16 +96,6 @@ class TmuxControl(object):
         self.tmux = subprocess.Popen(popen_command,
                                  stdout=subprocess.PIPE,
                                  stdin=subprocess.PIPE)
-        # wait for the ssh connection to go through
-        import time
-        if self.remote:
-            time.sleep(2)
-        else:
-            time.sleep(0.5)
-        self.tmux.poll()
-        if self.tmux.returncode and self.tmux.returncode != 0:
-            dbg(self.tmux.returncode)
-            return self.new_session(cwd=cwd, command=command, marker=marker)
         self.requests.put(notifications.noop)
         self.input = self.tmux.stdin
         self.output = self.tmux.stdout
@@ -128,7 +121,6 @@ class TmuxControl(object):
         self.input = self.tmux.stdin
         self.output = self.tmux.stdout
         self.start_notifications_consumer()
-        self.initial_layout()
 
     def refresh_client(self, width, height):
         dbg('{}::{}: {}x{}'.format("TmuxControl", "refresh_client", width, height))

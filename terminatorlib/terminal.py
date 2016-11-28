@@ -1450,7 +1450,6 @@ class Terminal(Gtk.VBox):
             if self.terminator.initial_layout:
                 pass
             else:
-                # command = '{} {}'.format(shell, ' '.join(args))
                 command = ' '.join(args)
                 self.pane_id = str(util.make_uuid())
                 self.control.run_command(command=command,
