@@ -48,7 +48,7 @@ class TmuxControl(object):
         self.requests = Queue.Queue()
 
     def reset(self):
-        self.tmux = self.input = self.output = self.width = self.height = self.consumer = None
+        self.tmux = self.input = self.output = self.width = self.height = None
 
     def run_command(self, command, marker, cwd=None, orientation=None,
                     pane_id=None):
@@ -83,6 +83,7 @@ class TmuxControl(object):
         #     tmux_command += ' -c "{}"'.format(cwd)
         if command:
             tmux_command += ' "{}"'.format(command)
+
         self._run_command(tmux_command,
                           callback=self.notifications_handler.pane_id_result)
 
@@ -92,7 +93,6 @@ class TmuxControl(object):
                          '-t', self.session_name]
         if self.remote:
             popen_command[:0] =  ['ssh', self.remote, '--']
-        dbg(popen_command)
         self.tmux = subprocess.Popen(popen_command,
                                  stdout=subprocess.PIPE,
                                  stdin=subprocess.PIPE)
@@ -113,10 +113,12 @@ class TmuxControl(object):
             popen_command += ['-c', cwd]
         if command:
             popen_command.append(command)
-        dbg(popen_command)
         self.tmux = subprocess.Popen(popen_command,
                                      stdout=subprocess.PIPE,
                                      stdin=subprocess.PIPE)
+        with self.requests.mutex:
+            self.requests.queue.clear()
+
         self.requests.put(self.notifications_handler.pane_id_result)
         self.input = self.tmux.stdin
         self.output = self.tmux.stdout
