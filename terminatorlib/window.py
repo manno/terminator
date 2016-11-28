@@ -627,17 +627,7 @@ class Window(Container, Gtk.Window):
             return
 
         terminals = self.get_visible_terminals()
-        column_sum = 0
-        row_sum = 0
-
-        for terminal in terminals:
-            rect = terminal.get_allocation()
-            if rect.x == 0:
-                cols, rows = terminal.get_size()
-                row_sum = row_sum + rows
-            if rect.y == 0:
-                cols, rows = terminal.get_size()
-                column_sum = column_sum + cols
+        column_sum, row_sum = util.get_column_row_count(terminals)
 
         if column_sum == 0 or row_sum == 0:
             dbg('column_sum=%s,row_sum=%s. No terminals found in >=1 axis' %
@@ -648,6 +638,7 @@ class Window(Container, Gtk.Window):
         # the last terminal we inspected. Looking up the default profile font
         # size and calculating its character sizes would be rather expensive
         # though.
+        terminal = terminals.items()[0][0]
         font_width, font_height = terminal.get_font_size()
         total_font_width = font_width * column_sum
         total_font_height = font_height * row_sum
