@@ -190,7 +190,8 @@ class TmuxControl(object):
 
     @staticmethod
     def kill_server(remote):
-        command = ['tmux', 'kill-server']
+        # command = ['tmux', 'kill-server']
+        command = ['tmux', 'kill-session', '-t', 'terminator']
         if remote:
             command[:0] = ['ssh', remote, '--']
         subprocess.call(command)
