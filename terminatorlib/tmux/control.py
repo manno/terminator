@@ -50,6 +50,30 @@ class TmuxControl(object):
     def reset(self):
         self.tmux = self.input = self.output = self.width = self.height = None
 
+    def remote_connect(self, command):
+        if self.tmux:
+            dbg("Already connected.")
+            return
+        popen_command = "ssh " + self.remote
+        self.tmux = subprocess.Popen(popen_command,
+                                 stdout=subprocess.PIPE,
+                                 stdin=subprocess.PIPE, shell=True)
+        self.input  = self.tmux.stdin
+        self.output = self.tmux.stdout
+
+        self.run_remote_command(command)
+
+    def run_remote_command(self, popen_command):
+        command = " ".join(popen_command)
+        if not self.input:
+            dbg('No tmux connection. [command={}]'.format(command))
+        else:
+            try:
+                self.input.write('exec {}\n'.format(command))
+            except IOError:
+                dbg("Tmux server has gone away.")
+                return
+
     def run_command(self, command, marker, cwd=None, orientation=None,
                     pane_id=None):
         if self.input:
@@ -92,30 +116,33 @@ class TmuxControl(object):
         popen_command = ['tmux', '-2', '-C', 'attach-session',
                          '-t', self.session_name]
         if self.remote:
-            popen_command[:0] =  ['ssh', self.remote, '--']
-        self.tmux = subprocess.Popen(popen_command,
-                                 stdout=subprocess.PIPE,
-                                 stdin=subprocess.PIPE)
+            self.remote_connect(popen_command)
+        if not self.tmux:
+            self.tmux = subprocess.Popen(popen_command,
+                                     stdout=subprocess.PIPE,
+                                     stdin=subprocess.PIPE)
+            self.input = self.tmux.stdin
+            self.output = self.tmux.stdout
         self.requests.put(notifications.noop)
-        self.input = self.tmux.stdin
-        self.output = self.tmux.stdout
         self.start_notifications_consumer()
         self.initial_layout()
 
     def new_session(self, cwd=None, command=None, marker=''):
-        self.kill_server(self.remote)
         quote = "'" if self.remote else ""
         popen_command = ['tmux', '-2', '-C', 'new-session', '-s', self.session_name,
                 '-P', '-F', '{}#D {}{}'.format(quote, marker, quote)]
-        if self.remote:
-            popen_command[:0] = ['ssh', self.remote, '--']
-        elif cwd:
+        if cwd:
             popen_command += ['-c', cwd]
         if command:
             popen_command.append(command)
-        self.tmux = subprocess.Popen(popen_command,
+        if self.remote:
+            self.remote_connect(popen_command)
+        if not self.tmux:
+            self.tmux = subprocess.Popen(popen_command,
                                      stdout=subprocess.PIPE,
                                      stdin=subprocess.PIPE)
+            self.input = self.tmux.stdin
+            self.output = self.tmux.stdout
         # starting a new session, delete any old requests we may have
         # in the queue (e.g. those added while trying to attach to
         # a nonexistant session)
@@ -123,8 +150,6 @@ class TmuxControl(object):
             self.requests.queue.clear()
 
         self.requests.put(self.notifications_handler.pane_id_result)
-        self.input = self.tmux.stdin
-        self.output = self.tmux.stdout
         self.start_notifications_consumer()
 
     def refresh_client(self, width, height):
@@ -196,11 +221,9 @@ class TmuxControl(object):
             self.requests.put(callback)
 
     @staticmethod
-    def kill_server(remote):
+    def kill_server():
         # command = ['tmux', 'kill-server']
         command = ['tmux', 'kill-session', '-t', 'terminator']
-        if remote:
-            command[:0] = ['ssh', remote, '--']
         subprocess.call(command)
 
     def start_notifications_consumer(self):

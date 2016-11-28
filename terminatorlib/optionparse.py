@@ -56,6 +56,8 @@ def parse_options():
             dest='borderless', help=_('Disable window borders'))
     parser.add_option('-H', '--hidden', action='store_true', dest='hidden',
             help=_('Hide the window at startup'))
+    parser.add_option('-M', '--tmux', action='store_true',
+            dest='tmux', help=_('Enable tmux integration'))
     parser.add_option('-T', '--title', dest='forcedtitle', 
                       help=_('Specify a title for the window'))
     parser.add_option('--geometry', dest='geometry', type='string', 
