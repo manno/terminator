@@ -41,9 +41,6 @@ DEBUGCLASSES = []
 # list of methods to show debugging for. empty list means show all methods
 DEBUGMETHODS = []
 
-TMUX = True
-TMUX_ATTACH = TMUX and False
-
 def dbg(log = ""):
     """Print a message if debugging is enabled"""
     if DEBUG:
@@ -312,10 +309,11 @@ def enumerate_descendants(parent):
         len(terminals), parent))
     return(containers, terminals)
 
-def get_column_row_count(terminals):
+def get_column_row_count(window):
     column_sum = 0
     row_sum = 0
 
+    terminals = window.get_visible_terminals()
     for terminal in terminals:
         rect = terminal.get_allocation()
         if rect.x == 0:

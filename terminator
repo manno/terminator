@@ -49,7 +49,7 @@ import terminatorlib.optionparse
 from terminatorlib.terminator import Terminator
 from terminatorlib.factory import Factory
 from terminatorlib.version import APP_NAME, APP_VERSION
-from terminatorlib.util import dbg, err, TMUX, TMUX_ATTACH
+from terminatorlib.util import dbg, err
 from terminatorlib.layoutlauncher import LayoutLauncher
 
 if __name__ == '__main__':
@@ -111,9 +111,6 @@ if __name__ == '__main__':
             dbg('dbus not imported')
             pass
 
-        if TMUX:
-            Gdk.threads_init()
-
         MAKER = Factory()
         TERMINATOR = Terminator()
         TERMINATOR.set_origcwd(ORIGCWD)
@@ -122,7 +119,7 @@ if __name__ == '__main__':
         TERMINATOR.ibus_running = ibus_running
 
         try:
-            if TMUX:
+            if OPTIONS.tmux:
                 TERMINATOR.start_tmux(remote=OPTIONS.remote)
                 while TERMINATOR.initial_layout is None:
                     time.sleep(0.1)
