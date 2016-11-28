@@ -1802,12 +1802,16 @@ class Terminal(Gtk.VBox):
             self.unzoom()
         else:
             self.maximise()
+        if util.TMUX:
+            self.control.toggle_zoom(self.pane_id)
 
     def key_scaled_zoom(self):
         if self.is_zoomed():
             self.unzoom()
         else:
             self.zoom()
+        if util.TMUX:
+            self.control.toggle_zoom(self.pane_id)
 
     def key_next_tab(self):
         self.emit('tab-change', -1)
