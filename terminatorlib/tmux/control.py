@@ -47,6 +47,9 @@ class TmuxControl(object):
         self.remote = None
         self.requests = Queue.Queue()
 
+    def reset(self):
+        self.tmux = self.input = self.output = self.width = self.height = None
+
     def run_command(self, command, marker, cwd=None, orientation=None,
                     pane_id=None):
         if self.input:
@@ -80,6 +83,7 @@ class TmuxControl(object):
         #     tmux_command += ' -c "{}"'.format(cwd)
         if command:
             tmux_command += ' "{}"'.format(command)
+
         self._run_command(tmux_command,
                           callback=self.notifications_handler.pane_id_result)
 
@@ -90,8 +94,8 @@ class TmuxControl(object):
         if self.remote:
             popen_command[:0] =  ['ssh', self.remote, '--']
         self.tmux = subprocess.Popen(popen_command,
-                                     stdout=subprocess.PIPE,
-                                     stdin=subprocess.PIPE)
+                                 stdout=subprocess.PIPE,
+                                 stdin=subprocess.PIPE)
         self.requests.put(notifications.noop)
         self.input = self.tmux.stdin
         self.output = self.tmux.stdout
@@ -109,15 +113,19 @@ class TmuxControl(object):
             popen_command += ['-c', cwd]
         if command:
             popen_command.append(command)
-        dbg(popen_command)
         self.tmux = subprocess.Popen(popen_command,
                                      stdout=subprocess.PIPE,
                                      stdin=subprocess.PIPE)
+        # starting a new session, delete any old requests we may have
+        # in the queue (e.g. those added while trying to attach to
+        # a nonexistant session)
+        with self.requests.mutex:
+            self.requests.queue.clear()
+
         self.requests.put(self.notifications_handler.pane_id_result)
         self.input = self.tmux.stdin
         self.output = self.tmux.stdout
         self.start_notifications_consumer()
-        # self.initial_layout()
 
     def refresh_client(self, width, height):
         dbg('{}::{}: {}x{}'.format("TmuxControl", "refresh_client", width, height))
@@ -179,13 +187,18 @@ class TmuxControl(object):
         if not self.input:
             dbg('No tmux connection. [command={}]'.format(command))
         else:
-            self.input.write('{}\n'.format(command))
+            try:
+                self.input.write('{}\n'.format(command))
+            except IOError:
+                dbg("Tmux server has gone away.")
+                return
             callback = callback or notifications.noop
             self.requests.put(callback)
 
     @staticmethod
     def kill_server(remote):
-        command = ['tmux', 'kill-server']
+        # command = ['tmux', 'kill-server']
+        command = ['tmux', 'kill-session', '-t', 'terminator']
         if remote:
             command[:0] = ['ssh', remote, '--']
         subprocess.call(command)
@@ -197,7 +210,13 @@ class TmuxControl(object):
 
     def consume_notifications(self):
         handler = self.notifications_handler
-        while self.tmux.poll() is None:
+        while True:
+            try:
+                if self.tmux.poll() is not None:
+                    break
+            except AttributeError as e:
+                dbg("Tmux control instance was reset.")
+                return
             line = self.output.readline()[:-1]
             if not line:
                 continue

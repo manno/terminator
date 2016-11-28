@@ -13,7 +13,7 @@ from gi.repository import Vte
 import subprocess
 import urllib
 
-from util import dbg, err, spawn_new_terminator, make_uuid, manual_lookup, display_manager
+from util import dbg, err, spawn_new_terminator, make_uuid, manual_lookup, display_manager, get_column_row_count
 import util
 from config import Config
 from cwd import get_default_cwd
@@ -1450,7 +1450,6 @@ class Terminal(Gtk.VBox):
             if self.terminator.initial_layout:
                 pass
             else:
-                # command = '{} {}'.format(shell, ' '.join(args))
                 command = ' '.join(args)
                 self.pane_id = str(util.make_uuid())
                 self.control.run_command(command=command,
