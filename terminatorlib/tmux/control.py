@@ -32,7 +32,7 @@ ARROW_KEYS = {
     Gdk.KEY_Right
 }
 
-
+# TODO: implement ssh connection using paramiko
 class TmuxControl(object):
 
     def __init__(self, session_name, notifications_handler):
@@ -44,6 +44,7 @@ class TmuxControl(object):
         self.consumer = None
         self.width = None
         self.height = None
+        self.remote = None
         self.requests = Queue.Queue()
 
     def run_command(self, command, marker, cwd=None, orientation=None,
@@ -86,6 +87,8 @@ class TmuxControl(object):
         # self.kill_server()
         popen_command = ['tmux', '-2', '-C', 'attach-session',
                          '-t', self.session_name]
+        if self.remote:
+            popen_command[:0] =  ['ssh', self.remote, '--']
         self.tmux = subprocess.Popen(popen_command,
                                      stdout=subprocess.PIPE,
                                      stdin=subprocess.PIPE)
@@ -96,14 +99,17 @@ class TmuxControl(object):
         self.initial_layout()
 
     def new_session(self, cwd=None, command=None, marker=''):
-        self.kill_server()
-        popen_command = [
-            'tmux', '-2', '-C', 'new-session', '-s', self.session_name,
-            '-P', '-F', '#D {}'.format(marker)]
-        if cwd:
+        self.kill_server(self.remote)
+        quote = "'" if self.remote else ""
+        popen_command = ['tmux', '-2', '-C', 'new-session', '-s', self.session_name,
+                '-P', '-F', '{}#D {}{}'.format(quote, marker, quote)]
+        if self.remote:
+            popen_command[:0] = ['ssh', self.remote, '--']
+        elif cwd:
             popen_command += ['-c', cwd]
         if command:
             popen_command.append(command)
+        dbg(popen_command)
         self.tmux = subprocess.Popen(popen_command,
                                      stdout=subprocess.PIPE,
                                      stdin=subprocess.PIPE)
@@ -112,11 +118,6 @@ class TmuxControl(object):
         self.output = self.tmux.stdout
         self.start_notifications_consumer()
         # self.initial_layout()
-
-    def list_panes_size(self):
-        tmux_command = 'list-panes -a -F "#D #{pane_width} #{pane_height}"'
-        self._run_command(tmux_command,
-                          callback=self.notifications_handler.list_panes_size_result)
 
     def refresh_client(self, width, height):
         dbg('{}::{}: {}x{}'.format("TmuxControl", "refresh_client", width, height))
@@ -183,8 +184,11 @@ class TmuxControl(object):
             self.requests.put(callback)
 
     @staticmethod
-    def kill_server():
-        subprocess.call(['tmux', 'kill-server'])
+    def kill_server(remote):
+        command = ['tmux', 'kill-server']
+        if remote:
+            command[:0] = ['ssh', remote, '--']
+        subprocess.call(command)
 
     def start_notifications_consumer(self):
         self.consumer = threading.Thread(target=self.consume_notifications)

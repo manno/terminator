@@ -71,6 +71,8 @@ def parse_options():
                 callback=execute_cb, 
                 help=_('Use the rest of the command line as a command to '
                        'execute inside the terminal, and its arguments'))
+    parser.add_option('--remote', dest='remote',
+            help=_('Specify a remote server for tmux to connect to'))
     parser.add_option('-g', '--config', dest='config', 
                       help=_('Specify a config file'))
     parser.add_option('-x', '--execute', dest='execute', action='callback',

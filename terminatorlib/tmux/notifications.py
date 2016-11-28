@@ -207,27 +207,6 @@ class NotificationsHandler(object):
         terminal.pane_id = pane_id
         self.terminator.pane_id_to_terminal[pane_id] = terminal
 
-    def list_panes_size_result(self, result):
-        dbg("{}::{}: {}".format("NotificationsHandler", "list_panes_size_result", result))
-        # output = { pane[0]: map(int, pane[1:]) for pane in map(string.split, result) }
-        # if not output == self.terminator.tmux_control.pane_layout:
-            # window = self.terminator.get_windows()[0]
-            # # DEBUG {{
-            # dbg("{}::{}: {}".format("NotificationsHandler", "list_panes_size_result", "dicts differ, updating."))
-            # # }}
-            # self.terminator.tmux_control.pane_layout = output
-            # for pane_id in output.keys():
-                # terminal = self.terminator.find_terminal_by_pane_id(pane_id)
-                # terminal.vte.set_size((output[pane_id][0]), output[pane_id][1])
-
-        # FIXME: probably not the best place for this, update tmux client size to match the window geometry
-        window = self.terminator.get_windows()[0]
-        column_count, row_count = map(int, get_column_row_count(window))
-        dbg("{}::{}: {}x{}".format("NotificationsHandler", "list_panes_size_result", column_count, row_count))
-        size_up_to_date = bool(column_count == self.terminator.tmux_control.width and row_count == self.terminator.tmux_control.height)
-        if not size_up_to_date:
-            self.terminator.tmux_control.refresh_client(column_count, row_count)
-
     def garbage_collect_panes_result(self, result):
         pane_ids = set()
         for line in result:
