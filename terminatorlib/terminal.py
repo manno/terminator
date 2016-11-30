@@ -1241,6 +1241,7 @@ class Terminal(Gtk.VBox):
         row_count = self.vte.get_row_count()
         self.titlebar.update_terminal_size(column_count, row_count)
         if self.terminator.tmux_control:
+            self.terminator.tmux_control.resize_pane(self.pane_id, row_count, column_count)
             # FIXME: probably not the best place for this, update tmux client size to match the window geometry
             # it is also likely to be very expensive
             window = self.terminator.get_windows()[0]
