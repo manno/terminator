@@ -251,3 +251,16 @@ class TmuxControl(object):
             notification.consume(line, self.output)
             handler.handle(notification)
         handler.terminate()
+
+    def display_pane_tty(self, pane_id):
+        tmux_command = 'display -pt "{}" "#D {}"'.format(
+            pane_id, "#{pane_tty}")
+
+        self._run_command(tmux_command,
+                callback=self.notifications_handler.pane_tty_result)
+
+    def resize_pane(self, pane_id, rows, cols):
+        tmux_command = 'resize-pane -t "{}" -x {} -y {}'.format(
+            pane_id, cols, rows)
+
+        self._run_command(tmux_command)

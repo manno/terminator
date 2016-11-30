@@ -237,6 +237,11 @@ class NotificationsHandler(object):
         terminal.pane_id = pane_id
         self.terminator.pane_id_to_terminal[pane_id] = terminal
 
+    def pane_tty_result(self, result):
+        dbg(result)
+        pane_id, pane_tty = result[0].split(' ')
+        # self.terminator.pane_id_to_terminal[pane_id].tty = pane_tty
+
     def garbage_collect_panes_result(self, result):
         pane_ids = set()
         for line in result:
@@ -266,6 +271,7 @@ class NotificationsHandler(object):
         self.terminator.initial_layout = terminator_layout
 
     def initial_output_result_callback(self, pane_id):
+        self.terminator.tmux_control.display_pane_tty(pane_id)
         def result_callback(result):
             terminal = self.terminator.pane_id_to_terminal.get(pane_id)
             if not terminal:
