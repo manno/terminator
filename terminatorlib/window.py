@@ -626,7 +626,18 @@ class Window(Container, Gtk.Window):
             dbg("We don't currently support geometry hinting with tabs")
             return
 
-        column_sum, row_sum = util.get_column_row_count(self)
+        column_sum = 0
+        row_sum = 0
+
+        terminals = self.get_visible_terminals() 
+        for terminal in terminals:
+            rect = terminal.get_allocation()
+            if rect.x == 0:
+                cols, rows = terminal.get_size()
+                row_sum = row_sum + rows
+            if rect.y == 0:
+                cols, rows = terminal.get_size()
+                column_sum = column_sum + cols
 
         if column_sum == 0 or row_sum == 0:
             dbg('column_sum=%s,row_sum=%s. No terminals found in >=1 axis' %
@@ -634,10 +645,9 @@ class Window(Container, Gtk.Window):
             return
 
         # FIXME: I don't think we should just use whatever font size info is on
-        # the focused terminal. Looking up the default profile font
+        # the last terminal we inspected. Looking up the default profile font
         # size and calculating its character sizes would be rather expensive
         # though.
-        terminal = self.get_focussed_terminal()
         font_width, font_height = terminal.get_font_size()
         total_font_width = font_width * column_sum
         total_font_height = font_height * row_sum
