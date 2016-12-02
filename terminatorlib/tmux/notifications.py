@@ -5,6 +5,8 @@ from terminatorlib.tmux import layout
 
 import string
 ATTACH_ERROR_STRINGS = ["can't find session terminator", "no current session"]
+ALTERNATE_SCREEN_ENTER_CODES = [ "\\033[?1049h" ]
+ALTERNATE_SCREEN_EXIT_CODES  = [ "\\033[?1049l" ]
 
 notifications_mappings = {}
 
@@ -85,7 +87,6 @@ class Output(Notification):
         output = ' '.join(line[1:])
         self.pane_id = pane_id
         self.output = output
-
 
 @notification
 class SessionChanged(Notification):
@@ -221,6 +222,12 @@ class NotificationsHandler(object):
         terminal = self.terminator.pane_id_to_terminal.get(pane_id)
         if not terminal:
             return
+        for code in ALTERNATE_SCREEN_ENTER_CODES:
+            if code in output:
+                self.terminator.tmux_control.alternate_on = True
+        for code in ALTERNATE_SCREEN_EXIT_CODES:
+            if code in output:
+                self.terminator.tmux_control.alternate_on = False
         terminal.vte.feed(output.decode('string_escape'))
 
     def handle_layout_change(self, notification):
@@ -237,19 +244,23 @@ class NotificationsHandler(object):
         terminal.pane_id = pane_id
         self.terminator.pane_id_to_terminal[pane_id] = terminal
 
+    # NOTE: UNUSED; if we ever end up needing this, create the tty property in
+    # the Terminal class first
     def pane_tty_result(self, result):
         dbg(result)
         pane_id, pane_tty = result[0].split(' ')
         # self.terminator.pane_id_to_terminal[pane_id].tty = pane_tty
 
     def garbage_collect_panes_result(self, result):
-        pane_ids = set()
-        for line in result:
-            pane_id = line.strip()
-            pane_ids.add(pane_id)
         pane_id_to_terminal = self.terminator.pane_id_to_terminal
-        removed_pane_ids = [p for p in pane_id_to_terminal.keys()
-                            if p not in pane_ids]
+        removed_pane_ids = pane_id_to_terminal.keys()
+
+        for line in result:
+            pane_id, pane_pid = line.split(' ')
+            # TODO: check whether we need to account for ValueError
+            removed_pane_ids.remove(pane_id)
+            pane_id_to_terminal[pane_id].pid = pane_pid
+
         if removed_pane_ids:
             def callback():
                 for pane_id in removed_pane_ids:

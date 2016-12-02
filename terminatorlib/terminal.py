@@ -989,6 +989,9 @@ class Terminal(Gtk.VBox):
             elif event.direction == Gdk.ScrollDirection.DOWN or SMOOTH_SCROLL_DOWN:
                 self.scroll_by_page(1)
                 return (True)
+
+        if self.terminator.tmux_control:
+            return self.control.send_mousewheel(event, pane_id=self.pane_id)
         return(False)
 
     def popup_menu(self, widget, event=None):
