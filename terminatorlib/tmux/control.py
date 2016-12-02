@@ -99,9 +99,8 @@ class TmuxControl(object):
         orientation = '-h' if orientation == 'horizontal' else '-v'
         tmux_command = 'split-window {} -t {} -P -F "#D {}"'.format(
             orientation, pane_id, marker)
-        # TODO (dank): fix (getting None for pid, e.g. /proc/None/cwd)
-        # if cwd:
-        #     tmux_command += ' -c "{}"'.format(cwd)
+        if cwd:
+            tmux_command += ' -c "{}"'.format(cwd)
         if command:
             tmux_command += ' "{}"'.format(command)
 
@@ -110,9 +109,8 @@ class TmuxControl(object):
 
     def new_window(self, cwd=None, command=None, marker=''):
         tmux_command = 'new-window -P -F "#D {}"'.format(marker)
-        # TODO (dank): fix (getting None for pid, e.g. /proc/None/cwd)
-        # if cwd:
-        #     tmux_command += ' -c "{}"'.format(cwd)
+        if cwd:
+            tmux_command += ' -c "{}"'.format(cwd)
         if command:
             tmux_command += ' "{}"'.format(command)
 
