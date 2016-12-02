@@ -32,6 +32,11 @@ ARROW_KEYS = {
     Gdk.KEY_Left,
     Gdk.KEY_Right
 }
+MOUSE_WHEEL = {
+    # TODO: make it configurable, e.g. like better-mouse-mode plugin
+    Gdk.ScrollDirection.UP: "C-y C-y C-y",
+    Gdk.ScrollDirection.DOWN: "C-e C-e C-e",
+}
 
 # TODO: implement ssh connection using paramiko
 class TmuxControl(object):
@@ -46,6 +51,7 @@ class TmuxControl(object):
         self.width = None
         self.height = None
         self.remote = None
+        self.alternate_on = False
         self.requests = Queue.Queue()
 
     def reset(self):
@@ -114,7 +120,6 @@ class TmuxControl(object):
                           callback=self.notifications_handler.pane_id_result)
 
     def attach_session(self):
-        # self.kill_server()
         popen_command = ['tmux', '-2', '-C', 'attach-session',
                          '-t', self.session_name]
         if self.remote:
@@ -160,8 +165,8 @@ class TmuxControl(object):
         self._run_command('refresh-client -C {},{}'.format(width, height))
 
     def garbage_collect_panes(self):
-        self._run_command('list-panes -s -t {} -F "#D"'.format(
-            self.session_name),
+        self._run_command('list-panes -s -t {} -F "#D {}"'.format(
+            self.session_name, '#{pane_pid}'),
             callback=self.notifications_handler.garbage_collect_panes_result)
 
     def initial_layout(self):
@@ -203,6 +208,27 @@ class TmuxControl(object):
             key = '\\;'
 
         self.send_content(key, pane_id)
+
+    def send_buttonpress(self, event, pane_id):
+        keyval = event.button
+        state = event.state
+
+        self.send_content(key, pane_id)
+
+    def send_mousewheel(self, event, pane_id):
+        SMOOTH_SCROLL_UP = event.direction == Gdk.ScrollDirection.SMOOTH and event.delta_y <= 0.
+        SMOOTH_SCROLL_DOWN = event.direction == Gdk.ScrollDirection.SMOOTH and event.delta_y > 0.
+        if SMOOTH_SCROLL_UP:
+            wheel = MOUSE_WHEEL[Gdk.ScrollDirection.UP]
+        elif SMOOTH_SCROLL_DOWN:
+            wheel = MOUSE_WHEEL[Gdk.ScrollDirection.DOWN]
+        else:
+            wheel = MOUSE_WHEEL[event.direction]
+
+        if self.alternate_on:
+            self._run_command("send-keys -t {} {}".format(pane_id, wheel))
+            return True
+        return False
 
     def send_content(self, content, pane_id):
         content = quote(content)
