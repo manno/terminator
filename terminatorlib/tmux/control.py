@@ -8,8 +8,10 @@ from gi.repository import Gtk, Gdk
 from terminatorlib.tmux import notifications
 from terminatorlib.util import dbg
 
+ESCAPE_CODE = '\033'
+
 def esc(seq):
-    return '\033{}'.format(seq)
+    return '{}{}'.format(ESCAPE_CODE, seq)
 
 
 KEY_MAPPINGS = {
@@ -52,6 +54,7 @@ class TmuxControl(object):
         self.height = None
         self.remote = None
         self.alternate_on = False
+        self.is_zoomed = False
         self.requests = Queue.Queue()
 
     def reset(self):
@@ -180,7 +183,8 @@ class TmuxControl(object):
                 pane_id))
 
     def toggle_zoom(self, pane_id):
-        self._run_command('resize-pane -Z -t {}'.format(pane_id))
+        self.is_zoomed = not self.is_zoomed
+        self._run_command('resize-pane -Z -x {} -y {} -t {}'.format(self.width, self.height, pane_id))
 
     def send_keypress(self, event, pane_id):
         keyval = event.keyval
@@ -229,9 +233,9 @@ class TmuxControl(object):
         return False
 
     def send_content(self, content, pane_id):
-        content = quote(content)
-        self._run_command("send-keys -t {} -l {}".format(
-                pane_id, content))
+        disable_key_name_lookup = "-l" if ESCAPE_CODE in content else ""
+        self._run_command("send-keys -t {} {} '{}'".format(
+                pane_id, disable_key_name_lookup, content))
 
     def _run_command(self, command, callback=None):
         if not self.input:
@@ -247,7 +251,6 @@ class TmuxControl(object):
 
     @staticmethod
     def kill_server():
-        # command = ['tmux', 'kill-server']
         command = ['tmux', 'kill-session', '-t', 'terminator']
         subprocess.call(command)
 
@@ -284,6 +287,10 @@ class TmuxControl(object):
                 callback=self.notifications_handler.pane_tty_result)
 
     def resize_pane(self, pane_id, rows, cols):
+        if self.is_zoomed:
+            # if the pane is zoomed, there is no need for tmux to
+            # change the current layout
+            return
         tmux_command = 'resize-pane -t "{}" -x {} -y {}'.format(
             pane_id, cols, rows)
 

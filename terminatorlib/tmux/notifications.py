@@ -228,7 +228,10 @@ class NotificationsHandler(object):
         for code in ALTERNATE_SCREEN_EXIT_CODES:
             if code in output:
                 self.terminator.tmux_control.alternate_on = False
-        terminal.vte.feed(output.decode('string_escape'))
+        # NOTE: using neovim, enabling visual-bell and setting t_vb empty results in incorrect
+        # escape sequences (C-g) being printed in the neovim window; remove them until we can
+        # figure out the root cause
+        terminal.vte.feed(output.decode('string_escape').replace("\033g",""))
 
     def handle_layout_change(self, notification):
         assert isinstance(notification, LayoutChange)
@@ -257,7 +260,7 @@ class NotificationsHandler(object):
 
         for line in result:
             pane_id, pane_pid = line.split(' ')
-            # TODO: check whether we need to account for ValueError
+            # TODO: do we need to account for ValueError?
             removed_pane_ids.remove(pane_id)
             pane_id_to_terminal[pane_id].pid = pane_pid
 
@@ -282,7 +285,6 @@ class NotificationsHandler(object):
         self.terminator.initial_layout = terminator_layout
 
     def initial_output_result_callback(self, pane_id):
-        self.terminator.tmux_control.display_pane_tty(pane_id)
         def result_callback(result):
             terminal = self.terminator.pane_id_to_terminal.get(pane_id)
             if not terminal:
