@@ -1276,10 +1276,10 @@ class Terminal(Gtk.VBox):
         column_count = self.vte.get_column_count()
         row_count = self.vte.get_row_count()
         self.titlebar.update_terminal_size(column_count, row_count)
+
         if self.terminator.tmux_control:
-            self.terminator.tmux_control.resize_pane(self.pane_id, row_count, column_count)
+            # self.terminator.tmux_control.resize_pane(self.pane_id, row_count, column_count)
             # FIXME: probably not the best place for this, update tmux client size to match the window geometry
-            # it is also likely to be very expensive
             window = self.terminator.get_windows()[0]
             column_count, row_count = map(int, get_column_row_count(window))
             # dbg("{}::{}: {}x{}".format("NotificationsHandler", "list_panes_size_result", column_count, row_count))
@@ -1817,7 +1817,7 @@ class Terminal(Gtk.VBox):
 
     def key_scaled_zoom(self):
         if self.terminator.tmux_control:
-            self.control.toggle_zoom(self.pane_id)
+            self.control.toggle_zoom(self.pane_id, zoom=True)
         if self.is_zoomed():
             self.unzoom()
         else:
