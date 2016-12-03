@@ -234,6 +234,11 @@ class TmuxControl(object):
         self._run_command("send-keys -t {} {} '{}'".format(
                 pane_id, disable_key_name_lookup, content))
 
+    def send_quoted_content(self, content, pane_id):
+        disable_key_name_lookup = "-l" if ESCAPE_CODE in content else ""
+        self._run_command("send-keys -t {} {} {}".format(
+                pane_id, disable_key_name_lookup, content))
+
     def _run_command(self, command, callback=None):
         if not self.input:
             dbg('No tmux connection. [command={}]'.format(command))

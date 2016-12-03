@@ -4,6 +4,7 @@
 """terminal.py - classes necessary to provide Terminal widgets"""
 
 from __future__ import division
+from pipes import quote
 import os
 import signal
 import gi
@@ -1542,8 +1543,8 @@ class Terminal(Gtk.VBox):
         """Paste one of the two clipboards"""
         if self.terminator.tmux_control:
             def callback(_, content):
-                content = content.replace('\n',  '\r')
-                self.control.send_content(content, self.pane_id)
+                content = quote(content.replace('\n',  '\r'))
+                self.control.send_quoted_content(content, self.pane_id)
             self.clipboard.request_text(callback)
         else:
             for term in self.terminator.get_target_terms(self):
