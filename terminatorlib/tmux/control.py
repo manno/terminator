@@ -21,8 +21,8 @@ KEY_MAPPINGS = {
     Gdk.KEY_Delete: esc('[3~'),
     Gdk.KEY_Page_Up: esc('[5~'),
     Gdk.KEY_Page_Down: esc('[6~'),
-    Gdk.KEY_Home: esc('OH'),
-    Gdk.KEY_End: esc('OF'),
+    Gdk.KEY_Home: esc('[1~'),
+    Gdk.KEY_End: esc('[4~'),
     Gdk.KEY_Up: esc('[A'),
     Gdk.KEY_Down: esc('[B'),
     Gdk.KEY_Right: esc('[C'),
@@ -231,8 +231,9 @@ class TmuxControl(object):
 
     def send_content(self, content, pane_id):
         disable_key_name_lookup = "-l" if ESCAPE_CODE in content else ""
-        self._run_command("send-keys -t {} {} '{}'".format(
-                pane_id, disable_key_name_lookup, content))
+        quote = "'" if "'" not in content else '"'
+        self._run_command("send-keys -t {} {} {}{}{}".format(
+                pane_id, disable_key_name_lookup, quote, content, quote))
 
     def send_quoted_content(self, content, pane_id):
         disable_key_name_lookup = "-l" if ESCAPE_CODE in content else ""
