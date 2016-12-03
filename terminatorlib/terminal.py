@@ -1808,20 +1808,20 @@ class Terminal(Gtk.VBox):
         self.emit('move-tab', 'left')
 
     def key_toggle_zoom(self):
+        if self.terminator.tmux_control:
+            self.control.toggle_zoom(self.pane_id)
         if self.is_zoomed():
             self.unzoom()
         else:
             self.maximise()
-        if self.terminator.tmux_control:
-            self.control.toggle_zoom(self.pane_id)
 
     def key_scaled_zoom(self):
+        if self.terminator.tmux_control:
+            self.control.toggle_zoom(self.pane_id)
         if self.is_zoomed():
             self.unzoom()
         else:
             self.zoom()
-        if self.terminator.tmux_control:
-            self.control.toggle_zoom(self.pane_id)
 
     def key_next_tab(self):
         self.emit('tab-change', -1)
