@@ -182,9 +182,10 @@ class TmuxControl(object):
             callback=self.notifications_handler.initial_output_result_callback(
                 pane_id))
 
-    def toggle_zoom(self, pane_id):
+    def toggle_zoom(self, pane_id, zoom=False):
         self.is_zoomed = not self.is_zoomed
-        self._run_command('resize-pane -Z -x {} -y {} -t {}'.format(self.width, self.height, pane_id))
+        if not zoom:
+            self._run_command('resize-pane -Z -x {} -y {} -t {}'.format(self.width, self.height, pane_id))
 
     def send_keypress(self, event, pane_id):
         keyval = event.keyval
@@ -211,12 +212,8 @@ class TmuxControl(object):
 
         self.send_content(key, pane_id)
 
-    def send_buttonpress(self, event, pane_id):
-        keyval = event.button
-        state = event.state
-
-        self.send_content(key, pane_id)
-
+    # Handle mouse scrolling events if the alternate_screen is visible
+    # otherwise let Terminator handle all the mouse behavior
     def send_mousewheel(self, event, pane_id):
         SMOOTH_SCROLL_UP = event.direction == Gdk.ScrollDirection.SMOOTH and event.delta_y <= 0.
         SMOOTH_SCROLL_DOWN = event.direction == Gdk.ScrollDirection.SMOOTH and event.delta_y > 0.
