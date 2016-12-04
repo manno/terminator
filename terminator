@@ -77,8 +77,10 @@ if __name__ == '__main__':
         # continue. Failure to import dbus, or the global config option "dbus"
         # being False will cause us to continue without the dbus server and open a
         # window.
+        # Disable DBUS if using tmux, so we can have multiple sessions (e.g. local
+        # and remote, multiple remotes, etc.)
         try:
-            if OPTIONS.nodbus:
+            if OPTIONS.nodbus or OPTIONS.tmux:
                 dbg('dbus disabled by command line')
                 raise ImportError
             from terminatorlib import ipc

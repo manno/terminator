@@ -138,7 +138,7 @@ class TmuxControl(object):
     def new_session(self, cwd=None, command=None, marker=''):
         popen_command = ['tmux', '-2', '-C', 'new-session', '-s', self.session_name,
                 '-P', '-F', '#D {}'.format(marker)]
-        if cwd:
+        if cwd and not self.remote:
             popen_command += ['-c', cwd]
         if command:
             popen_command.append(command)
@@ -230,15 +230,15 @@ class TmuxControl(object):
         return False
 
     def send_content(self, content, pane_id):
-        disable_key_name_lookup = "-l" if ESCAPE_CODE in content else ""
+        key_name_lookup = "-l" if ESCAPE_CODE in content else ""
         quote = "'" if "'" not in content else '"'
         self._run_command("send-keys -t {} {} {}{}{}".format(
-                pane_id, disable_key_name_lookup, quote, content, quote))
+                pane_id, key_name_lookup, quote, content, quote))
 
     def send_quoted_content(self, content, pane_id):
-        disable_key_name_lookup = "-l" if ESCAPE_CODE in content else ""
+        key_name_lookup = "-l" if ESCAPE_CODE in content else ""
         self._run_command("send-keys -t {} {} {}".format(
-                pane_id, disable_key_name_lookup, content))
+                pane_id, key_name_lookup, content))
 
     def _run_command(self, command, callback=None):
         if not self.input:
@@ -277,7 +277,12 @@ class TmuxControl(object):
             line = line[1:].split(' ')
             marker = line[0]
             line = line[1:]
-            notification = notifications.notifications_mappings[marker]()
+            # skip MOTD, anything that isn't coming from tmux control mode
+            try:
+                notification = notifications.notifications_mappings[marker]()
+            except KeyError:
+                dbg("Discarding invalid output from the control terminal.")
+                continue
             notification.consume(line, self.output)
             handler.handle(notification)
         handler.terminate()

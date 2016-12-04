@@ -70,7 +70,8 @@ class LayoutChange(Notification):
                   'window_flags']
 
     def consume(self, line, *args):
-        window_id, window_layout, window_visible_layout, window_flags = line
+        # attributes not present default to None
+        window_id, window_layout, window_visible_layout, window_flags = line + [None] * (len(self.attributes) - len(line))
         self.window_id = window_id
         self.window_layout = layout.parse_layout(window_layout)
         self.window_visible_layout = window_visible_layout
