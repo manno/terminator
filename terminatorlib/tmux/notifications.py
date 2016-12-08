@@ -261,9 +261,12 @@ class NotificationsHandler(object):
 
         for line in result:
             pane_id, pane_pid = line.split(' ')
-            # TODO: do we need to account for ValueError?
-            removed_pane_ids.remove(pane_id)
-            pane_id_to_terminal[pane_id].pid = pane_pid
+            try:
+                removed_pane_ids.remove(pane_id)
+                pane_id_to_terminal[pane_id].pid = pane_pid
+            except ValueError:
+                dbg("Pane already reaped, keep going.")
+                continue
 
         if removed_pane_ids:
             def callback():
