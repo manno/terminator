@@ -15,6 +15,10 @@ dependencies yourself:
      Debian/Ubuntu: python-vte
      FreeBSD: x11-toolkits/py-vte
 
+ * Python PyParsing library (only required for Tmux mode):
+     Debian/Ubuntu: python-pyparsing
+     FreeBSD: devel/py-pyparsing
+
 If you don't care about native language support or icons, Terminator
 should run just fine directly from this directory, just:
 

@@ -1,43 +1,106 @@
+from pyparsing import *
+
+class LayoutParser():
+    """BNF representation for a Tmux Layout
+    <layout>        :: <layout_name> <comma> <element>+ ;
+    <element>       :: ( <container> | <pane> ) <comma>? ;
+    <layout_name>   :: <hexadecimal>{4} ;
+    <container>     :: <start_token> <element>+ <end_token> ;
+    <pane>          :: <preamble> <comma> <decimal> ;
+    <preamble>      :: <size> <comma> <decimal> <comma> <decimal> ;
+    <size>          :: <decimal> "x" <decimal> ;
+    <start_token>   :: "{" | "[" ;
+    <end_token>     :: "}" | "]" ;
+    <decimal>       :: <decimal-digit>+ ;
+    <hexadecimal>   :: <hex-digit>+ ;
+    <decimal-digit> :: "0" | ... | "9" ;
+    <hex-digit>     :: <decimal-digit> | "a" | ... | "f" ;
+    <comma>         :: "," ;
+    """
+    layout_parser = None
+
+    def __init__(self):
+        decimal = Word(nums)
+
+        comma = Suppress(Literal(','))
+        lcpar = Literal('{')
+        rcpar = Suppress(Literal('}'))
+        lspar = Literal('[')
+        rspar = Suppress(Literal(']'))
+
+        layout_name = Word(hexnums, min=4, max=4)("name")
+        size        = decimal("width") + Suppress(Literal('x')) + decimal("height")
+
+        preamble    = size + comma + decimal("x") + comma + decimal("y")
+        pane        = Group(preamble + comma + decimal("pane_id"))("pane")
+        horiz_start = preamble + lcpar
+        horiz_end   = rcpar
+        vert_start  = preamble + lspar
+        vert_end    = rspar
+
+        element         = Forward() # will be defined later
+        horiz_container = Group(horiz_start + OneOrMore(element) + horiz_end)("horiz")
+        vert_container  = Group(vert_start + OneOrMore(element) + vert_end)("vert")
+        container       = (horiz_container | vert_container)
+
+        element << (container | pane) + Optional(comma)
+
+        self.layout_parser = layout_name + comma + OneOrMore(element)
+
+    def parse(self, layout):
+        parsed = self.layout_parser.parseString(layout)
+        return parsed.asList()
+
 def parse_layout(layout):
-    layout = layout.split(',')
-    layout = ','.join(layout[1:])
+    """Apply our application logic to the parsed layout.
 
-    def parse(consumed):
-        result = []
-        while True:
-            sep = layout[consumed:].index(',')
-            size = layout[consumed:consumed + sep]
-            width, height = size.split('x')
-            consumed += 1 + len(size)
-            sep = layout[consumed:].index(',')
-            x = layout[consumed:consumed + sep]
-            consumed += 1 + len(x)
-            seps = [layout[consumed:].find(c) for c in ',{[']
-            sep = min(s for s in seps if s != -1)
-            y = layout[consumed:consumed + sep]
-            consumed += 1 + len(y)
-            if layout[consumed - 1] == '[':
-                children, consumed = parse(consumed)
-                container = Vertical(width, height, x, y, children)
-            elif layout[consumed - 1] == '{':
-                children, consumed = parse(consumed)
-                container = Horizontal(width, height, x, y, children)
-            else:
-                seps = [layout[consumed:].find(c) for c in ',}]']
-                seps = [s for s in seps if s != -1]
-                if not seps:
-                    pane_id = layout[consumed:]
-                    consumed = len(layout)
-                else:
-                    sep = min(seps)
-                    pane_id = layout[consumed: consumed + sep]
-                    consumed += 1 + len(pane_id)
-                container = Pane(width, height, x, y, '%{}'.format(pane_id))
-            result.append(container)
-            if consumed == len(layout) or layout[consumed - 1] in ']}':
-                return result, consumed
-    return parse(consumed=0)[0][0]
+    Arguments:
+    layout -- Layout parsed by LayoutParser.parse(),
+              it is represented as a nested list; each nested
+              list has the following format:
+              [0]  : width,
+              [1]  : height,
+              [2]  : position on x axis,
+              [3]  : position on y axis,
+              [4]  : '{' if the current element is a horizontal splits container,
+                     '[' if the current element is a vertical splits container,
+                     '%[0-9]+' if the current element is a pane
+              [5+] : if present, they are nested lists with the same structure
 
+    """
+    result = []
+
+    children = []
+    for item in layout[5:]:
+        children.extend(parse_layout(item))
+
+    if layout[4] == '{':
+        result.append(Horizontal(
+            layout[0],
+            layout[1],
+            layout[2],
+            layout[3],
+            children
+            ))
+
+    elif layout[4] == '[':
+        result.append(Vertical(
+            layout[0],
+            layout[1],
+            layout[2],
+            layout[3],
+            children
+            ))
+    else:
+        result.append(Pane(
+            layout[0],
+            layout[1],
+            layout[2],
+            layout[3],
+            "%{}".format(layout[4])
+            ))
+
+    return result
 
 def convert_to_terminator_layout(window_layouts):
     assert len(window_layouts) > 0
