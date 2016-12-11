@@ -66,6 +66,7 @@ class Terminator(Borg):
 
     cur_gtk_theme_name = None
     gtk_settings = None
+
     tmux_control = None
     pane_id_to_terminal = None
     initial_layout = None
