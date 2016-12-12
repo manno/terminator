@@ -233,6 +233,8 @@ class PrefsEditor:
         termsepsize = self.config['handle_size']
         widget = guiget('handlesize')
         widget.set_value(float(termsepsize))
+        widget = guiget('handlesize_value_label')
+        widget.set_text(str(termsepsize))
         # Window geometry hints
         geomhint = self.config['geometry_hinting']
         widget = guiget('wingeomcheck')
@@ -252,6 +254,9 @@ class PrefsEditor:
         # Window borders
         widget = guiget('winbordercheck')
         widget.set_active(not self.config['borderless'])
+        # Extra styling
+        widget = guiget('extrastylingcheck')
+        widget.set_active(self.config['extra_styling'])
         # Tab bar position
         option = self.config['tab_position']
         widget = guiget('tabposcombo')
@@ -569,6 +574,8 @@ class PrefsEditor:
         # Inactive terminal shading
         widget = guiget('inactive_color_offset')
         widget.set_value(float(self.config['inactive_color_offset']))
+        widget = guiget('inactive_color_offset_value_label')
+        widget.set_text('%d%%' % (int(float(self.config['inactive_color_offset'])*100)))
         # Use custom URL handler
         widget = guiget('use_custom_url_handler_checkbox')
         widget.set_active(self.config['use_custom_url_handler'])
@@ -686,6 +693,11 @@ class PrefsEditor:
     def on_winbordercheck_toggled(self, widget):
         """Window border setting changed"""
         self.config['borderless'] = not widget.get_active()
+        self.config.save()
+
+    def on_extrastylingcheck_toggled(self, widget):
+        """Extra styling setting changed"""
+        self.config['extra_styling'] = widget.get_active()
         self.config.save()
 
     def on_hidefromtaskbcheck_toggled(self, widget):
@@ -859,7 +871,7 @@ class PrefsEditor:
         self.config['scrollbar_position'] = value
         self.config.save()
 
-    def on_darken_background_scale_change_value(self, widget, scroll, _value_not_rounded):
+    def on_darken_background_scale_value_changed(self, widget):
         """Background darkness setting changed"""
         value = widget.get_value()  # This one is rounded according to the UI.
         if value > 1.0:
@@ -1036,15 +1048,18 @@ class PrefsEditor:
         self.config['title_transmit_fg_color'] = color2hex(widget)
         self.config.save()
 
-    def on_inactive_color_offset_change_value(self, widget, scroll, _value_not_rounded):
+    def on_inactive_color_offset_value_changed(self, widget):
         """Inactive color offset setting changed"""
         value = widget.get_value()  # This one is rounded according to the UI.
         if value > 1.0:
           value = 1.0
         self.config['inactive_color_offset'] = value
         self.config.save()
+        guiget = self.builder.get_object
+        label_widget = guiget('inactive_color_offset_value_label')
+        label_widget.set_text('%d%%' % (int(value * 100)))
 
-    def on_handlesize_change_value(self, widget, scroll, _value_not_rounded):
+    def on_handlesize_value_changed(self, widget):
         """Handle size changed"""
         value = widget.get_value()  # This one is rounded according to the UI.
         value = int(value)          # Cast to int.
@@ -1052,6 +1067,9 @@ class PrefsEditor:
             value = 20
         self.config['handle_size'] = value
         self.config.save()
+        guiget = self.builder.get_object
+        label_widget = guiget('handlesize_value_label')
+        label_widget.set_text(str(value))
 
     def on_focuscombo_changed(self, widget):
         """Focus type changed"""
@@ -1568,9 +1586,6 @@ class LayoutEditor:
         self.profile_ids_to_profile = {}
         self.profile_profile_to_ids= {}
         chooser = self.builder.get_object('layout_profile_chooser')
-        model = chooser.get_model()
-
-        model.clear()
 
         profiles = self.config.list_profiles()
         profiles.sort()
@@ -1578,7 +1593,7 @@ class LayoutEditor:
         for profile in profiles:
             self.profile_ids_to_profile[i] = profile
             self.profile_profile_to_ids[profile] = i
-            model.append([profile])
+            chooser.append_text(profile)
             i = i + 1
 
     def on_layout_selection_changed(self, selection):
