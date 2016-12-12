@@ -5,7 +5,7 @@ class LayoutParser():
     <layout>        :: <layout_name> <comma> <element>+ ;
     <element>       :: ( <container> | <pane> ) <comma>? ;
     <layout_name>   :: <hexadecimal>{4} ;
-    <container>     :: <start_token> <element>+ <end_token> ;
+    <container>     :: <preamble> <start_token> <element>+ <end_token> ;
     <pane>          :: <preamble> <comma> <decimal> ;
     <preamble>      :: <size> <comma> <decimal> <comma> <decimal> ;
     <size>          :: <decimal> "x" <decimal> ;
@@ -23,25 +23,16 @@ class LayoutParser():
         decimal = Word(nums)
 
         comma = Suppress(Literal(','))
-        lcpar = Literal('{')
-        rcpar = Suppress(Literal('}'))
-        lspar = Literal('[')
-        rspar = Suppress(Literal(']'))
+        start_token = Literal('{') | Literal('[')
+        end_token   = Suppress(Literal('}') | Literal(']'))
 
-        layout_name = Word(hexnums, min=4, max=4)("name")
+        layout_name = Suppress(Word(hexnums, min=4, max=4))
         size        = decimal("width") + Suppress(Literal('x')) + decimal("height")
 
         preamble    = size + comma + decimal("x") + comma + decimal("y")
-        pane        = Group(preamble + comma + decimal("pane_id"))("pane")
-        horiz_start = preamble + lcpar
-        horiz_end   = rcpar
-        vert_start  = preamble + lspar
-        vert_end    = rspar
-
-        element         = Forward() # will be defined later
-        horiz_container = Group(horiz_start + OneOrMore(element) + horiz_end)("horiz")
-        vert_container  = Group(vert_start + OneOrMore(element) + vert_end)("vert")
-        container       = (horiz_container | vert_container)
+        pane        = Group(preamble + comma + decimal("pane_id"))
+        element     = Forward() # will be defined later
+        container   = Group(preamble + start_token + OneOrMore(element) + end_token)
 
         element << (container | pane) + Optional(comma)
 
