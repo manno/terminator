@@ -62,14 +62,12 @@ class Terminator(Borg):
     groupsend = None
     groupsend_type = {'all':0, 'group':1, 'off':2}
 
-<<<<<<< TREE
+    cur_gtk_theme_name = None
+    gtk_settings = None
+
     tmux_control = None
     pane_id_to_terminal = None
     initial_layout = None
-=======
-    cur_gtk_theme_name = None
-    gtk_settings = None
->>>>>>> MERGE-SOURCE
 
     def __init__(self):
         """Class initialiser"""
