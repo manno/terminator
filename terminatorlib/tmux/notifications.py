@@ -279,7 +279,7 @@ class NotificationsHandler(object):
         window_layouts = []
         for line in result:
             window_layout = line.strip()
-            window_layouts.extend(layout.parse_layout(self.layout_parser.parse(window_layout)[1]))
+            window_layouts.extend(layout.parse_layout(self.layout_parser.parse(window_layout)[0]))
             # window_layouts.append(layout.parse_layout(window_layout))
         terminator_layout = layout.convert_to_terminator_layout(
                 window_layouts)
