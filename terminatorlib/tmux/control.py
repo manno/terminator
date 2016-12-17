@@ -232,12 +232,12 @@ class TmuxControl(object):
     def send_content(self, content, pane_id):
         key_name_lookup = "-l" if ESCAPE_CODE in content else ""
         quote = "'" if "'" not in content else '"'
-        self._run_command("send-keys -t {} {} {}{}{}".format(
+        self._run_command("send-keys -t {} {} -- {}{}{}".format(
                 pane_id, key_name_lookup, quote, content, quote))
 
     def send_quoted_content(self, content, pane_id):
         key_name_lookup = "-l" if ESCAPE_CODE in content else ""
-        self._run_command("send-keys -t {} {} {}".format(
+        self._run_command("send-keys -t {} {} -- {}".format(
                 pane_id, key_name_lookup, content))
 
     def _run_command(self, command, callback=None):
