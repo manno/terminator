@@ -7,7 +7,8 @@ import copy
 import os
 import gi
 gi.require_version('Vte', '2.91')
-from gi.repository import Gtk, Gdk, Vte
+from gi.repository import Gtk, Gdk, Vte, GdkX11
+from gi.repository.GLib import GError
 
 import borg
 from borg import Borg
@@ -58,6 +59,7 @@ class Terminator(Borg):
     doing_layout = None
     layoutname = None
     last_active_window = None
+    prelayout_windows = None
 
     groupsend = None
     groupsend_type = {'all':0, 'group':1, 'off':2}
@@ -235,6 +237,15 @@ class Terminator(Borg):
                 return terminal
         return None
 
+    def find_window_by_uuid(self, uuid):
+        """Search our terminals for one matching the supplied UUID"""
+        dbg('searching self.terminals for: %s' % uuid)
+        for window in self.windows:
+            dbg('checking: %s (%s)' % (window.uuid.urn, window))
+            if window.uuid.urn == uuid:
+                return window
+        return None
+
     def find_terminal_by_pane_id(self, pane_id):
         """Search our terminals for one matching the supplied pane_id"""
         dbg('searching self.terminals for: %s' % pane_id)
@@ -266,6 +277,7 @@ class Terminator(Borg):
 
         self.doing_layout = True
         self.last_active_window = None
+        self.prelayout_windows = self.windows[:]
 
         if not layout:
             layout = copy.deepcopy(self.config.layout_get_config(layoutname))
@@ -406,9 +418,39 @@ class Terminator(Borg):
                     term = self.find_terminal_by_uuid(window_last_active_term_mapping[window].urn)
                     term.ensure_visible_and_focussed()
 
+        # Build list of new windows using prelayout list
+        new_win_list = []
         for window in self.windows:
-            if window.uuid == self.last_active_window:
+            if window not in self.prelayout_windows:
+                new_win_list.append(window)
+        
+        # Make sure all new windows get bumped to the top
+        for window in new_win_list:
+            window.show()
+            window.grab_focus()
+            try:
+                t = GdkX11.x11_get_server_time(window.get_window())
+            except (TypeError, AttributeError):
+                t = 0
+            window.get_window().focus(t)
+
+        # Awful workaround to be sure that the last focused window is actually the one focused.
+        # Don't ask, don't tell policy on this. Even this is not 100%
+        if self.last_active_window:
+            window = self.find_window_by_uuid(self.last_active_window.urn)
+            count = 0
+            while count < 1000 and Gtk.events_pending():
+                count += 1
+                Gtk.main_iteration_do(False)
                 window.show()
+                window.grab_focus()
+                try:
+                    t = GdkX11.x11_get_server_time(window.get_window())
+                except (TypeError, AttributeError):
+                    t = 0
+                window.get_window().focus(t)
+
+        self.prelayout_windows = None
 
     def on_gtk_theme_name_notify(self, settings, prop):
         """Reconfigure if the gtk theme name changes"""
@@ -509,7 +551,16 @@ class Terminator(Borg):
                                                           theme_part_file)
                 if os.path.isfile(path_to_theme_specific_css):
                     style_provider = Gtk.CssProvider()
-                    style_provider.load_from_path(path_to_theme_specific_css)
+                    style_provider.connect('parsing-error', self.on_css_parsing_error)
+                    try:
+                        style_provider.load_from_path(path_to_theme_specific_css)
+                    except GError:
+                        # Hmmm. Should we try to provide GTK version specific files here on failure?
+                        gtk_version_string = '.'.join([str(Gtk.get_major_version()),
+                                                       str(Gtk.get_minor_version()),
+                                                       str(Gtk.get_micro_version())])
+                        err('Error(s) loading css from %s into Gtk %s' % (path_to_theme_specific_css,
+                                                                          gtk_version_string))
                     self.style_providers.append(style_provider)
                     break
 
@@ -546,6 +597,15 @@ class Terminator(Borg):
             child = window.get_child()
             if maker.isinstance(child, 'Notebook'):
                 child.configure()
+
+    def on_css_parsing_error(self, provider, section, error, user_data=None):
+        """Report CSS parsing issues"""
+        file_path = section.get_file().get_path()
+        line_no = section.get_end_line() +1
+        col_no = section.get_end_position() + 1
+        err('%s, at line %d, column %d, of file %s' % (error.message,
+                                                       line_no, col_no,
+                                                       file_path))
 
     def create_group(self, name):
         """Create a new group"""

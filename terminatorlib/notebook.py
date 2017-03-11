@@ -162,12 +162,14 @@ class Notebook(Container, Gtk.Notebook):
         if not sibling:
             sibling = maker.make('terminal')
             sibling.set_cwd(cwd)
+            if self.config['always_split_with_profile']:
+                sibling.force_set_profile(None, widget.get_profile())
             sibling.spawn_child(
                 orientation='vertical' if vertical else 'horizontal',
                 active_pane_id=getattr(widget, 'pane_id', None))
             if widget.group and self.config['split_to_group']:
                 sibling.set_group(None, widget.group)
-        if self.config['always_split_with_profile']:
+        elif self.config['always_split_with_profile']:
             sibling.force_set_profile(None, widget.get_profile())
 
         self.insert_page(container, None, page_num)
@@ -247,8 +249,10 @@ class Notebook(Container, Gtk.Notebook):
             widget = maker.make('Terminal')
             if cwd:
                 widget.set_cwd(cwd)
+            if profile and self.config['always_split_with_profile']:
+                widget.force_set_profile(None, profile)
             widget.spawn_child(debugserver=debugtab)
-        if profile and self.config['always_split_with_profile']:
+        elif profile and self.config['always_split_with_profile']:
             widget.force_set_profile(None, profile)
 
         signals = {'close-term': self.wrapcloseterm,

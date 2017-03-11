@@ -11,7 +11,7 @@ from borg import Borg
 from terminator import Terminator
 from config import Config
 from factory import Factory
-from util import dbg
+from util import dbg,  enumerate_descendants
 
 CONFIG = Config()
 if not CONFIG['dbus']:
@@ -23,7 +23,7 @@ BUS_BASE = 'net.tenshu.Terminator2'
 BUS_PATH = '/net/tenshu/Terminator2'
 try:
     # Try and include the X11 display name in the dbus bus name
-    DISPLAY  = hex(hash(Gdk.get_display())).replace('-', '_')
+    DISPLAY  = hex(hash(Gdk.get_display().partition('.')[0]))
     BUS_NAME = '%s%s' % (BUS_BASE, DISPLAY)
 except:
     BUS_NAME = BUS_BASE
@@ -158,7 +158,15 @@ class DBusService(Borg, dbus.service.Object):
         window = terminal.get_toplevel()
         root_widget = window.get_children()[0]
         if maker.isinstance(root_widget, 'Notebook'):
-            return root_widget.uuid.urn
+            #return root_widget.uuid.urn
+            for tab_child in root_widget.get_children():
+                terms = [tab_child]
+                if not maker.isinstance(terms[0], "Terminal"):
+                    terms = enumerate_descendants(tab_child)[1]
+                if terminal in terms:
+                    # FIXME: There are no uuid's assigned to the the notebook, or the actual tabs!
+                    # This would fail: return root_widget.uuid.urn
+                    return ""
 
     @dbus.service.method(BUS_NAME)
     def get_tab_title(self, uuid=None):
@@ -168,7 +176,12 @@ class DBusService(Borg, dbus.service.Object):
         window = terminal.get_toplevel()
         root_widget = window.get_children()[0]
         if maker.isinstance(root_widget, "Notebook"):
-            return root_widget.get_tab_label(terminal).get_label()
+            for tab_child in root_widget.get_children():
+                terms = [tab_child]
+                if not maker.isinstance(terms[0], "Terminal"):
+                    terms = enumerate_descendants(tab_child)[1]
+                if terminal in terms:
+                    return root_widget.get_tab_label(tab_child).get_label()
 
 def with_proxy(func):
     """Decorator function to connect to the session dbus bus"""

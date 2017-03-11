@@ -51,12 +51,14 @@ class Paned(Container):
         if not sibling:
             sibling = self.maker.make('terminal')
             sibling.set_cwd(cwd)
+            if self.config['always_split_with_profile']:
+                sibling.force_set_profile(None, widget.get_profile())
             sibling.spawn_child(
                 orientation='vertical' if vertical else 'horizontal',
                 active_pane_id=getattr(widget, 'pane_id', None))
             if widget.group and self.config['split_to_group']:
                 sibling.set_group(None, widget.group)
-        if self.config['always_split_with_profile']:
+        elif self.config['always_split_with_profile']:
             sibling.force_set_profile(None, widget.get_profile())
 
         self.add(container)
@@ -486,7 +488,11 @@ class Paned(Container):
         return float(position) / float(non_separator_size)
 
     def set_position_by_ratio(self):
-        handle_size = handle_size = self.get_handlesize()
+        # Fix for strange race condition where every so often get_length returns 1. (LP:1655027)
+        while self.terminator.doing_layout and self.get_length() == 1:
+            while Gtk.events_pending():
+                Gtk.main_iteration()
+
         self.set_pos(self.position_by_ratio(self.get_length(), self.get_handlesize(), self.ratio))
 
     def set_position(self, pos):
