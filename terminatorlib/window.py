@@ -23,8 +23,8 @@ if display_manager() == 'X11':
         gi.require_version('Keybinder', '3.0')
         from gi.repository import Keybinder
         Keybinder.init()
-    except ImportError:
-        err('Warning: python-keybinder is not installed. This means the \
+    except (ImportError, ValueError):
+        err('Unable to load Keybinder module. This means the \
 hide_window shortcut will be unavailable')
 
 # pylint: disable-msg=R0904
@@ -127,7 +127,7 @@ class Window(Container, Gtk.Window):
             if display_manager() == 'X11':
                 try:
                     self.hidebound = Keybinder.bind(
-                        self.config['keybindings']['hide_window'],
+                        self.config['keybindings']['hide_window'].replace('<Shift>',''),
                         self.on_hide_window)
                 except (KeyError, NameError):
                     pass
@@ -270,8 +270,11 @@ class Window(Container, Gtk.Window):
         """Handle a window close request"""
         maker = Factory()
         if maker.isinstance(self.get_child(), 'Terminal'):
-            dbg('Window::on_delete_event: Only one child, closing is fine')
-            return(False)
+            if self.get_property('term_zoomed') == True:
+                return(self.confirm_close(window, _('window')))
+            else:
+                dbg('Window::on_delete_event: Only one child, closing is fine')
+                return(False)
         elif maker.isinstance(self.get_child(), 'Container'):
             return(self.confirm_close(window, _('window')))
         else:
@@ -307,13 +310,10 @@ class Window(Container, Gtk.Window):
             self.show()
             self.grab_focus()
             try:
-                t = GdkX11.x11_get_server_time(self.window)
+                t = GdkX11.x11_get_server_time(self.get_window())
             except AttributeError:
                 t = 0
-            print t
-            print self
-            print self.window
-            self.window.focus(t)
+            self.get_window().focus(t)
         else:
             self.position = self.get_position()
             self.hidefunc()
