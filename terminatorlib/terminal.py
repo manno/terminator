@@ -848,6 +848,8 @@ class Terminal(Gtk.VBox):
             elif event.type == Gdk.EventType.BUTTON_PRESS:
                 # Single Click gives popup
                 dbg('on_group_button_press: group menu popup')
+                window = self.get_toplevel()
+                window.preventHide = True
                 self.create_popup_group_menu(widget, event)
                 return True
             else:
@@ -935,8 +937,12 @@ class Terminal(Gtk.VBox):
             # try to pass it to vte widget first though
             if event.get_state() & Gdk.ModifierType.CONTROL_MASK == 0:
                 if event.get_state() & Gdk.ModifierType.SHIFT_MASK == 0:
+                    gtk_settings=Gtk.Settings().get_default()
+                    primary_state = gtk_settings.get_property('gtk-enable-primary-paste')
+                    gtk_settings.set_property('gtk-enable-primary-paste',  False)
                     if not Vte.Terminal.do_button_press_event(self.vte, event):
                         middle_click[0](*middle_click[1])
+                    gtk_settings.set_property('gtk-enable-primary-paste', primary_state)
                 else:
                     middle_click[0](*middle_click[1])
                 return(True)
@@ -990,6 +996,8 @@ class Terminal(Gtk.VBox):
 
     def popup_menu(self, widget, event=None):
         """Display the context menu"""
+        window = self.get_toplevel()
+        window.preventHide = True
         menu = TerminalPopupMenu(self)
         menu.show(widget, event)
 

@@ -8,24 +8,24 @@ msgstr ""
 "Project-Id-Version: terminator\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-01-12 16:51+0100\n"
-"PO-Revision-Date: 2016-12-17 14:42+0000\n"
-"Last-Translator: m4sk1n <Unknown>\n"
+"PO-Revision-Date: 2018-10-31 11:37+0000\n"
+"Last-Translator: Mateusz Łukasik <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2017-02-09 06:02+0000\n"
-"X-Generator: Launchpad (build 18326)\n"
+"X-Launchpad-Export-Date: 2018-11-01 04:54+0000\n"
+"X-Generator: Launchpad (build 18810)\n"
 "Language: pl\n"
 
 #. Command         uuid req.    Description
 #: ../remotinator.py:38
 msgid "Open a new window"
-msgstr "Otwiera nowe okno programu"
+msgstr "Otwórz nowe okno"
 
 #: ../remotinator.py:39
 msgid "Open a new tab"
-msgstr "Otwiera nową kartę"
+msgstr "Otwórz nową kartę"
 
 #: ../remotinator.py:40
 msgid "Split the current terminal horizontally"
@@ -41,19 +41,19 @@ msgstr "Uzyskaj listę wszystkich terminali"
 
 #: ../remotinator.py:43
 msgid "Get the UUID of a parent window"
-msgstr ""
+msgstr "Dziedziczenie UUID okna nadrzędnego"
 
 #: ../remotinator.py:44
 msgid "Get the title of a parent window"
-msgstr ""
+msgstr "Dziedziczenie tytułu okna nadrzędnego"
 
 #: ../remotinator.py:45
 msgid "Get the UUID of a parent tab"
-msgstr ""
+msgstr "Dziedziczenie UUID karty nadrzędnej"
 
 #: ../remotinator.py:46
 msgid "Get the title of a parent tab"
-msgstr ""
+msgstr "Dziedziczenie tytułu karty nadrzędnej"
 
 #: ../remotinator.py:63
 #, python-format
@@ -62,12 +62,17 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Uruchom jedną z poniższych komend  DBus Terminatora:\n"
+"\n"
+"%s"
 
 #: ../remotinator.py:64
 msgid ""
 "* These entries require either TERMINATOR_UUID environment var,\n"
 "  or the --uuid option must be used."
 msgstr ""
+"Te opcje wymagają albo zmiennej środowiskowej TERMINATOR_UUID,\n"
+"  albo opcja --uuid musi zostać użyta."
 
 #: ../remotinator.py:66
 msgid "Terminal UUID for when not in env var TERMINATOR_UUID"
@@ -87,7 +92,7 @@ msgstr "Wiele terminali w jednym oknie"
 #: ../data/terminator.appdata.xml.in.h:3
 #: ../terminatorlib/preferences.glade.h:149
 msgid "The robot future of terminals"
-msgstr ""
+msgstr "Robotyczna przyszłość terminali"
 
 #: ../data/terminator.appdata.xml.in.h:4
 msgid ""
@@ -96,6 +101,10 @@ msgid ""
 "terminals in grids (tabs is the most common default method, which Terminator "
 "also supports)."
 msgstr ""
+"Wszechstronne narzędzie do komponowania terminali. Inspirowane przez "
+"programy takie jak gnome-multi-term, quadkonsole, itp. w sposób, że główny "
+"nacisk kładziony jest na układanie terminali w prostokątne siatki "
+"(najczęstszą metodą są taby, które Terminator również wspiera)."
 
 #: ../data/terminator.appdata.xml.in.h:5
 msgid ""
@@ -104,6 +113,10 @@ msgid ""
 "out in different directions with useful features for sysadmins and other "
 "users."
 msgstr ""
+"Wiele zachowań Terminatora bazuje na GNOME Terminal i z biegiem czasu "
+"dodajemy nowe funkcjonalności stamtąd, ale chcemy również rozwijać się w "
+"innych kierunkach z funkcjonalnościami przydatnymi dla administaratorów i "
+"innych użytkowników"
 
 #: ../data/terminator.appdata.xml.in.h:6
 msgid "Some highlights:"
@@ -131,7 +144,7 @@ msgstr "Zapisywanie wielu układów i profili w graficznym edytorze ustawień"
 
 #: ../data/terminator.appdata.xml.in.h:12
 msgid "Simultaneous typing to arbitrary groups of terminals"
-msgstr ""
+msgstr "Równoczesne wpisywanie tekstu do dowolnej grupy terminali."
 
 #: ../data/terminator.appdata.xml.in.h:13
 msgid "And lots more..."
@@ -166,12 +179,16 @@ msgid ""
 "This window has several terminals open. Closing the window will also close "
 "all terminals within it."
 msgstr ""
+"W tym oknie jest otwartych kilka terminali. Zamknięcie okna spowoduje ich "
+"zamknięcie."
 
 #: ../terminatorlib/container.py:178
 msgid ""
 "This tab has several terminals open. Closing the tab will also close all "
 "terminals within it."
 msgstr ""
+"W tej karcie jest otwartych kilka terminali. Zamknięcie karty spowoduje ich "
+"zamknięcie."
 
 #: ../terminatorlib/container.py:198
 msgid "Do not show this message next time"
@@ -323,7 +340,7 @@ msgstr "Tajski"
 
 #: ../terminatorlib/layoutlauncher.glade.h:1
 msgid "Terminator Layout Launcher"
-msgstr ""
+msgstr "Uruchamianie układu Terminatora"
 
 #: ../terminatorlib/layoutlauncher.glade.h:2
 #: ../terminatorlib/preferences.glade.h:135
@@ -661,11 +678,11 @@ msgstr "Ciemny Solarized"
 
 #: ../terminatorlib/preferences.glade.h:20
 msgid "Gruvbox light"
-msgstr ""
+msgstr "Jasny Gruvbox"
 
 #: ../terminatorlib/preferences.glade.h:21
 msgid "Gruvbox dark"
-msgstr ""
+msgstr "Ciemny Gruvbox"
 
 #: ../terminatorlib/preferences.glade.h:22
 msgid "Custom"
@@ -801,7 +818,7 @@ msgstr ""
 
 #: ../terminatorlib/preferences.glade.h:56
 msgid "PuTTY style paste"
-msgstr ""
+msgstr "Wklejanie jak w PuTTY"
 
 #: ../terminatorlib/preferences.glade.h:57
 msgid "Smart copy"
@@ -829,7 +846,7 @@ msgstr "Ramki okna"
 
 #: ../terminatorlib/preferences.glade.h:63
 msgid "Unfocused terminal font brightness:"
-msgstr ""
+msgstr "Jasność czcionki nieaktywnego terminala"
 
 #: ../terminatorlib/preferences.glade.h:64
 msgid "Terminal separator size:"
@@ -837,7 +854,7 @@ msgstr "Rozmiar odstępu między terminalami"
 
 #: ../terminatorlib/preferences.glade.h:65
 msgid "Extra Styling (Theme dependant)"
-msgstr ""
+msgstr "Dodatkowe stylowanie (zależne od motywu)"
 
 #: ../terminatorlib/preferences.glade.h:66
 msgid "Tab position:"
@@ -849,7 +866,7 @@ msgstr ""
 
 #: ../terminatorlib/preferences.glade.h:68
 msgid "Tabs scroll buttons"
-msgstr ""
+msgstr "Przycisk przewijania zakładek"
 
 #: ../terminatorlib/preferences.glade.h:69
 msgid "<b>Terminal Titlebar</b>"
@@ -865,7 +882,7 @@ msgstr "Tło:"
 
 #: ../terminatorlib/preferences.glade.h:72
 msgid "Focused"
-msgstr ""
+msgstr "Aktywny"
 
 #: ../terminatorlib/preferences.glade.h:73
 msgid "Inactive"
@@ -873,7 +890,7 @@ msgstr "Nieaktywny"
 
 #: ../terminatorlib/preferences.glade.h:74
 msgid "Receiving"
-msgstr "Przyjęcie"
+msgstr "Odbieranie"
 
 #: ../terminatorlib/preferences.glade.h:75
 msgid "Hide size from title"
@@ -949,7 +966,7 @@ msgstr "Kolor pierwszoplanowy"
 
 #: ../terminatorlib/preferences.glade.h:93
 msgid "<b>Terminal bell</b>"
-msgstr "<b>Dzwonek termianala</b>"
+msgstr "<b>Dzwonek terminala</b>"
 
 #: ../terminatorlib/preferences.glade.h:94
 msgid "Titlebar icon"
@@ -1180,7 +1197,7 @@ msgstr ""
 
 #: ../terminatorlib/preferences.glade.h:153
 msgid "The Manual"
-msgstr ""
+msgstr "Podręcznik"
 
 #: ../terminatorlib/preferences.glade.h:154
 msgid ""
@@ -1245,11 +1262,11 @@ msgstr ""
 
 #: ../terminatorlib/prefseditor.py:108
 msgid "Rotate terminals clockwise"
-msgstr ""
+msgstr "Obróć terminale zgodnie z ruchem wskazówek zegara"
 
 #: ../terminatorlib/prefseditor.py:109
 msgid "Rotate terminals counter-clockwise"
-msgstr ""
+msgstr "Obróć terminale przeciwnie do ruchu wskazówek zegara"
 
 #: ../terminatorlib/prefseditor.py:110
 msgid "Split horizontally"
@@ -1309,19 +1326,19 @@ msgstr "Zamknij okno"
 
 #: ../terminatorlib/prefseditor.py:124
 msgid "Resize the terminal up"
-msgstr ""
+msgstr "Zmień rozmiar terminala w górę"
 
 #: ../terminatorlib/prefseditor.py:125
 msgid "Resize the terminal down"
-msgstr ""
+msgstr "Zmień rozmiar terminala w dół"
 
 #: ../terminatorlib/prefseditor.py:126
 msgid "Resize the terminal left"
-msgstr ""
+msgstr "Zmień rozmiar terminala w lewo"
 
 #: ../terminatorlib/prefseditor.py:127
 msgid "Resize the terminal right"
-msgstr ""
+msgstr "Zmień rozmiar terminala w prawo"
 
 #: ../terminatorlib/prefseditor.py:128
 msgid "Move the tab right"

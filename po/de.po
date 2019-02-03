@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: terminator\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-01-12 16:51+0100\n"
-"PO-Revision-Date: 2017-02-21 03:11+0000\n"
-"Last-Translator: vulpecula <Unknown>\n"
+"PO-Revision-Date: 2018-11-09 22:21+0000\n"
+"Last-Translator: Tobias Bannert <tobannert@gmail.com>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2017-02-22 06:09+0000\n"
-"X-Generator: Launchpad (build 18326)\n"
+"X-Launchpad-Export-Date: 2018-11-10 04:51+0000\n"
+"X-Generator: Launchpad (build 18816)\n"
 "Language: de\n"
 
 #. Command         uuid req.    Description
@@ -25,7 +25,7 @@ msgstr "Ein neues Fenster öffnen"
 
 #: ../remotinator.py:39
 msgid "Open a new tab"
-msgstr "Einen neuen Reiter öffnen"
+msgstr "Neuen Reiter öffnen"
 
 #: ../remotinator.py:40
 msgid "Split the current terminal horizontally"
@@ -37,23 +37,23 @@ msgstr "Aktuelles Terminal senkrecht teilen"
 
 #: ../remotinator.py:42
 msgid "Get a list of all terminals"
-msgstr "Liste von allen Terminals"
+msgstr "Liste aller Terminals"
 
 #: ../remotinator.py:43
 msgid "Get the UUID of a parent window"
-msgstr "UUID aus dem Elternfenster erhalten"
+msgstr "UUID des Elternfensters erhalten"
 
 #: ../remotinator.py:44
 msgid "Get the title of a parent window"
-msgstr "Titel aus dem Elternfenster erhalten"
+msgstr "Titel des Elternfensters erhalten"
 
 #: ../remotinator.py:45
 msgid "Get the UUID of a parent tab"
-msgstr "UUID aus dem Elternreiter erhalten"
+msgstr "UUID des Elternreiters erhalten"
 
 #: ../remotinator.py:46
 msgid "Get the title of a parent tab"
-msgstr "Titel aus dem Elternreiter erhalten"
+msgstr "Titel des Elternreiters erhalten"
 
 #: ../remotinator.py:63
 #, python-format
@@ -76,7 +76,7 @@ msgstr ""
 
 #: ../remotinator.py:66
 msgid "Terminal UUID for when not in env var TERMINATOR_UUID"
-msgstr ""
+msgstr "Terminal UUID falls nicht in Umgebungsvariable TERMINATOR_UUID"
 
 #: ../data/terminator.desktop.in.h:1 ../data/terminator.appdata.xml.in.h:1
 #: ../terminatorlib/plugins/activitywatch.py:84
@@ -699,11 +699,11 @@ msgstr "Benutzerdefiniert"
 
 #: ../terminatorlib/preferences.glade.h:23
 msgid "Block"
-msgstr "Blockieren"
+msgstr "Block"
 
 #: ../terminatorlib/preferences.glade.h:24
 msgid "Underline"
-msgstr "Unterstreichen"
+msgstr "Unterstrich"
 
 #: ../terminatorlib/preferences.glade.h:25
 msgid "I-Beam"
@@ -891,7 +891,7 @@ msgstr "Hintergrund:"
 
 #: ../terminatorlib/preferences.glade.h:72
 msgid "Focused"
-msgstr "Fokusiert"
+msgstr "Fokussiert"
 
 #: ../terminatorlib/preferences.glade.h:73
 msgid "Inactive"
@@ -1203,6 +1203,11 @@ msgid ""
 "users. If you have any suggestions, please file wishlist bugs! (see left for "
 "the Development link)"
 msgstr ""
+"Das Ziel dieses Projekts ist es, ein nützliches Werkzeug zur Einrichtung von "
+"Terminals zu schaffen. Es ist von Programmen wie gnome-multi-term, "
+"quadkonsole, usw. inspiriert, wo der Hauptfokus auf das Arrangieren von "
+"Terminals in Gittern (Tabs sind die meist verbreitete Methode, die "
+"Terminator ebenfalls unterstützt."
 
 #: ../terminatorlib/preferences.glade.h:153
 msgid "The Manual"
@@ -1248,27 +1253,27 @@ msgstr "Neuen Reiter erstellen"
 
 #: ../terminatorlib/prefseditor.py:100 ../terminatorlib/prefseditor.py:102
 msgid "Focus the next terminal"
-msgstr "Nächstes Terminal fokusieren"
+msgstr "Nächstes Terminal fokussieren"
 
 #: ../terminatorlib/prefseditor.py:101 ../terminatorlib/prefseditor.py:103
 msgid "Focus the previous terminal"
-msgstr "Das vorherige Terminal fokusieren"
+msgstr "Das vorherige Terminal fokussieren"
 
 #: ../terminatorlib/prefseditor.py:104
 msgid "Focus the terminal above"
-msgstr "Das obrige Terminal fokusieren"
+msgstr "Das obrige Terminal fokussieren"
 
 #: ../terminatorlib/prefseditor.py:105
 msgid "Focus the terminal below"
-msgstr "Das untere Tarminal fokusieren"
+msgstr "Das untere Tarminal fokussieren"
 
 #: ../terminatorlib/prefseditor.py:106
 msgid "Focus the terminal left"
-msgstr "Das linke Terminal fokusieren"
+msgstr "Das linke Terminal fokussieren"
 
 #: ../terminatorlib/prefseditor.py:107
 msgid "Focus the terminal right"
-msgstr "Das rechte Terminal fokusieren"
+msgstr "Das rechte Terminal fokussieren"
 
 #: ../terminatorlib/prefseditor.py:108
 msgid "Rotate terminals clockwise"

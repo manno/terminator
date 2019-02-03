@@ -8,52 +8,52 @@ msgstr ""
 "Project-Id-Version: terminator\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-01-12 16:51+0100\n"
-"PO-Revision-Date: 2015-08-05 12:32+0000\n"
-"Last-Translator: Zdeněk Kopš <zdenekkops@gmail.com>\n"
+"PO-Revision-Date: 2018-03-06 07:44+0000\n"
+"Last-Translator: Pavel Borecki <Unknown>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2017-02-09 06:01+0000\n"
-"X-Generator: Launchpad (build 18326)\n"
+"X-Launchpad-Export-Date: 2018-03-07 06:05+0000\n"
+"X-Generator: Launchpad (build 18566)\n"
 "Language: cs\n"
 
 #. Command         uuid req.    Description
 #: ../remotinator.py:38
 msgid "Open a new window"
-msgstr ""
+msgstr "Otevřít nové okno"
 
 #: ../remotinator.py:39
 msgid "Open a new tab"
-msgstr ""
+msgstr "Otevřít nový panel"
 
 #: ../remotinator.py:40
 msgid "Split the current terminal horizontally"
-msgstr ""
+msgstr "Rozdělit stávající terminál vodorovně"
 
 #: ../remotinator.py:41
 msgid "Split the current terminal vertically"
-msgstr ""
+msgstr "Rozdělit stávající terminál svisle"
 
 #: ../remotinator.py:42
 msgid "Get a list of all terminals"
-msgstr ""
+msgstr "Zobrazit seznam všech terminálů"
 
 #: ../remotinator.py:43
 msgid "Get the UUID of a parent window"
-msgstr ""
+msgstr "Získat nikde se neopakující identifikátor (UUID) nadřazeného okna"
 
 #: ../remotinator.py:44
 msgid "Get the title of a parent window"
-msgstr ""
+msgstr "Získat titulek nadřazeného okna"
 
 #: ../remotinator.py:45
 msgid "Get the UUID of a parent tab"
-msgstr ""
+msgstr "Získat nikde se neopakující identifikátor (UUID) nadřazeného panelu"
 
 #: ../remotinator.py:46
 msgid "Get the title of a parent tab"
-msgstr ""
+msgstr "Získat název nadřazeného panelu"
 
 #: ../remotinator.py:63
 #, python-format
@@ -62,32 +62,39 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Spustit jeden z následujících Terminator DBus příkazů:\n"
+"\n"
+"%s"
 
 #: ../remotinator.py:64
 msgid ""
 "* These entries require either TERMINATOR_UUID environment var,\n"
 "  or the --uuid option must be used."
 msgstr ""
+"* Tyto položky vyžadují buď proměnnou prostředí TERMINATOR_UUID,\n"
+"  nebo použití volby --uuid."
 
 #: ../remotinator.py:66
 msgid "Terminal UUID for when not in env var TERMINATOR_UUID"
 msgstr ""
+"Nikde se neopakující identifikátor (UUID) terminálu když není v proměnné "
+"prostředí TERMINATOR_UUID"
 
 #: ../data/terminator.desktop.in.h:1 ../data/terminator.appdata.xml.in.h:1
 #: ../terminatorlib/plugins/activitywatch.py:84
 #: ../terminatorlib/plugins/activitywatch.py:163
 #: ../terminatorlib/preferences.glade.h:148
 msgid "Terminator"
-msgstr "Terminator"
+msgstr "Terminátor"
 
 #: ../data/terminator.desktop.in.h:2 ../data/terminator.appdata.xml.in.h:2
 msgid "Multiple terminals in one window"
-msgstr "Několik terminálů v jednom okně"
+msgstr "Vícero terminálů v jednom okně"
 
 #: ../data/terminator.appdata.xml.in.h:3
 #: ../terminatorlib/preferences.glade.h:149
 msgid "The robot future of terminals"
-msgstr ""
+msgstr "Robotická budoucnost terminálů"
 
 #: ../data/terminator.appdata.xml.in.h:4
 msgid ""
@@ -96,6 +103,10 @@ msgid ""
 "terminals in grids (tabs is the most common default method, which Terminator "
 "also supports)."
 msgstr ""
+"Nástroj pro pokročilé uživatele pro uspořádávání terminálů. Inspirováno "
+"aplikacemi jako gnome-multi-term, quadkonsole, atp. v tom, že hlavní "
+"zaměření je uspořádávání terminálů v mřížkách (panely jsou nejběžnější "
+"výchozí metodou, kterou Terminátor také podporuje)."
 
 #: ../data/terminator.appdata.xml.in.h:5
 msgid ""
@@ -104,50 +115,55 @@ msgid ""
 "out in different directions with useful features for sysadmins and other "
 "users."
 msgstr ""
+"Mnohé z chování Terminátor je založeno na GNOME Terminal a postupně jsou "
+"přidávány další funkce z něj. Úmyslem je ale také rozšíření v různých "
+"směrech o funkce užitečné pro správce systémů a další uživatele."
 
 #: ../data/terminator.appdata.xml.in.h:6
 msgid "Some highlights:"
-msgstr ""
+msgstr "Několik zajímavostí:"
 
 #: ../data/terminator.appdata.xml.in.h:7
 msgid "Arrange terminals in a grid"
-msgstr ""
+msgstr "Uspořádat terminály v mřížce"
 
 #: ../data/terminator.appdata.xml.in.h:8
 msgid "Tabs"
-msgstr "Karty"
+msgstr "Panely"
 
 #: ../data/terminator.appdata.xml.in.h:9
 msgid "Drag and drop re-ordering of terminals"
-msgstr ""
+msgstr "Změna uspořádání terminálů jejich přetažením"
 
 #: ../data/terminator.appdata.xml.in.h:10
 msgid "Lots of keyboard shortcuts"
-msgstr ""
+msgstr "Mnoho klávesových zkratek"
 
 #: ../data/terminator.appdata.xml.in.h:11
 msgid "Save multiple layouts and profiles via GUI preferences editor"
 msgstr ""
+"Uložit vícero rozvržení a profilů prostřednictvím editoru předvoleb v "
+"grafickém uživatelském rozhraní"
 
 #: ../data/terminator.appdata.xml.in.h:12
 msgid "Simultaneous typing to arbitrary groups of terminals"
-msgstr ""
+msgstr "Souběžné psaní do libovolných skupin terminálů"
 
 #: ../data/terminator.appdata.xml.in.h:13
 msgid "And lots more..."
-msgstr ""
+msgstr "A mnoho dalšího…"
 
 #: ../data/terminator.appdata.xml.in.h:14
 msgid "The main window showing the application in action"
-msgstr ""
+msgstr "Hlavní okno zobrazující aplikaci v akci"
 
 #: ../data/terminator.appdata.xml.in.h:15
 msgid "Getting a little crazy with the terminals"
-msgstr ""
+msgstr "Trocha bláznivosti s terminály"
 
 #: ../data/terminator.appdata.xml.in.h:16
 msgid "The preferences window where you can change the defaults"
-msgstr ""
+msgstr "Okno předvoleb ve kterém je možné měnit výchozí hodnoty"
 
 #: ../terminatorlib/container.py:163
 msgid "Close?"
@@ -166,20 +182,24 @@ msgid ""
 "This window has several terminals open. Closing the window will also close "
 "all terminals within it."
 msgstr ""
+"V tomto okně je otevřeno několik terminálů. Jeho zavření ukončí i všechny "
+"terminály v něm."
 
 #: ../terminatorlib/container.py:178
 msgid ""
 "This tab has several terminals open. Closing the tab will also close all "
 "terminals within it."
 msgstr ""
+"V tomto panelu je otevřeno několik terminálů. Jeho zavření ukončí i všechny "
+"terminály v něm."
 
 #: ../terminatorlib/container.py:198
 msgid "Do not show this message next time"
-msgstr "Příště tuto zprávu neukazovat"
+msgstr "Příště tuto zprávu nezobrazovat"
 
 #: ../terminatorlib/encoding.py:35
 msgid "Current Locale"
-msgstr "Nynější jazykové nastavení"
+msgstr "Stávající místní a jazyková nastavení"
 
 #: ../terminatorlib/encoding.py:36 ../terminatorlib/encoding.py:49
 #: ../terminatorlib/encoding.py:68 ../terminatorlib/encoding.py:91
@@ -323,20 +343,20 @@ msgstr "Thajština"
 
 #: ../terminatorlib/layoutlauncher.glade.h:1
 msgid "Terminator Layout Launcher"
-msgstr ""
+msgstr "Spouštěč uspořádání v Terminátor"
 
 #: ../terminatorlib/layoutlauncher.glade.h:2
 #: ../terminatorlib/preferences.glade.h:135
 msgid "Layout"
-msgstr ""
+msgstr "Uspořádání"
 
 #: ../terminatorlib/layoutlauncher.glade.h:3
 msgid "Launch"
-msgstr ""
+msgstr "Spustit"
 
 #: ../terminatorlib/notebook.py:353
 msgid "tab"
-msgstr "záložka"
+msgstr "panel"
 
 #: ../terminatorlib/notebook.py:573
 msgid "Close Tab"
@@ -348,11 +368,11 @@ msgstr "Zobrazit verzi aplikace"
 
 #: ../terminatorlib/optionparse.py:52
 msgid "Maximize the window"
-msgstr ""
+msgstr "Maximalizovat okno"
 
 #: ../terminatorlib/optionparse.py:54
 msgid "Make the window fill the screen"
-msgstr "Okno na plochu obrazovky"
+msgstr "Vyplnit oknem obrazovku"
 
 #: ../terminatorlib/optionparse.py:56
 msgid "Disable window borders"
@@ -364,23 +384,25 @@ msgstr "Skrýt okno při startu"
 
 #: ../terminatorlib/optionparse.py:60
 msgid "Specify a title for the window"
-msgstr "Uveď titulek okna"
+msgstr "Zadat titulek okna"
 
 #: ../terminatorlib/optionparse.py:62
 msgid "Set the preferred size and position of the window(see X man page)"
-msgstr "Nastavit upřednostňovanou velikost a polohu okna (viz X man stránka)"
+msgstr ""
+"Nastavit upřednostňovanou velikost a polohu okna (viz manuálová stránka "
+"zobrazovacího X serveru)"
 
 #: ../terminatorlib/optionparse.py:66 ../terminatorlib/optionparse.py:69
 msgid "Specify a command to execute inside the terminal"
-msgstr "Uveď příkaz k provedení uvnitř terminálu"
+msgstr "Zadat příkaz k provedení v terminálu"
 
 #: ../terminatorlib/optionparse.py:72 ../terminatorlib/optionparse.py:78
 msgid ""
 "Use the rest of the command line as a command to execute inside the "
 "terminal, and its arguments"
 msgstr ""
-"Použít zbytek z příkazového řádku, jako příkaz k vykonání v terminálu i s "
-"jeho argumenty."
+"Použít zbytek příkazového řádku jako příkaz a jeho argumenty k vykonání v "
+"terminálu"
 
 #: ../terminatorlib/optionparse.py:75
 msgid "Specify a config file"
@@ -388,27 +410,27 @@ msgstr "Stanovit soubor s nastavením"
 
 #: ../terminatorlib/optionparse.py:81
 msgid "Set the working directory"
-msgstr "Nastavit pracovní adresář"
+msgstr "Nastavit pracovní složku"
 
 #: ../terminatorlib/optionparse.py:82
 msgid "Set a custom name (WM_CLASS) property on the window"
-msgstr "Nastavit oknu vlastnost vlastní název (WM_CLASS)"
+msgstr "Nastavit oknu vlastnost uživatelský název (WM_CLASS)"
 
 #: ../terminatorlib/optionparse.py:84
 msgid "Set a custom icon for the window (by file or name)"
-msgstr "Nastavit vlastní ikonu pro okno (podle souboru nebo názvu)"
+msgstr "Nastavit oknu uživatelskou ikonu (podle souboru nebo názvu)"
 
 #: ../terminatorlib/optionparse.py:87
 msgid "Set a custom WM_WINDOW_ROLE property on the window"
-msgstr "Nastavit vlastní WM_WINDOW_ROLE vlastnost okna"
+msgstr "Nastavit uživatelskou WM_WINDOW_ROLE vlastnost okna"
 
 #: ../terminatorlib/optionparse.py:89
 msgid "Launch with the given layout"
-msgstr ""
+msgstr "Spustit se zadaným uspořádáním"
 
 #: ../terminatorlib/optionparse.py:91
 msgid "Select a layout from a list"
-msgstr ""
+msgstr "Vybrat uspořádání ze seznamu"
 
 #: ../terminatorlib/optionparse.py:93
 msgid "Use a different profile as the default"
@@ -424,73 +446,72 @@ msgstr "Povolit ladící informace (dvakrát pro ladící server)"
 
 #: ../terminatorlib/optionparse.py:99
 msgid "Comma separated list of classes to limit debugging to"
-msgstr "Čárkou oddělený seznam tříd pro omezení ladění"
+msgstr "Čárkou oddělovaný seznam tříd na které ladění omezit"
 
 #: ../terminatorlib/optionparse.py:101
 msgid "Comma separated list of methods to limit debugging to"
-msgstr "Čárkou oddělený seznam metod pro omezení ladění"
+msgstr "Čárkou oddělovaný seznam metod na které ladění omezit"
 
 #: ../terminatorlib/optionparse.py:103
 msgid "If Terminator is already running, just open a new tab"
-msgstr "Pokud Terminator již běží, otevřít novou kartu"
+msgstr "Pokud je Terminátor už spuštěný, jen otevřít nový panel"
 
 #: ../terminatorlib/plugins/activitywatch.py:25
 msgid "ActivityWatch plugin unavailable: please install python-notify"
-msgstr ""
-"Doplněk ActivityWatch není dostupný: Prosím, nainstalujte python-notify"
+msgstr "Doplněk ActivityWatch není dostupný: Nainstalujte python-notify"
 
 #: ../terminatorlib/plugins/activitywatch.py:55
 msgid "Watch for _activity"
-msgstr ""
+msgstr "Hlídat _aktivitu"
 
 #: ../terminatorlib/plugins/activitywatch.py:84
 #, python-format
 msgid "Activity in: %s"
-msgstr ""
+msgstr "Aktivita v: %s"
 
 #: ../terminatorlib/plugins/activitywatch.py:121
 msgid "Watch for _silence"
-msgstr ""
+msgstr "Hlídat _ticho"
 
 #: ../terminatorlib/plugins/activitywatch.py:163
 #, python-format
 msgid "Silence in: %s"
-msgstr ""
+msgstr "Ticho v: %s"
 
 #: ../terminatorlib/plugins/custom_commands.py:61
 msgid "_Custom Commands"
-msgstr ""
+msgstr "_Uživatelské příkazy"
 
 #. VERIFY FOR GTK3: is this ever false?
 #: ../terminatorlib/plugins/custom_commands.py:67
 #: ../terminatorlib/terminal_popup_menu.py:188
 msgid "_Preferences"
-msgstr "_Volby"
+msgstr "_Vlastnosti"
 
 #: ../terminatorlib/plugins/custom_commands.py:120
 msgid "Custom Commands Configuration"
-msgstr "Konfigurace vlastních příkazů"
+msgstr "Nastavení uživatelských příkazů"
 
 #: ../terminatorlib/plugins/custom_commands.py:124
 #: ../terminatorlib/plugins/custom_commands.py:273
 #: ../terminatorlib/plugins/logger.py:22
 #: ../terminatorlib/plugins/terminalshot.py:21
 msgid "_Cancel"
-msgstr ""
+msgstr "_Storno"
 
 #: ../terminatorlib/plugins/custom_commands.py:125
 #: ../terminatorlib/plugins/custom_commands.py:274
 msgid "_OK"
-msgstr ""
+msgstr "_OK"
 
 #: ../terminatorlib/plugins/custom_commands.py:152
 msgid "Enabled"
-msgstr ""
+msgstr "Zapnuto"
 
 #: ../terminatorlib/plugins/custom_commands.py:156
 #: ../terminatorlib/preferences.glade.h:137
 msgid "Name"
-msgstr ""
+msgstr "Název"
 
 #: ../terminatorlib/plugins/custom_commands.py:160
 #: ../terminatorlib/preferences.glade.h:103
@@ -504,27 +525,27 @@ msgstr "Nahoře"
 
 #: ../terminatorlib/plugins/custom_commands.py:180
 msgid "Up"
-msgstr ""
+msgstr "Nahoru"
 
 #: ../terminatorlib/plugins/custom_commands.py:186
 msgid "Down"
-msgstr ""
+msgstr "Dolů"
 
 #: ../terminatorlib/plugins/custom_commands.py:192
 msgid "Last"
-msgstr ""
+msgstr "Minulé"
 
 #: ../terminatorlib/plugins/custom_commands.py:198
 msgid "New"
-msgstr ""
+msgstr "Nové"
 
 #: ../terminatorlib/plugins/custom_commands.py:203
 msgid "Edit"
-msgstr ""
+msgstr "Upravit"
 
 #: ../terminatorlib/plugins/custom_commands.py:209
 msgid "Delete"
-msgstr ""
+msgstr "Smazat"
 
 #: ../terminatorlib/plugins/custom_commands.py:269
 msgid "New Command"
@@ -532,7 +553,7 @@ msgstr "Nový příkaz"
 
 #: ../terminatorlib/plugins/custom_commands.py:280
 msgid "Enabled:"
-msgstr "Povoleny:"
+msgstr "Zapnuté:"
 
 #: ../terminatorlib/plugins/custom_commands.py:286
 msgid "Name:"
@@ -545,38 +566,38 @@ msgstr "Příkaz:"
 #: ../terminatorlib/plugins/custom_commands.py:315
 #: ../terminatorlib/plugins/custom_commands.py:425
 msgid "You need to define a name and command"
-msgstr "Definuj název a příkaz"
+msgstr "Zadejte název a příkaz"
 
 #: ../terminatorlib/plugins/custom_commands.py:332
 #: ../terminatorlib/plugins/custom_commands.py:444
 #, python-format
 msgid "Name *%s* already exist"
-msgstr "Název *%s* již existuje"
+msgstr "Název *%s* už existuje"
 
 #: ../terminatorlib/plugins/logger.py:23
 #: ../terminatorlib/plugins/terminalshot.py:22
 msgid "_Save"
-msgstr ""
+msgstr "_Uložit"
 
 #: ../terminatorlib/plugins/logger.py:34
 msgid "Start _Logger"
-msgstr ""
+msgstr "Spustit _záznam"
 
 #: ../terminatorlib/plugins/logger.py:37
 msgid "Stop _Logger"
-msgstr ""
+msgstr "Zastavit _záznam"
 
 #: ../terminatorlib/plugins/logger.py:67
 msgid "Save Log File As"
-msgstr ""
+msgstr "Uložit soubor se záznamem jako"
 
 #: ../terminatorlib/plugins/terminalshot.py:29
 msgid "Terminal _screenshot"
-msgstr ""
+msgstr "_Snímek obrazovky terminálu"
 
 #: ../terminatorlib/plugins/terminalshot.py:38
 msgid "Save image"
-msgstr ""
+msgstr "Uložit obrázek"
 
 #: ../terminatorlib/preferences.glade.h:1
 msgid "Automatic"
@@ -601,7 +622,7 @@ msgstr "Vše"
 
 #: ../terminatorlib/preferences.glade.h:6
 msgid "Group"
-msgstr ""
+msgstr "Seskupit"
 
 #: ../terminatorlib/preferences.glade.h:7
 msgid "None"
@@ -617,31 +638,31 @@ msgstr "Spustit příkaz znovu"
 
 #: ../terminatorlib/preferences.glade.h:10
 msgid "Hold the terminal open"
-msgstr "Nechat terminál otevřený"
+msgstr "Ponechat terminál otevřený"
 
 #: ../terminatorlib/preferences.glade.h:11
 msgid "Black on light yellow"
-msgstr "Černá na světle žluté"
+msgstr "Černé na světle žlutém"
 
 #: ../terminatorlib/preferences.glade.h:12
 msgid "Black on white"
-msgstr "Černá na bílé"
+msgstr "Černé na bílém"
 
 #: ../terminatorlib/preferences.glade.h:13
 msgid "Gray on black"
-msgstr ""
+msgstr "Šedé na černém"
 
 #: ../terminatorlib/preferences.glade.h:14
 msgid "Green on black"
-msgstr "Zelená na černé"
+msgstr "Zelené na černém"
 
 #: ../terminatorlib/preferences.glade.h:15
 msgid "White on black"
-msgstr "Černá na bílé"
+msgstr "Černé na bílém"
 
 #: ../terminatorlib/preferences.glade.h:16
 msgid "Orange on black"
-msgstr "Oranžová na černé"
+msgstr "Oranžové na černém"
 
 #: ../terminatorlib/preferences.glade.h:17
 msgid "Ambience"
@@ -649,35 +670,35 @@ msgstr "Okolí"
 
 #: ../terminatorlib/preferences.glade.h:18
 msgid "Solarized light"
-msgstr ""
+msgstr "Sluneční světlé"
 
 #: ../terminatorlib/preferences.glade.h:19
 msgid "Solarized dark"
-msgstr ""
+msgstr "Sluneční tmavé"
 
 #: ../terminatorlib/preferences.glade.h:20
 msgid "Gruvbox light"
-msgstr ""
+msgstr "Gruvbox světlé"
 
 #: ../terminatorlib/preferences.glade.h:21
 msgid "Gruvbox dark"
-msgstr ""
+msgstr "Gruvbox tmavé"
 
 #: ../terminatorlib/preferences.glade.h:22
 msgid "Custom"
-msgstr "Vlastní"
+msgstr "Uživatelské"
 
 #: ../terminatorlib/preferences.glade.h:23
 msgid "Block"
-msgstr "Blokovat"
+msgstr "Blokový"
 
 #: ../terminatorlib/preferences.glade.h:24
 msgid "Underline"
-msgstr "Podtržení"
+msgstr "Podtržítko"
 
 #: ../terminatorlib/preferences.glade.h:25
 msgid "I-Beam"
-msgstr "I-Beam"
+msgstr "Svislá čára"
 
 #: ../terminatorlib/preferences.glade.h:26
 msgid "GNOME Default"
@@ -685,11 +706,11 @@ msgstr "Výchozí pro GNOME"
 
 #: ../terminatorlib/preferences.glade.h:27
 msgid "Click to focus"
-msgstr "Klepnout pro zaměření"
+msgstr "Zaměřit kliknutím"
 
 #: ../terminatorlib/preferences.glade.h:28
 msgid "Follow mouse pointer"
-msgstr "Sledovat ukazatel myši"
+msgstr "Následovat ukazatel myši"
 
 #: ../terminatorlib/preferences.glade.h:29
 msgid "Tango"
@@ -709,7 +730,7 @@ msgstr "Rxvt"
 
 #: ../terminatorlib/preferences.glade.h:33
 msgid "Solarized"
-msgstr ""
+msgstr "Sluneční"
 
 #: ../terminatorlib/preferences.glade.h:34
 msgid "On the left side"
@@ -721,7 +742,7 @@ msgstr "Na pravé straně"
 
 #: ../terminatorlib/preferences.glade.h:36
 msgid "Disabled"
-msgstr "Zakázáno"
+msgstr "Vypnuto"
 
 #: ../terminatorlib/preferences.glade.h:38
 msgid "Bottom"
@@ -737,7 +758,7 @@ msgstr "Vpravo"
 
 #: ../terminatorlib/preferences.glade.h:41
 msgid "Hidden"
-msgstr "Skryto"
+msgstr "Skryté"
 
 #: ../terminatorlib/preferences.glade.h:42
 msgid "Normal"
@@ -745,7 +766,7 @@ msgstr "Normální"
 
 #: ../terminatorlib/preferences.glade.h:43
 msgid "Maximised"
-msgstr "Zvětšeno"
+msgstr "Zvětšené"
 
 #: ../terminatorlib/preferences.glade.h:44
 msgid "Fullscreen"
@@ -753,15 +774,15 @@ msgstr "Na celou obrazovku"
 
 #: ../terminatorlib/preferences.glade.h:45
 msgid "Terminator Preferences"
-msgstr "Nastavení Terminátoru"
+msgstr "Předvolby pro Terminátor"
 
 #: ../terminatorlib/preferences.glade.h:46
 msgid "<b>Behavior</b>"
-msgstr ""
+msgstr "<b>Chování</b>"
 
 #: ../terminatorlib/preferences.glade.h:47
 msgid "Window state:"
-msgstr ""
+msgstr "Stav okna:"
 
 #: ../terminatorlib/preferences.glade.h:48
 msgid "Always on top"
@@ -769,7 +790,7 @@ msgstr "Vždy nahoře"
 
 #: ../terminatorlib/preferences.glade.h:49
 msgid "Show on all workspaces"
-msgstr "Ukázat na všech pracovních plochách"
+msgstr "Zobrazovat na všech pracovních plochách"
 
 #: ../terminatorlib/preferences.glade.h:50
 msgid "Hide on lose focus"
@@ -777,7 +798,7 @@ msgstr "Skrýt při ztrátě zaměření"
 
 #: ../terminatorlib/preferences.glade.h:51
 msgid "Hide from taskbar"
-msgstr "Skrýt z pruhu s úkoly"
+msgstr "Nezobrazovat na systémovém panelu"
 
 #: ../terminatorlib/preferences.glade.h:52
 msgid "Window geometry hints"
@@ -789,35 +810,35 @@ msgstr "Server DBus"
 
 #: ../terminatorlib/preferences.glade.h:54
 msgid "Mouse focus:"
-msgstr ""
+msgstr "Zaměření myši:"
 
 #: ../terminatorlib/preferences.glade.h:55
 msgid "Broadcast default:"
-msgstr ""
+msgstr "Výchozí vysílání do více směrů:"
 
 #: ../terminatorlib/preferences.glade.h:56
 msgid "PuTTY style paste"
-msgstr ""
+msgstr "Vkládání jako v PuTTY"
 
 #: ../terminatorlib/preferences.glade.h:57
 msgid "Smart copy"
-msgstr ""
+msgstr "Chytré kopírování"
 
 #: ../terminatorlib/preferences.glade.h:58
 msgid "Re-use profiles for new terminals"
-msgstr "Použít znovu profily pro nové terminály"
+msgstr "Pro nové terminály znovu využít stávající profily"
 
 #: ../terminatorlib/preferences.glade.h:59
 msgid "Use custom URL handler"
-msgstr "Použít vlastní ovladač adresy (URL)"
+msgstr "Použít uživatelem určené nakládání s URL adresami"
 
 #: ../terminatorlib/preferences.glade.h:60
 msgid "Custom URL handler:"
-msgstr ""
+msgstr "Uživatelem určené nakládání s URL adresou:"
 
 #: ../terminatorlib/preferences.glade.h:61
 msgid "<b>Appearance</b>"
-msgstr ""
+msgstr "<b>Vzhled</b>"
 
 #: ../terminatorlib/preferences.glade.h:62
 msgid "Window borders"
@@ -825,59 +846,59 @@ msgstr "Ohraničení okna"
 
 #: ../terminatorlib/preferences.glade.h:63
 msgid "Unfocused terminal font brightness:"
-msgstr ""
+msgstr "Jas písma nezaměřeného terminálu:"
 
 #: ../terminatorlib/preferences.glade.h:64
 msgid "Terminal separator size:"
-msgstr ""
+msgstr "Velikost oddělovače terminálu:"
 
 #: ../terminatorlib/preferences.glade.h:65
 msgid "Extra Styling (Theme dependant)"
-msgstr ""
+msgstr "Další stylování (závislé na motivu vzhledu)"
 
 #: ../terminatorlib/preferences.glade.h:66
 msgid "Tab position:"
-msgstr ""
+msgstr "Pozice panelu:"
 
 #: ../terminatorlib/preferences.glade.h:67
 msgid "Tabs homogeneous"
-msgstr ""
+msgstr "Homogení panely"
 
 #: ../terminatorlib/preferences.glade.h:68
 msgid "Tabs scroll buttons"
-msgstr ""
+msgstr "Tlačítka posuvníku panelů"
 
 #: ../terminatorlib/preferences.glade.h:69
 msgid "<b>Terminal Titlebar</b>"
-msgstr ""
+msgstr "<b>Titulek terminálu</b>"
 
 #: ../terminatorlib/preferences.glade.h:70
 msgid "Font color:"
-msgstr ""
+msgstr "Barva písma:"
 
 #: ../terminatorlib/preferences.glade.h:71
 msgid "Background:"
-msgstr ""
+msgstr "Pozadí:"
 
 #: ../terminatorlib/preferences.glade.h:72
 msgid "Focused"
-msgstr ""
+msgstr "Zaměřeno"
 
 #: ../terminatorlib/preferences.glade.h:73
 msgid "Inactive"
-msgstr ""
+msgstr "Nečinné"
 
 #: ../terminatorlib/preferences.glade.h:74
 msgid "Receiving"
-msgstr ""
+msgstr "Přijímající"
 
 #: ../terminatorlib/preferences.glade.h:75
 msgid "Hide size from title"
-msgstr ""
+msgstr "Nezobrazovat v titulku velikost"
 
 #: ../terminatorlib/preferences.glade.h:76
 msgid "_Use the system font"
-msgstr ""
+msgstr "Po_užít systémové písmo"
 
 #: ../terminatorlib/preferences.glade.h:77
 msgid "_Font:"
@@ -885,11 +906,11 @@ msgstr "_Písmo:"
 
 #: ../terminatorlib/preferences.glade.h:78
 msgid "Choose A Titlebar Font"
-msgstr ""
+msgstr "Zvolte písmo pro titulní lištu"
 
 #: ../terminatorlib/preferences.glade.h:79
 msgid "Global"
-msgstr "Celková"
+msgstr "Společné"
 
 #: ../terminatorlib/preferences.glade.h:80
 msgid "Profile"
@@ -901,7 +922,7 @@ msgstr "Po_užívat systémové písmo s pevnou šířkou"
 
 #: ../terminatorlib/preferences.glade.h:82
 msgid "Choose A Terminal Font"
-msgstr "Vybrat písmo terminálu"
+msgstr "Zvolte písmo terminálu"
 
 #: ../terminatorlib/preferences.glade.h:83
 msgid "_Allow bold text"
@@ -909,7 +930,7 @@ msgstr "Povolit _tučný text"
 
 #: ../terminatorlib/preferences.glade.h:84
 msgid "Show titlebar"
-msgstr "Ukázat titulkový pruh"
+msgstr "Zobrazit pruh s titulkem"
 
 #: ../terminatorlib/preferences.glade.h:85
 msgid "Copy on selection"
@@ -917,7 +938,7 @@ msgstr "Kopírovat při výběru"
 
 #: ../terminatorlib/preferences.glade.h:86
 msgid "Rewrap on resize"
-msgstr ""
+msgstr "Znovu zalomit při změně velikosti"
 
 #: ../terminatorlib/preferences.glade.h:87
 msgid "Select-by-_word characters:"
@@ -929,31 +950,31 @@ msgstr "<b>Ukazatel</b>"
 
 #: ../terminatorlib/preferences.glade.h:89
 msgid "_Shape:"
-msgstr ""
+msgstr "_Podoba:"
 
 #: ../terminatorlib/preferences.glade.h:90
 msgid "Color:"
-msgstr ""
+msgstr "Barva:"
 
 #: ../terminatorlib/preferences.glade.h:91
 msgid "Blink"
-msgstr ""
+msgstr "Blikat"
 
 #: ../terminatorlib/preferences.glade.h:92
 msgid "Foreground"
-msgstr ""
+msgstr "Popředí"
 
 #: ../terminatorlib/preferences.glade.h:93
 msgid "<b>Terminal bell</b>"
-msgstr "<b>Terminálový zvonek</b>"
+msgstr "<b>Pípání terminálu</b>"
 
 #: ../terminatorlib/preferences.glade.h:94
 msgid "Titlebar icon"
-msgstr "Ikona v titulkovém pruhu"
+msgstr "Ikona pruhu s titulkem"
 
 #: ../terminatorlib/preferences.glade.h:95
 msgid "Visual flash"
-msgstr "Viditelný pablesk"
+msgstr "Problikávání"
 
 #: ../terminatorlib/preferences.glade.h:96
 msgid "Audible beep"
@@ -961,7 +982,7 @@ msgstr "Slyšitelné zvukové znamení"
 
 #: ../terminatorlib/preferences.glade.h:97
 msgid "Window list flash"
-msgstr "Pablesk seznamu oken"
+msgstr "Blikání seznamu oken"
 
 #: ../terminatorlib/preferences.glade.h:98
 msgid "General"
@@ -977,11 +998,11 @@ msgstr "S_pustit vlastní příkaz místo mého shellu"
 
 #: ../terminatorlib/preferences.glade.h:101
 msgid "Custom co_mmand:"
-msgstr "_Vlastní příkaz:"
+msgstr "_Uživatelský příkaz:"
 
 #: ../terminatorlib/preferences.glade.h:102
 msgid "When command _exits:"
-msgstr "Po _skončení příkazu:"
+msgstr "Po skonč_ení příkazu:"
 
 #: ../terminatorlib/preferences.glade.h:104
 msgid "<b>Foreground and Background</b>"
@@ -1001,7 +1022,7 @@ msgstr "Barva _textu:"
 
 #: ../terminatorlib/preferences.glade.h:108
 msgid "_Background color:"
-msgstr "Barva _pozadí:"
+msgstr "_Barva pozadí:"
 
 #: ../terminatorlib/preferences.glade.h:109
 msgid "Choose Terminal Text Color"
@@ -1029,7 +1050,7 @@ msgstr "Barvy"
 
 #: ../terminatorlib/preferences.glade.h:115
 msgid "_Solid color"
-msgstr "Barevná _výplň"
+msgstr "_Jednolitá barva"
 
 #: ../terminatorlib/preferences.glade.h:116
 msgid "_Transparent background"
@@ -1037,7 +1058,7 @@ msgstr "_Průhledné pozadí"
 
 #: ../terminatorlib/preferences.glade.h:117
 msgid "S_hade transparent background:"
-msgstr ""
+msgstr "Stínové prů_hledné pozadí:"
 
 #: ../terminatorlib/preferences.glade.h:118
 msgid "<small><i>None</i></small>"
@@ -1053,19 +1074,19 @@ msgstr "Pozadí"
 
 #: ../terminatorlib/preferences.glade.h:121
 msgid "_Scrollbar is:"
-msgstr "Z_obrazení posuvníku:"
+msgstr "Zobrazení po_suvníku:"
 
 #: ../terminatorlib/preferences.glade.h:122
 msgid "Scroll on _output"
-msgstr "P_osunovat při výstupu"
+msgstr "P_osouvat při výstupu"
 
 #: ../terminatorlib/preferences.glade.h:123
 msgid "Scroll on _keystroke"
-msgstr "Posunovat při _stisku klávesy"
+msgstr "Posouvat při stisku _klávesy"
 
 #: ../terminatorlib/preferences.glade.h:124
 msgid "Infinite Scrollback"
-msgstr "Nekonečný posun zpět"
+msgstr "Pamatovat si vše zpět"
 
 #: ../terminatorlib/preferences.glade.h:125
 msgid "Scroll_back:"
@@ -1077,7 +1098,7 @@ msgstr "řádků"
 
 #: ../terminatorlib/preferences.glade.h:127
 msgid "Scrolling"
-msgstr "Posunování"
+msgstr "Posouvání"
 
 #: ../terminatorlib/preferences.glade.h:128
 msgid ""
@@ -1087,8 +1108,8 @@ msgid ""
 "behavior.</i></small>"
 msgstr ""
 "<small><i><b>Poznámka:</b> Tyto volby mohou způsobit, že některé aplikace "
-"nebudou fungovat správně. Jsou tu pouze proto, abyste mohli obejít "
-"skutečnost, že některé aplikace a operační systémy očekávají jiné chování "
+"nebudou fungovat správně. Jsou zde pouze proto, aby bylo možné obejít to, že "
+"některé aplikace a operační systémy očekávají jiné chování "
 "terminálu.</i></small>"
 
 #: ../terminatorlib/preferences.glade.h:129
@@ -1101,11 +1122,11 @@ msgstr "Klávesa _Delete vytváří:"
 
 #: ../terminatorlib/preferences.glade.h:131
 msgid "Encoding:"
-msgstr ""
+msgstr "Kódování znaků:"
 
 #: ../terminatorlib/preferences.glade.h:132
 msgid "_Reset Compatibility Options to Defaults"
-msgstr "Obnovit výchozí nastavení pro _kompatibilitu"
+msgstr "V_rátit nastavení kompatibility na výchozí"
 
 #: ../terminatorlib/preferences.glade.h:133
 msgid "Compatibility"
@@ -1118,19 +1139,19 @@ msgstr "Profily"
 
 #: ../terminatorlib/preferences.glade.h:136
 msgid "Type"
-msgstr ""
+msgstr "Typ"
 
 #: ../terminatorlib/preferences.glade.h:138
 msgid "Profile:"
-msgstr ""
+msgstr "Profil:"
 
 #: ../terminatorlib/preferences.glade.h:139
 msgid "Custom command:"
-msgstr ""
+msgstr "Uživatelský příkaz:"
 
 #: ../terminatorlib/preferences.glade.h:140
 msgid "Working directory:"
-msgstr ""
+msgstr "Pracovní adresář:"
 
 #: ../terminatorlib/preferences.glade.h:141
 msgid "Layouts"
@@ -1138,11 +1159,11 @@ msgstr "Rozvržení"
 
 #: ../terminatorlib/preferences.glade.h:142
 msgid "Action"
-msgstr ""
+msgstr "Akce"
 
 #: ../terminatorlib/preferences.glade.h:143
 msgid "Keybinding"
-msgstr ""
+msgstr "Klávesová zkratka"
 
 #: ../terminatorlib/preferences.glade.h:144
 msgid "Keybindings"
@@ -1150,15 +1171,15 @@ msgstr "Klávesové zkratky"
 
 #: ../terminatorlib/preferences.glade.h:145
 msgid "Plugin"
-msgstr ""
+msgstr "Zásuvný modul"
 
 #: ../terminatorlib/preferences.glade.h:146
 msgid "This plugin has no configuration options"
-msgstr "Tento přídavný modul nemá žádné volby pro nastavení"
+msgstr "Tento zásuvný modul nemá žádné volby pro nastavení"
 
 #: ../terminatorlib/preferences.glade.h:147
 msgid "Plugins"
-msgstr "Přídavné moduly"
+msgstr "Zásuvné moduly"
 
 #: ../terminatorlib/preferences.glade.h:150
 msgid ""
@@ -1173,10 +1194,19 @@ msgid ""
 "users. If you have any suggestions, please file wishlist bugs! (see left for "
 "the Development link)"
 msgstr ""
+"Cílem tohoto projektu je vytvořit užitečný nástroj pro uspořádávání "
+"terminálů. Inspirováno aplikacemi jako gnome-multi-term, quadkonsole, atp. "
+"hlavním zaměřením je uspořádávání terminálů v mřížkách (karty jsou "
+"nejběžnější výchozí metodou, kterou Terminátor také podporuje).\n"
+"\n"
+"Mnohé z chování Terminátor je založeno na GNOME Terminal a postupně jsou "
+"přidávány další funkce z něj. Úmyslem je ale také rozšíření v různých "
+"směrech o funkce užitečné pro správce systémů a další uživatele. Pokud máte "
+"nějaké návrhy, nahlaste nám je! (viz vlevo odkaz Vývoj)"
 
 #: ../terminatorlib/preferences.glade.h:153
 msgid "The Manual"
-msgstr ""
+msgstr "Příručka"
 
 #: ../terminatorlib/preferences.glade.h:154
 msgid ""
@@ -1188,290 +1218,296 @@ msgid ""
 "<a href=\"https://bugs.launchpad.net/terminator\">Bugs / Enhancements</a>\n"
 "<a href=\"https://translations.launchpad.net/terminator\">Translations</a>"
 msgstr ""
+"<a href=\"http://gnometerminator.blogspot.com/p/introduction.html\">Domovská "
+"stránka</a>\n"
+"<a href=\"http://gnometerminator.blogspot.com/\">Blog/novinky</a>\n"
+"<a href=\"https://launchpad.net/terminator\">Vývoj</a>\n"
+"<a href=\"https://bugs.launchpad.net/terminator\">Chyby/vylepšení</a>\n"
+"<a href=\"https://translations.launchpad.net/terminator\">Překlady</a>"
 
 #: ../terminatorlib/preferences.glade.h:159
 msgid "About"
-msgstr ""
+msgstr "O aplikaci"
 
 #: ../terminatorlib/prefseditor.py:96
 msgid "Increase font size"
-msgstr ""
+msgstr "Zvětšit velikost písma"
 
 #: ../terminatorlib/prefseditor.py:97
 msgid "Decrease font size"
-msgstr ""
+msgstr "Zmenšit velikost písma"
 
 #: ../terminatorlib/prefseditor.py:98
 msgid "Restore original font size"
-msgstr ""
+msgstr "Vrátit původní velikost písma"
 
 #: ../terminatorlib/prefseditor.py:99
 msgid "Create a new tab"
-msgstr ""
+msgstr "Vytvořit nový panel"
 
 #: ../terminatorlib/prefseditor.py:100 ../terminatorlib/prefseditor.py:102
 msgid "Focus the next terminal"
-msgstr ""
+msgstr "Zaměřit následující terminál"
 
 #: ../terminatorlib/prefseditor.py:101 ../terminatorlib/prefseditor.py:103
 msgid "Focus the previous terminal"
-msgstr ""
+msgstr "Zaměřit předchozí terminál"
 
 #: ../terminatorlib/prefseditor.py:104
 msgid "Focus the terminal above"
-msgstr ""
+msgstr "Zaměřit terminál výše"
 
 #: ../terminatorlib/prefseditor.py:105
 msgid "Focus the terminal below"
-msgstr ""
+msgstr "Zaměřit terminál níže"
 
 #: ../terminatorlib/prefseditor.py:106
 msgid "Focus the terminal left"
-msgstr ""
+msgstr "Zaměřit terminál vlevo"
 
 #: ../terminatorlib/prefseditor.py:107
 msgid "Focus the terminal right"
-msgstr ""
+msgstr "Zaměřit terminál vpravo"
 
 #: ../terminatorlib/prefseditor.py:108
 msgid "Rotate terminals clockwise"
-msgstr ""
+msgstr "Otočit terminály doprava"
 
 #: ../terminatorlib/prefseditor.py:109
 msgid "Rotate terminals counter-clockwise"
-msgstr ""
+msgstr "Otočit terminály doleva"
 
 #: ../terminatorlib/prefseditor.py:110
 msgid "Split horizontally"
-msgstr ""
+msgstr "Rozdělit vodorovně"
 
 #: ../terminatorlib/prefseditor.py:111
 msgid "Split vertically"
-msgstr ""
+msgstr "Rozdělit svisle"
 
 #: ../terminatorlib/prefseditor.py:112
 msgid "Close terminal"
-msgstr ""
+msgstr "Zavřít terminál"
 
 #: ../terminatorlib/prefseditor.py:113
 msgid "Copy selected text"
-msgstr ""
+msgstr "Zkopírovat označený text"
 
 #: ../terminatorlib/prefseditor.py:114
 msgid "Paste clipboard"
-msgstr ""
+msgstr "Vložit ze schránky"
 
 #: ../terminatorlib/prefseditor.py:115
 msgid "Show/Hide the scrollbar"
-msgstr ""
+msgstr "Zobrazit/skrýt posuvník"
 
 #: ../terminatorlib/prefseditor.py:116
 msgid "Search terminal scrollback"
-msgstr ""
+msgstr "Hledat v historii terminálu"
 
 #: ../terminatorlib/prefseditor.py:117
 msgid "Scroll upwards one page"
-msgstr ""
+msgstr "Odrolovat o jednu stránku nahoru"
 
 #: ../terminatorlib/prefseditor.py:118
 msgid "Scroll downwards one page"
-msgstr ""
+msgstr "Odrolovat o jednu stránku dolů"
 
 #: ../terminatorlib/prefseditor.py:119
 msgid "Scroll upwards half a page"
-msgstr ""
+msgstr "Odrolovat o půl stránky nahoru"
 
 #: ../terminatorlib/prefseditor.py:120
 msgid "Scroll downwards half a page"
-msgstr ""
+msgstr "Odrolovat o půl stránky dolů"
 
 #: ../terminatorlib/prefseditor.py:121
 msgid "Scroll upwards one line"
-msgstr ""
+msgstr "Odrolovat o řádek nahoru"
 
 #: ../terminatorlib/prefseditor.py:122
 msgid "Scroll downwards one line"
-msgstr ""
+msgstr "Odrolovat o řádek dolů"
 
 #: ../terminatorlib/prefseditor.py:123
 msgid "Close window"
-msgstr ""
+msgstr "Zavřít okno"
 
 #: ../terminatorlib/prefseditor.py:124
 msgid "Resize the terminal up"
-msgstr ""
+msgstr "Změnit velikost terminálu dolů"
 
 #: ../terminatorlib/prefseditor.py:125
 msgid "Resize the terminal down"
-msgstr ""
+msgstr "Změnit velikost terminálu nahoru"
 
 #: ../terminatorlib/prefseditor.py:126
 msgid "Resize the terminal left"
-msgstr ""
+msgstr "Změnit velikost terminálu doleva"
 
 #: ../terminatorlib/prefseditor.py:127
 msgid "Resize the terminal right"
-msgstr ""
+msgstr "Změnit velikost terminálu doprava"
 
 #: ../terminatorlib/prefseditor.py:128
 msgid "Move the tab right"
-msgstr ""
+msgstr "Přesunout panel doprava"
 
 #: ../terminatorlib/prefseditor.py:129
 msgid "Move the tab left"
-msgstr ""
+msgstr "Přesunout panel doleva"
 
 #: ../terminatorlib/prefseditor.py:130
 msgid "Maximize terminal"
-msgstr ""
+msgstr "Maximalizovat terminál"
 
 #: ../terminatorlib/prefseditor.py:131
 msgid "Zoom terminal"
-msgstr ""
+msgstr "Změnit velikost terminálu"
 
 #: ../terminatorlib/prefseditor.py:132
 msgid "Switch to the next tab"
-msgstr ""
+msgstr "Přepnout na následující panel"
 
 #: ../terminatorlib/prefseditor.py:133
 msgid "Switch to the previous tab"
-msgstr ""
+msgstr "Přepnout na předchozí panel"
 
 #: ../terminatorlib/prefseditor.py:134
 msgid "Switch to the first tab"
-msgstr ""
+msgstr "Přepnout na první panel"
 
 #: ../terminatorlib/prefseditor.py:135
 msgid "Switch to the second tab"
-msgstr ""
+msgstr "Přepnout na druhý panel"
 
 #: ../terminatorlib/prefseditor.py:136
 msgid "Switch to the third tab"
-msgstr ""
+msgstr "Přepnout na třetí panel"
 
 #: ../terminatorlib/prefseditor.py:137
 msgid "Switch to the fourth tab"
-msgstr ""
+msgstr "Přepnout na čtvrtý panel"
 
 #: ../terminatorlib/prefseditor.py:138
 msgid "Switch to the fifth tab"
-msgstr ""
+msgstr "Přepnout na pátý panel"
 
 #: ../terminatorlib/prefseditor.py:139
 msgid "Switch to the sixth tab"
-msgstr ""
+msgstr "Přepnout na šestý panel"
 
 #: ../terminatorlib/prefseditor.py:140
 msgid "Switch to the seventh tab"
-msgstr ""
+msgstr "Přepnout na sedmý panel"
 
 #: ../terminatorlib/prefseditor.py:141
 msgid "Switch to the eighth tab"
-msgstr ""
+msgstr "Přepnout na osmý panel"
 
 #: ../terminatorlib/prefseditor.py:142
 msgid "Switch to the ninth tab"
-msgstr ""
+msgstr "Přepnout na devátý panel"
 
 #: ../terminatorlib/prefseditor.py:143
 msgid "Switch to the tenth tab"
-msgstr ""
+msgstr "Přepnout na desátý panel"
 
 #: ../terminatorlib/prefseditor.py:144
 msgid "Toggle fullscreen"
-msgstr ""
+msgstr "Zapnout/vypnout zobrazení na celou obrazovku"
 
 #: ../terminatorlib/prefseditor.py:145
 msgid "Reset the terminal"
-msgstr ""
+msgstr "Resetovat terminál"
 
 #: ../terminatorlib/prefseditor.py:146
 msgid "Reset and clear the terminal"
-msgstr ""
+msgstr "Resetovat a vyčistit terminál"
 
 #: ../terminatorlib/prefseditor.py:147
 msgid "Toggle window visibility"
-msgstr ""
+msgstr "Zobrazit/skrýt okno"
 
 #: ../terminatorlib/prefseditor.py:148
 msgid "Group all terminals"
-msgstr ""
+msgstr "Seskupit všechny terminály"
 
 #: ../terminatorlib/prefseditor.py:149
 msgid "Group/Ungroup all terminals"
-msgstr ""
+msgstr "Seskupit / zrušit seskupení všech terminálů"
 
 #: ../terminatorlib/prefseditor.py:150
 msgid "Ungroup all terminals"
-msgstr ""
+msgstr "Zrušit seskupení všech terminálů"
 
 #: ../terminatorlib/prefseditor.py:151
 msgid "Group terminals in tab"
-msgstr ""
+msgstr "Seskupit terminály v panelu"
 
 #: ../terminatorlib/prefseditor.py:152
 msgid "Group/Ungroup terminals in tab"
-msgstr ""
+msgstr "Seskupit / zrušit seskupení terminálů v panelu"
 
 #: ../terminatorlib/prefseditor.py:153
 msgid "Ungroup terminals in tab"
-msgstr ""
+msgstr "Zrušit seskupení terminálů v panelu"
 
 #: ../terminatorlib/prefseditor.py:154
 msgid "Create a new window"
-msgstr ""
+msgstr "Vytvořit nové okno"
 
 #: ../terminatorlib/prefseditor.py:155
 msgid "Spawn a new Terminator process"
-msgstr ""
+msgstr "Vytvořit nový proces Terminátor"
 
 #: ../terminatorlib/prefseditor.py:156
 msgid "Don't broadcast key presses"
-msgstr ""
+msgstr "Nevysílat stisky kláves do více terminálů"
 
 #: ../terminatorlib/prefseditor.py:157
 msgid "Broadcast key presses to group"
-msgstr ""
+msgstr "Vysílat stisky kláves do skupiny"
 
 #: ../terminatorlib/prefseditor.py:158
 msgid "Broadcast key events to all"
-msgstr ""
+msgstr "Vysílat stisky kláves všem"
 
 #: ../terminatorlib/prefseditor.py:159
 msgid "Insert terminal number"
-msgstr "Vložte číslo terminálu"
+msgstr "Zadejte číslo terminálu"
 
 #: ../terminatorlib/prefseditor.py:160
 msgid "Insert padded terminal number"
-msgstr "Vložit podložené číslo terminálu"
+msgstr "Zadejte celé číslo terminálu"
 
 #: ../terminatorlib/prefseditor.py:161
 msgid "Edit window title"
-msgstr ""
+msgstr "Upravit titulek okna"
 
 #: ../terminatorlib/prefseditor.py:162
 msgid "Edit terminal title"
-msgstr ""
+msgstr "Upravit titulek terminálu"
 
 #: ../terminatorlib/prefseditor.py:163
 msgid "Edit tab title"
-msgstr ""
+msgstr "Upravit titulek panelu"
 
 #: ../terminatorlib/prefseditor.py:164
 msgid "Open layout launcher window"
-msgstr ""
+msgstr "Otevřít okno spuštěče rozvržení"
 
 #: ../terminatorlib/prefseditor.py:165
 msgid "Switch to next profile"
-msgstr ""
+msgstr "Přepnout na následující profil"
 
 #: ../terminatorlib/prefseditor.py:166
 msgid "Switch to previous profile"
-msgstr ""
+msgstr "Přepnout na předchozí profil"
 
 #: ../terminatorlib/prefseditor.py:167
 msgid "Open the manual"
-msgstr ""
+msgstr "Otevřít příručku"
 
 #: ../terminatorlib/prefseditor.py:1136 ../terminatorlib/prefseditor.py:1141
 msgid "New Profile"
@@ -1479,12 +1515,12 @@ msgstr "Nový profil"
 
 #: ../terminatorlib/prefseditor.py:1181 ../terminatorlib/prefseditor.py:1186
 msgid "New Layout"
-msgstr "Nové rozložení"
+msgstr "Nové rozvržení"
 
 #. Label
 #: ../terminatorlib/searchbar.py:52
 msgid "Search:"
-msgstr "Najít:"
+msgstr "Hledat:"
 
 #: ../terminatorlib/searchbar.py:68
 msgid "Close Search bar"
@@ -1493,7 +1529,7 @@ msgstr "Zavřít vyhledávač"
 #. Next Button
 #: ../terminatorlib/searchbar.py:73
 msgid "Next"
-msgstr "Dále"
+msgstr "Další"
 
 #. Previous Button
 #: ../terminatorlib/searchbar.py:79
@@ -1503,11 +1539,11 @@ msgstr "Předchozí"
 #. Wrap checkbox
 #: ../terminatorlib/searchbar.py:85
 msgid "Wrap"
-msgstr ""
+msgstr "Zalamování"
 
 #: ../terminatorlib/searchbar.py:144
 msgid "Searching scrollback"
-msgstr "Vyhledávací scrollback"
+msgstr "Vyhledává se v historii"
 
 #: ../terminatorlib/searchbar.py:162 ../terminatorlib/searchbar.py:188
 msgid "No more results"
@@ -1515,23 +1551,23 @@ msgstr "Žádné další výsledky"
 
 #: ../terminatorlib/searchbar.py:203
 msgid "Found at row"
-msgstr "Najít na řádku"
+msgstr "Najít na řádek"
 
 #: ../terminatorlib/terminal_popup_menu.py:59
 msgid "_Send email to..."
-msgstr "Poslat _email:"
+msgstr "Po_slat e-mail…"
 
 #: ../terminatorlib/terminal_popup_menu.py:60
 msgid "_Copy email address"
-msgstr "Kopírovat emailovou _adresu"
+msgstr "Zkopírovat e-mailovou _adresu"
 
 #: ../terminatorlib/terminal_popup_menu.py:62
 msgid "Ca_ll VoIP address"
-msgstr "Zavolat _VoIP adresu"
+msgstr "Zavo_lat VoIP adresu"
 
 #: ../terminatorlib/terminal_popup_menu.py:63
 msgid "_Copy VoIP address"
-msgstr "_Kopírovat VoIP adresu"
+msgstr "_Zkopírovat VoIP adresu"
 
 #: ../terminatorlib/terminal_popup_menu.py:84
 msgid "_Open link"
@@ -1539,47 +1575,47 @@ msgstr "_Otevřít odkaz"
 
 #: ../terminatorlib/terminal_popup_menu.py:86
 msgid "_Copy address"
-msgstr "Kopírovat a_dresu"
+msgstr "Zkopírovat a_dresu"
 
 #: ../terminatorlib/terminal_popup_menu.py:102
 msgid "_Copy"
-msgstr ""
+msgstr "_Kopírovat"
 
 #: ../terminatorlib/terminal_popup_menu.py:107
 msgid "_Paste"
-msgstr ""
+msgstr "_Vložit"
 
 #: ../terminatorlib/terminal_popup_menu.py:114
 msgid "Split H_orizontally"
-msgstr "Rozděl H_orizontálně"
+msgstr "Rozdělit v_odorovně"
 
 #: ../terminatorlib/terminal_popup_menu.py:124
 msgid "Split V_ertically"
-msgstr "Rozděl V_ertikálně"
+msgstr "Rozdělit svisl_e"
 
 #: ../terminatorlib/terminal_popup_menu.py:134
 msgid "Open _Tab"
-msgstr "Otevří_t kartu"
+msgstr "Otevří_t panel"
 
 #: ../terminatorlib/terminal_popup_menu.py:140
 msgid "Open _Debug Tab"
-msgstr "Otevřít _Debug záložku"
+msgstr "Otevřít panel la_dění"
 
 #: ../terminatorlib/terminal_popup_menu.py:147
 msgid "_Close"
-msgstr ""
+msgstr "_Zavřít"
 
 #: ../terminatorlib/terminal_popup_menu.py:156
 msgid "_Zoom terminal"
-msgstr "_Přiblížit terminál"
+msgstr "_Změnit přiblížení terminálu"
 
 #: ../terminatorlib/terminal_popup_menu.py:161
 msgid "Ma_ximize terminal"
-msgstr ""
+msgstr "Ma_ximalizovat terminál"
 
 #: ../terminatorlib/terminal_popup_menu.py:168
 msgid "_Restore all terminals"
-msgstr "Ob_novit všechny terminály"
+msgstr "Obnovit všechny te_rminály"
 
 #: ../terminatorlib/terminal_popup_menu.py:175
 msgid "Grouping"
@@ -1587,11 +1623,11 @@ msgstr "Seskupování"
 
 #: ../terminatorlib/terminal_popup_menu.py:182
 msgid "Show _scrollbar"
-msgstr "Ukázat _scrollbar"
+msgstr "Zobrazit po_suvník"
 
 #: ../terminatorlib/terminal_popup_menu.py:239
 msgid "Encodings"
-msgstr "Kódování"
+msgstr "Kódování znaků"
 
 #: ../terminatorlib/terminal_popup_menu.py:254
 msgid "Default"
@@ -1599,19 +1635,19 @@ msgstr "Výchozí"
 
 #: ../terminatorlib/terminal_popup_menu.py:257
 msgid "User defined"
-msgstr "Uživatelem definovaný"
+msgstr "Uživatelem určené"
 
 #: ../terminatorlib/terminal_popup_menu.py:273
 msgid "Other Encodings"
-msgstr "Jiné kódování"
+msgstr "Ostatní kódování"
 
 #: ../terminatorlib/terminal.py:433
 msgid "N_ew group..."
-msgstr ""
+msgstr "_Nová skupina…"
 
 #: ../terminatorlib/terminal.py:439
 msgid "_None"
-msgstr ""
+msgstr "_Nic"
 
 #: ../terminatorlib/terminal.py:459
 #, python-format
@@ -1620,11 +1656,11 @@ msgstr "Odstranit skupinu %s"
 
 #: ../terminatorlib/terminal.py:464
 msgid "G_roup all in tab"
-msgstr "Seskupit všechny v záložkách"
+msgstr "Seskupit všechny v panelech"
 
 #: ../terminatorlib/terminal.py:469
 msgid "Ungro_up all in tab"
-msgstr ""
+msgstr "Zr_ušit seskupení v panelu"
 
 #: ../terminatorlib/terminal.py:474
 msgid "Remove all groups"
@@ -1637,39 +1673,39 @@ msgstr "Zavřít skupinu %s"
 
 #: ../terminatorlib/terminal.py:491
 msgid "Broadcast _all"
-msgstr ""
+msgstr "Vysíl_at vše"
 
 #: ../terminatorlib/terminal.py:492
 msgid "Broadcast _group"
-msgstr ""
+msgstr "_Skupina pro vysílání"
 
 #: ../terminatorlib/terminal.py:493
 msgid "Broadcast _off"
-msgstr ""
+msgstr "Vysílání vypnut_o"
 
 #: ../terminatorlib/terminal.py:509
 msgid "_Split to this group"
-msgstr ""
+msgstr "Rozdělit do této _skupiny"
 
 #: ../terminatorlib/terminal.py:514
 msgid "Auto_clean groups"
-msgstr ""
+msgstr "Automati_cky čistit skupiny"
 
 #: ../terminatorlib/terminal.py:521
 msgid "_Insert terminal number"
-msgstr ""
+msgstr "Zadejte číslo term_inálu"
 
 #: ../terminatorlib/terminal.py:525
 msgid "Insert _padded terminal number"
-msgstr ""
+msgstr "Zadejte celé číslo terminálu"
 
 #: ../terminatorlib/terminal.py:1394
 msgid "Unable to find a shell"
-msgstr "Nemohu najít shell"
+msgstr "Nedaří se najít shell"
 
 #: ../terminatorlib/terminal.py:1427
 msgid "Unable to start shell:"
-msgstr "Nemohu spustit příkazovou řádku:"
+msgstr "Nedaří se spustit příkazový řádek:"
 
 #: ../terminatorlib/terminal.py:1848
 msgid "Rename Window"
@@ -1677,103 +1713,103 @@ msgstr "Přejmenovat okno"
 
 #: ../terminatorlib/terminal.py:1856
 msgid "Enter a new title for the Terminator window..."
-msgstr "Zadejte nový název pro okno Terminatoru"
+msgstr "Zadejte nový název pro okno s Terminátor…"
 
 #: ../terminatorlib/titlebar.py:254
 msgid "Alpha"
-msgstr ""
+msgstr "Alfa"
 
 #: ../terminatorlib/titlebar.py:254
 msgid "Beta"
-msgstr ""
+msgstr "Beta"
 
 #: ../terminatorlib/titlebar.py:254
 msgid "Gamma"
-msgstr ""
+msgstr "Gama"
 
 #: ../terminatorlib/titlebar.py:254
 msgid "Delta"
-msgstr ""
+msgstr "Delta"
 
 #: ../terminatorlib/titlebar.py:254
 msgid "Epsilon"
-msgstr ""
+msgstr "Epsilon"
 
 #: ../terminatorlib/titlebar.py:254
 msgid "Zeta"
-msgstr ""
+msgstr "Zéta"
 
 #: ../terminatorlib/titlebar.py:254
 msgid "Eta"
-msgstr ""
+msgstr "Éta"
 
 #: ../terminatorlib/titlebar.py:255
 msgid "Theta"
-msgstr ""
+msgstr "Théta"
 
 #: ../terminatorlib/titlebar.py:255
 msgid "Iota"
-msgstr ""
+msgstr "Ióta"
 
 #: ../terminatorlib/titlebar.py:255
 msgid "Kappa"
-msgstr ""
+msgstr "Kappa"
 
 #: ../terminatorlib/titlebar.py:255
 msgid "Lambda"
-msgstr ""
+msgstr "Lambda"
 
 #: ../terminatorlib/titlebar.py:255
 msgid "Mu"
-msgstr ""
+msgstr "Mý"
 
 #: ../terminatorlib/titlebar.py:255
 msgid "Nu"
-msgstr ""
+msgstr "Ný"
 
 #: ../terminatorlib/titlebar.py:255
 msgid "Xi"
-msgstr ""
+msgstr "Ksí"
 
 #: ../terminatorlib/titlebar.py:256
 msgid "Omicron"
-msgstr ""
+msgstr "Omikron"
 
 #: ../terminatorlib/titlebar.py:256
 msgid "Pi"
-msgstr ""
+msgstr "Pí"
 
 #: ../terminatorlib/titlebar.py:256
 msgid "Rho"
-msgstr ""
+msgstr "Ró"
 
 #: ../terminatorlib/titlebar.py:256
 msgid "Sigma"
-msgstr ""
+msgstr "Sigma"
 
 #: ../terminatorlib/titlebar.py:256
 msgid "Tau"
-msgstr ""
+msgstr "Tau"
 
 #: ../terminatorlib/titlebar.py:256
 msgid "Upsilon"
-msgstr ""
+msgstr "Ypsilon"
 
 #: ../terminatorlib/titlebar.py:256
 msgid "Phi"
-msgstr ""
+msgstr "Fí"
 
 #: ../terminatorlib/titlebar.py:257
 msgid "Chi"
-msgstr ""
+msgstr "Chí"
 
 #: ../terminatorlib/titlebar.py:257
 msgid "Psi"
-msgstr ""
+msgstr "Psí"
 
 #: ../terminatorlib/titlebar.py:257
 msgid "Omega"
-msgstr ""
+msgstr "Omega"
 
 #: ../terminatorlib/window.py:276
 msgid "window"
@@ -1782,7 +1818,7 @@ msgstr "okno"
 #: ../terminatorlib/window.py:730
 #, python-format
 msgid "Tab %d"
-msgstr "Záložka %d"
+msgstr "Panel %d"
 
 #, python-format
 #~ msgid ""
