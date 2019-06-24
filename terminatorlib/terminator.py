@@ -105,13 +105,7 @@ class Terminator(Borg):
             self.attempt_gnome_client()
         if self.pane_id_to_terminal is None:
             self.pane_id_to_terminal = {}
-        if self.tmux_control is None and TMUX:
-            handler = tmux.notifications.NotificationsHandler(self)
-            self.tmux_control = tmux.control.TmuxControl(
-                session_name='terminator',
-                notifications_handler=handler)
-            if TMUX_ATTACH:
-                self.tmux_control.attach_session()
+
         self.connect_signals()
 
     def connect_signals(self):

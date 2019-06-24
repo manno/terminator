@@ -471,9 +471,9 @@ class Window(Container, Gtk.Window):
         if not sibling:
             sibling = maker.make('Terminal')
             sibling.set_cwd(cwd)
+            # TODO (dank): is widget ever not a Terminal?
             if self.config['always_split_with_profile']:
                 sibling.force_set_profile(None, widget.get_profile())
-            # TODO (dank): is widget ever not a Terminal?
             sibling.spawn_child(
                 orientation='vertical' if vertical else 'horizontal',
                 active_pane_id=getattr(widget, 'pane_id', None))
