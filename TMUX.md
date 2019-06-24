@@ -7,7 +7,7 @@ Remote SSH example, starts tmux on remote host and displays tabs and splits in t
 terminator -M --remote example.org
 ```
 
-Local session (not working for me?):
+Local session:
 ```
 terminator -M
 ```

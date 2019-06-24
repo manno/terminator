@@ -4,7 +4,7 @@ from terminatorlib.util import dbg
 from terminatorlib.tmux import layout
 
 import string
-ATTACH_ERROR_STRINGS = ["can't find session terminator", "no current session"]
+ATTACH_ERROR_STRINGS = ["can't find session terminator", "no current session", "no sessions"]
 ALTERNATE_SCREEN_ENTER_CODES = [ "\\033[?1049h" ]
 ALTERNATE_SCREEN_EXIT_CODES  = [ "\\033[?1049l" ]
 
