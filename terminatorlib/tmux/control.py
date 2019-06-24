@@ -9,6 +9,7 @@ from terminatorlib.tmux import notifications
 from terminatorlib.util import dbg
 
 ESCAPE_CODE = '\033'
+TMUX_BINARY = 'tmux'
 
 def esc(seq):
     return '{}{}'.format(ESCAPE_CODE, seq)
@@ -121,7 +122,7 @@ class TmuxControl(object):
                           callback=self.notifications_handler.pane_id_result)
 
     def attach_session(self):
-        popen_command = ['tmux', '-2', '-C', 'attach-session',
+        popen_command = [TMUX_BINARY, '-2', '-C', 'attach-session',
                          '-t', self.session_name]
         if self.remote:
             self.remote_connect(popen_command)
@@ -136,7 +137,7 @@ class TmuxControl(object):
         self.initial_layout()
 
     def new_session(self, cwd=None, command=None, marker=''):
-        popen_command = ['tmux', '-2', '-C', 'new-session', '-s', self.session_name,
+        popen_command = [TMUX_BINARY, '-2', '-C', 'new-session', '-s', self.session_name,
                 '-P', '-F', '#D {}'.format(marker)]
         if cwd and not self.remote:
             popen_command += ['-c', cwd]
@@ -254,7 +255,7 @@ class TmuxControl(object):
 
     @staticmethod
     def kill_server():
-        command = ['tmux', 'kill-session', '-t', 'terminator']
+        command = [TMUX_BINARY, 'kill-session', '-t', 'terminator']
         subprocess.call(command)
 
     def start_notifications_consumer(self):
