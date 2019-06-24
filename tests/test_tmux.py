@@ -1,7 +1,11 @@
+#!/usr/bin/env python2
+
+import os
+import sys, os.path
+sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), "..")))
+
 import unittest
-
 from terminatorlib.tmux import notifications
-
 
 class NotificationsTests(unittest.TestCase):
 
