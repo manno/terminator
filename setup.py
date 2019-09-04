@@ -230,7 +230,7 @@ setup(name=APP_NAME,
                   ('share/icons/HighContrast/16x16/status', glob.glob('data/icons/HighContrast/16x16/status/*.png')),
                  ],
       packages=['terminatorlib', 'terminatorlib.configobj',
-      'terminatorlib.plugins'],
+      'terminatorlib.plugins', 'terminatorlib.tmux'],
       package_data={'terminatorlib': ['preferences.glade', 'layoutlauncher.glade']},
       cmdclass={'build': BuildData, 'install_data': InstallData, 'uninstall': Uninstall, 'test':Test},
       distclass=TerminatorDist
